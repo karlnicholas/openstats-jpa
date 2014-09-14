@@ -3,14 +3,13 @@
 import java.io.*;
 import java.util.*;
 
+import javax.persistence.*;
+
 import openstats.model.*;
 
 import org.openstates.bulkdata.LoadBulkData;
-
 import org.supercsv.io.*;
 import org.supercsv.prefs.CsvPreference;
-
-import com.fasterxml.jackson.databind.*;
 
 public class BuildSession {
 
@@ -75,10 +74,95 @@ public class BuildSession {
 */		
 		TestAction testAction = new GATestAction();
 		Session session = buildSession(testAction);
-		writeCsv(session);
+		writeJpa(session);
 
 	}
 
+	private static void writeJpa(Session session) throws Exception {
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
+		EntityManager em = emf.createEntityManager();
+		em.persist(session);
+		em.flush();
+		em.close();
+	}
+
+	private static void writeCsv(Session session) throws Exception {
+        
+    	class MyCsvWriter extends AbstractCsvWriter {
+
+			public MyCsvWriter(Writer writer, CsvPreference preference) {
+				super(writer, preference);
+			}
+			public void writeRow(String... columns ) throws IOException {
+				super.writeRow(columns);
+			}
+		}
+		MyCsvWriter writer = null;
+        try {
+        	
+        	writer = new MyCsvWriter(new FileWriter("c:/users/karl/"+session.getState()+"-2013-les.csv"), CsvPreference.STANDARD_PREFERENCE);
+	        Districts districts = session.getDistricts();
+	        // the header elements are used to map the bean values to each column (names must match)
+	        List<String> columns = new ArrayList<String>();
+
+	        columns.add("district");
+	        columns.add("chamber");
+//			Aggregate aggregate = districts.getAggregate(GROUPLABEL);
+
+	        for ( String head: districts.getUserData().getAggregates().getGroup(GROUPLABEL)) {
+	        	columns.add(head);
+	        }
+	        for ( String head: districts.getUserData().getComputations().getGroup(GROUPLABEL)) {
+	        	columns.add(head);
+	        }
+
+            // write the header
+	        String[] sColumns = new String[columns.size()];
+	        sColumns = columns.toArray(sColumns);
+            writer.writeHeader(sColumns);
+            class LESComparator implements Comparator<District> {
+            	private Districts districts;
+            	public LESComparator(Districts districts) {
+            		this.districts = districts;
+            	}
+				@Override
+				public int compare(District o1, District o2) {
+					try {
+						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
+					} catch (OpenStatsException e) {
+						throw new RuntimeException(e);
+					}
+				}
+            }
+            
+            Collections.sort(districts, new LESComparator(districts));
+            // write the customer lists
+            for ( final openstats.model.District dist: districts) {
+            	columns.clear();
+    	        columns.add(dist.getDistrict());
+    	        columns.add(dist.getChamber());
+    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+    	        for ( Long agg: aggs ) {
+    	        	columns.add(agg.toString());
+    	        }
+    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist);
+    	        for ( Double comp: comps ) {
+    	        	columns.add(comp.toString());
+    	        }
+                writer.writeRow(columns.toArray(sColumns));
+            }
+
+            writer.writeHeader(SKEWLABEL.get(0));
+            writer.writeRow(session.getUserData().getComputation(GROUPLABEL).getValue(session, SKEWLABEL.get(0)).toString());
+                
+        }
+        finally {
+            if( writer  != null ) {
+            	writer.close();
+            }
+        }
+	}
+	
 /*
 
 	System.out.print( "NAME" + "\t" + "CHAMBER" + "\t" + "DISTRICT" + "\t" + "PARTY" + "\t" + "OFFICE" + "\t");
@@ -150,17 +234,17 @@ public class BuildSession {
 			
 			openstats.model.District district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district != null ) {
-				Long[] values = aggregate.getValues(district);
-				values[0] = values[0] + sponsorStats.billData[0][0];
-				values[1] = values[1] + sponsorStats.billData[0][3];
-				values[2] = values[2] + sponsorStats.billData[1][0];
-				values[3] = values[3] + sponsorStats.billData[1][1];
-				values[4] = values[4] + sponsorStats.billData[1][2];
-				values[5] = values[5] + sponsorStats.billData[1][3];
-				values[6] = values[6] + sponsorStats.billData[2][0];
-				values[7] = values[7] + sponsorStats.billData[2][1];
-				values[8] = values[8] + sponsorStats.billData[2][2];
-				values[9] = values[9] + sponsorStats.billData[2][3];
+				ArrayList<Long> values = aggregate.getValues(district);
+				values.set(0, values.get(0) + sponsorStats.billData[0][0]);
+				values.set(0, values.get(0) + sponsorStats.billData[0][3]);
+				values.set(0, values.get(0) + sponsorStats.billData[1][0]);
+				values.set(0, values.get(0) + sponsorStats.billData[1][1]);
+				values.set(0, values.get(0) + sponsorStats.billData[1][2]);
+				values.set(0, values.get(0) + sponsorStats.billData[1][3]);
+				values.set(0, values.get(0) + sponsorStats.billData[2][0]);
+				values.set(0, values.get(0) + sponsorStats.billData[2][1]);
+				values.set(0, values.get(0) + sponsorStats.billData[2][2]);
+				values.set(0, values.get(0) + sponsorStats.billData[2][3]);
 				aggregate.setValues(district, values);
 			} else {
 				openstats.model.Legislator sLegislator = new openstats.model.Legislator();
@@ -172,17 +256,17 @@ public class BuildSession {
 				district.getLegislators().add(sLegislator); 
 				districts.add(district);
 				
-				Long[] values = new Long[AGGLABELS.size()];
-				values[0] = sponsorStats.billData[0][0];
-				values[1] = sponsorStats.billData[0][3];
-				values[2] = sponsorStats.billData[1][0];
-				values[3] = sponsorStats.billData[1][1];
-				values[4] = sponsorStats.billData[1][2];
-				values[5] = sponsorStats.billData[1][3];
-				values[6] = sponsorStats.billData[2][0];
-				values[7] = sponsorStats.billData[2][1];
-				values[8] = sponsorStats.billData[2][2];
-				values[9] = sponsorStats.billData[2][3];
+				ArrayList<Long> values = new ArrayList<Long>(AGGLABELS.size());
+				values.add(sponsorStats.billData[0][0]);
+				values.add(sponsorStats.billData[0][3]);
+				values.add(sponsorStats.billData[1][0]);
+				values.add(sponsorStats.billData[1][1]);
+				values.add(sponsorStats.billData[1][2]);
+				values.add(sponsorStats.billData[1][3]);
+				values.add(sponsorStats.billData[2][0]);
+				values.add(sponsorStats.billData[2][1]);
+				values.add(sponsorStats.billData[2][2]);
+				values.add(sponsorStats.billData[2][3]);
 				aggregate.setValues(district, values);
 			}
 		}
@@ -191,82 +275,6 @@ public class BuildSession {
 		return session;
 	}	
 
-	private static void writeCsv(Session session) throws Exception {
-	        
-    	class MyCsvWriter extends AbstractCsvWriter {
-
-			public MyCsvWriter(Writer writer, CsvPreference preference) {
-				super(writer, preference);
-			}
-			public void writeRow(String... columns ) throws IOException {
-				super.writeRow(columns);
-			}
-		}
-		MyCsvWriter writer = null;
-        try {
-        	
-        	writer = new MyCsvWriter(new FileWriter("c:/users/karl/"+session.getState()+"-2013-les.csv"), CsvPreference.STANDARD_PREFERENCE);
-	        Districts districts = session.getDistricts();
-	        // the header elements are used to map the bean values to each column (names must match)
-	        List<String> columns = new ArrayList<String>();
-
-	        columns.add("district");
-	        columns.add("chamber");
-//			Aggregate aggregate = districts.getAggregate(GROUPLABEL);
-
-	        for ( String head: districts.getUserData().getAggregates().getGroup(GROUPLABEL)) {
-	        	columns.add(head);
-	        }
-	        for ( String head: districts.getUserData().getComputations().getGroup(GROUPLABEL)) {
-	        	columns.add(head);
-	        }
-
-            // write the header
-	        String[] sColumns = new String[columns.size()];
-	        sColumns = columns.toArray(sColumns);
-            writer.writeHeader(sColumns);
-            class LESComparator implements Comparator<District> {
-            	private Districts districts;
-            	public LESComparator(Districts districts) {
-            		this.districts = districts;
-            	}
-				@Override
-				public int compare(District o1, District o2) {
-					try {
-						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
-					} catch (OpenStatsException e) {
-						throw new RuntimeException(e);
-					}
-				}
-            }
-            
-            Collections.sort(districts, new LESComparator(districts));
-            // write the customer lists
-            for ( final openstats.model.District dist: districts) {
-            	columns.clear();
-    	        columns.add(dist.getDistrict());
-    	        columns.add(dist.getChamber());
-    	        Long[] aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
-    	        for ( Long agg: aggs ) {
-    	        	columns.add(agg.toString());
-    	        }
-    	        Double[] comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist);
-    	        for ( Double comp: comps ) {
-    	        	columns.add(comp.toString());
-    	        }
-                writer.writeRow(columns.toArray(sColumns));
-            }
-
-            writer.writeHeader(SKEWLABEL.get(0));
-            writer.writeRow(session.getUserData().getComputation(GROUPLABEL).getValue(session, SKEWLABEL.get(0)).toString());
-                
-        }
-        finally {
-            if( writer  != null ) {
-            	writer.close();
-            }
-        }
-	}
 	
 	public static void computeSkewness(Session session) throws OpenStatsException {
 		Districts districts = session.getDistricts();
@@ -274,13 +282,13 @@ public class BuildSession {
 		double[] stats = new double[districts.size()];
 		int i=0;
 		for ( District district: districts ) {
-			Double[] values = computation.getValues(district);
-			stats[i++] = values[0];
+			ArrayList<Double> values = computation.getValues(district);
+			stats[i++] = values.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
 		Computation compSession = session.getUserData().createComputation(GROUPLABEL, SKEWLABEL);
-		Double[] values = compSession.createValues(session);
-		values[0] = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev(); 
+		ArrayList<Double> values = compSession.createValues(session);
+		values.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
 		compSession.setValues(session, values);		
 	}
 
@@ -303,12 +311,6 @@ public class BuildSession {
 			Map<String, Double> computations = legAgg.getValueComputations();
 			computations.put("LES", sponsorStats.les);
 	 */
-
-	private static void jacksonPrintJson(Session session) throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        System.out.println(mapper.writeValueAsString(session));
-	}
 
 	private static void determinePrincipalSponsors(
 		org.openstates.data.Bill bill, 
@@ -1080,22 +1082,22 @@ public class BuildSession {
 
 		for ( openstats.model.District dist: districts) {
 
-			Long[] values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+			ArrayList<Long> values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
 
-			distArray[0][0] = values[0];
+			distArray[0][0] = values.get(0);
 			distArray[0][1] = 0.0;
 			distArray[0][2] = 0.0;
-			distArray[0][3] = values[1]; 
+			distArray[0][3] = values.get(1); 
 			
-			distArray[1][0] = values[2];
-			distArray[1][1] = values[3]; 
-			distArray[1][2] = values[4]; 
-			distArray[1][3] = values[5]; 
+			distArray[1][0] = values.get(2);
+			distArray[1][1] = values.get(3); 
+			distArray[1][2] = values.get(4); 
+			distArray[1][3] = values.get(5); 
 
-			distArray[2][0] = values[6];
-			distArray[2][1] = values[7]; 
-			distArray[2][2] = values[8]; 
-			distArray[2][3] = values[9];
+			distArray[2][0] = values.get(6);
+			distArray[2][1] = values.get(7); 
+			distArray[2][2] = values.get(8); 
+			distArray[2][3] = values.get(9);
 				
 			// make the array inverse cumulative across rows 
 			for ( int j=0; j < 3; ++j ) {
@@ -1131,8 +1133,8 @@ public class BuildSession {
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			Double[] comps = new Double[LESLABEL.size()];
-			comps[0] = LES;
+			ArrayList<Double> comps = new ArrayList<Double>(LESLABEL.size());
+			comps.add(LES);
 			computation.setValues(dist, comps);
 		}
 	}
@@ -1148,7 +1150,7 @@ public class BuildSession {
 
 	private static void buildcurrentTopics(TestAction testAction) throws Exception {
 		currentTopics = new TreeSet<String>(); 
-		InputStream is = BuildSession.class.getResourceAsStream("/" + testAction.getState() + "TopicBills2013.txt");
+		InputStream is = BuildSession.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
 		InputStreamReader isr = new InputStreamReader(is, "ASCII");
 		BufferedReader br = new BufferedReader(isr);
 		String line;

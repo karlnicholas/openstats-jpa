@@ -73,8 +73,6 @@ public class SchemaTranslator {
 				Districts.class, 
 				District.class, 
 				Legislator.class, 
-				DistrictUserData.class, 
-				SessionUserData.class, 
 				UserData.class,
 				Aggregates.class, 
 				Aggregate.class, 
