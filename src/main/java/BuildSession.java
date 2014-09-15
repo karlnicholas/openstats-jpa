@@ -75,14 +75,15 @@ public class BuildSession {
 		TestAction testAction = new GATestAction();
 		Session session = buildSession(testAction);
 		writeJpa(session);
-
 	}
 
 	private static void writeJpa(Session session) throws Exception {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
 		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
 		em.persist(session);
-		em.flush();
+		tx.commit();
 		em.close();
 	}
 
@@ -128,7 +129,7 @@ public class BuildSession {
 				@Override
 				public int compare(District o1, District o2) {
 					try {
-						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
+						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2.getModelKey(), LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1.getModelKey(), LESLABEL.get(0)));
 					} catch (OpenStatsException e) {
 						throw new RuntimeException(e);
 					}
@@ -141,11 +142,11 @@ public class BuildSession {
             	columns.clear();
     	        columns.add(dist.getDistrict());
     	        columns.add(dist.getChamber());
-    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist.getModelKey());
     	        for ( Long agg: aggs ) {
     	        	columns.add(agg.toString());
     	        }
-    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist);
+    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist.getModelKey());
     	        for ( Double comp: comps ) {
     	        	columns.add(comp.toString());
     	        }
@@ -153,7 +154,7 @@ public class BuildSession {
             }
 
             writer.writeHeader(SKEWLABEL.get(0));
-            writer.writeRow(session.getUserData().getComputation(GROUPLABEL).getValue(session, SKEWLABEL.get(0)).toString());
+            writer.writeRow(session.getUserData().getComputation(GROUPLABEL).getValue(session.getModelKey(), SKEWLABEL.get(0)).toString());
                 
         }
         finally {
@@ -234,7 +235,7 @@ public class BuildSession {
 			
 			openstats.model.District district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district != null ) {
-				ArrayList<Long> values = aggregate.getValues(district);
+				ArrayList<Long> values = aggregate.getValues(district.getModelKey());
 				values.set(0, values.get(0) + sponsorStats.billData[0][0]);
 				values.set(0, values.get(0) + sponsorStats.billData[0][3]);
 				values.set(0, values.get(0) + sponsorStats.billData[1][0]);
@@ -245,7 +246,7 @@ public class BuildSession {
 				values.set(0, values.get(0) + sponsorStats.billData[2][1]);
 				values.set(0, values.get(0) + sponsorStats.billData[2][2]);
 				values.set(0, values.get(0) + sponsorStats.billData[2][3]);
-				aggregate.setValues(district, values);
+				aggregate.setValues(district.getModelKey(), values);
 			} else {
 				openstats.model.Legislator sLegislator = new openstats.model.Legislator();
 				sLegislator.setName(legislator.full_name);
@@ -267,7 +268,7 @@ public class BuildSession {
 				values.add(sponsorStats.billData[2][1]);
 				values.add(sponsorStats.billData[2][2]);
 				values.add(sponsorStats.billData[2][3]);
-				aggregate.setValues(district, values);
+				aggregate.setValues(district.getModelKey(), values);
 			}
 		}
 		computeLES(districts);
@@ -282,14 +283,14 @@ public class BuildSession {
 		double[] stats = new double[districts.size()];
 		int i=0;
 		for ( District district: districts ) {
-			ArrayList<Double> values = computation.getValues(district);
+			ArrayList<Double> values = computation.getValues(district.getModelKey());
 			stats[i++] = values.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
 		Computation compSession = session.getUserData().createComputation(GROUPLABEL, SKEWLABEL);
-		ArrayList<Double> values = compSession.createValues(session);
+		ArrayList<Double> values = compSession.createValues(session.getModelKey());
 		values.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		compSession.setValues(session, values);		
+		compSession.setValues(session.getModelKey(), values);		
 	}
 
 	/**
@@ -1082,7 +1083,7 @@ public class BuildSession {
 
 		for ( openstats.model.District dist: districts) {
 
-			ArrayList<Long> values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+			ArrayList<Long> values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist.getModelKey());
 
 			distArray[0][0] = values.get(0);
 			distArray[0][1] = 0.0;
@@ -1135,14 +1136,14 @@ public class BuildSession {
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
 			ArrayList<Double> comps = new ArrayList<Double>(LESLABEL.size());
 			comps.add(LES);
-			computation.setValues(dist, comps);
+			computation.setValues(dist.getModelKey(), comps);
 		}
 	}
 	
 	private static double totalFrom(Districts districts, String label) throws OpenStatsException {
 		double ret = 0.0;
 		for ( openstats.model.District dist: districts) {
-			Long iVal = districts.getUserData().getAggregate(GROUPLABEL).getValue(dist, label);
+			Long iVal = districts.getUserData().getAggregate(GROUPLABEL).getValue(dist.getModelKey(), label);
 			ret = ret + iVal;
 		}
 		return ret;
