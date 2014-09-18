@@ -1,5 +1,4 @@
 
-
 import java.io.*;
 import java.util.*;
 
@@ -42,9 +41,12 @@ public class WriteSession {
 	}
 
 	private static TreeSet<String> currentTopics;
+	private static EntityManagerFactory emf;
+	private static EntityManager em;
 
 	public static void main(String[] args) throws Exception {
-/*		
+		initJpa();
+
 		TestAction[] testActions = new TestAction[] {
 				new GATestAction(), 
 				new ARTestAction(), 
@@ -69,22 +71,24 @@ public class WriteSession {
 		
 		for( TestAction testAction: testActions) {
 			Session session = buildSession(testAction);
-			writeCsv(session);
+			writeJpa(session);
 		}
-*/		
-		TestAction testAction = new GATestAction();
-		Session session = buildSession(testAction);
+/*		
+ 		TestAction testAction = new GATestAction();
+ 		Session session = buildSession(testAction);
 		writeJpa(session);
+*/		
 	}
 
+	private static void initJpa() throws Exception {
+		emf = Persistence.createEntityManagerFactory("openstats");
+		em = emf.createEntityManager();
+	}
 	private static void writeJpa(Session session) throws Exception {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
-		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(session);
 		tx.commit();
-		em.close();
 	}
 
 	private static void writeCsv(Session session) throws Exception {
@@ -135,8 +139,7 @@ public class WriteSession {
 					}
 				}
             }
-            
-            Collections.sort(districts, new LESComparator(districts));
+            Collections.sort(districts, new LESComparator(districts) );
             // write the customer lists
             for ( final openstats.model.District dist: districts) {
             	columns.clear();
