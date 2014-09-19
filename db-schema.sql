@@ -162,7 +162,9 @@
     );
     create table Districts_District (
         Districts_id int8 not null,
-        districtList_id int8 not null
+        districtList_id int8 not null,
+        districtList_ORDER int4 not null,
+        primary key (Districts_id, districtList_ORDER)
     );
     create table Legislator (
         id int8 not null,
