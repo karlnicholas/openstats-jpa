@@ -48,7 +48,7 @@ public class WriteSession {
 		initJpa();
 
 		TestAction[] testActions = new TestAction[] {
-				new GATestAction(), 
+//				new GATestAction(), 
 				new ARTestAction(), 
 				new OKTestAction(), 
 				new MATestAction(), 
@@ -73,11 +73,12 @@ public class WriteSession {
 			Session session = buildSession(testAction);
 			writeJpa(session);
 		}
-/*		
+
  		TestAction testAction = new GATestAction();
+
  		Session session = buildSession(testAction);
 		writeJpa(session);
-*/		
+		
 	}
 
 	private static void initJpa() throws Exception {
@@ -139,9 +140,9 @@ public class WriteSession {
 					}
 				}
             }
-            Collections.sort(districts, new LESComparator(districts) );
+            Collections.sort(districts.getDistrictList(), new LESComparator(districts) );
             // write the customer lists
-            for ( final openstats.model.District dist: districts) {
+            for ( final openstats.model.District dist: districts.getDistrictList()) {
             	columns.clear();
     	        columns.add(dist.getDistrict());
     	        columns.add(dist.getChamber());
@@ -258,7 +259,7 @@ public class WriteSession {
 				district.setChamber(legislator.chamber);
 				district.setDistrict(legislator.district);
 				district.getLegislators().add(sLegislator); 
-				districts.add(district);
+				districts.getDistrictList().add(district);
 				
 				ArrayList<Long> values = new ArrayList<Long>(AGGLABELS.size());
 				values.add(sponsorStats.billData[0][0]);
@@ -283,9 +284,9 @@ public class WriteSession {
 	public static void computeSkewness(Session session) throws OpenStatsException {
 		Districts districts = session.getDistricts();
 		Computation computation = districts.getUserData().getComputation(GROUPLABEL);
-		double[] stats = new double[districts.size()];
+		double[] stats = new double[districts.getDistrictList().size()];
 		int i=0;
-		for ( District district: districts ) {
+		for ( District district: districts.getDistrictList() ) {
 			ArrayList<Double> values = computation.getValues(district);
 			stats[i++] = values.get(0);
 		}
@@ -1031,7 +1032,7 @@ public class WriteSession {
 //		ArrayList<Long> lidsAll = makeRList();
 		Computation computation = districts.getUserData().createComputation(GROUPLABEL, LESLABEL);
 	
-		double LESMult = new Double(districts.size()/4.0);
+		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
 		double[][] denomArray = new double[3][4];
 
@@ -1084,7 +1085,7 @@ public class WriteSession {
 
 		double[][] distArray = new double[3][4];
 
-		for ( openstats.model.District dist: districts) {
+		for ( openstats.model.District dist: districts.getDistrictList()) {
 
 			ArrayList<Long> values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
 
@@ -1145,7 +1146,7 @@ public class WriteSession {
 	
 	private static double totalFrom(Districts districts, String label) throws OpenStatsException {
 		double ret = 0.0;
-		for ( openstats.model.District dist: districts) {
+		for ( openstats.model.District dist: districts.getDistrictList()) {
 			Long iVal = districts.getUserData().getAggregate(GROUPLABEL).getValue(dist, label);
 			ret = ret + iVal;
 		}

@@ -45,9 +45,10 @@ public class ReadSession {
 			writeCsv(session);
 		}
 */		
-//		ReadAction testAction = new GATestAction();
-		List<Session> sessions = listSessions();
-		System.out.println(sessions);
+		ReadAction testAction = new GATestAction();
+//		List<Session> sessions = listSessions();
+		Session session = readJpa(testAction);
+		writeCsv(session);
 	}
 
 	private static List<Session> listSessions() throws Exception {
@@ -115,9 +116,9 @@ public class ReadSession {
 				}
             }
             
-            Collections.sort(districts, new LESComparator(districts));
+            Collections.sort(districts.getDistrictList(), new LESComparator(districts));
             // write the customer lists
-            for ( final openstats.model.District dist: districts) {
+            for ( final openstats.model.District dist: districts.getDistrictList()) {
             	columns.clear();
     	        columns.add(dist.getDistrict());
     	        columns.add(dist.getChamber());
