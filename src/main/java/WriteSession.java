@@ -46,9 +46,9 @@ public class WriteSession {
 
 	public static void main(String[] args) throws Exception {
 		initJpa();
-
+/*
 		TestAction[] testActions = new TestAction[] {
-//				new GATestAction(), 
+				new GATestAction(), 
 				new ARTestAction(), 
 				new OKTestAction(), 
 				new MATestAction(), 
@@ -73,7 +73,7 @@ public class WriteSession {
 			Session session = buildSession(testAction);
 			writeJpa(session);
 		}
-
+*/
  		TestAction testAction = new GATestAction();
 
  		Session session = buildSession(testAction);
@@ -108,7 +108,7 @@ public class WriteSession {
         	
         	writer = new MyCsvWriter(new FileWriter("c:/users/karl/"+session.getState()+"-2013-les.csv"), CsvPreference.STANDARD_PREFERENCE);
 	        Districts districts = session.getDistricts();
-	        // the header elements are used to map the bean values to each column (names must match)
+	        // the header elements are used to map the bean valueList to each column (names must match)
 	        List<String> columns = new ArrayList<String>();
 
 	        columns.add("district");
@@ -133,11 +133,7 @@ public class WriteSession {
             	}
 				@Override
 				public int compare(District o1, District o2) {
-					try {
-						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
-					} catch (OpenStatsException e) {
-						throw new RuntimeException(e);
-					}
+					return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
 				}
             }
             Collections.sort(districts.getDistrictList(), new LESComparator(districts) );
@@ -146,11 +142,11 @@ public class WriteSession {
             	columns.clear();
     	        columns.add(dist.getDistrict());
     	        columns.add(dist.getChamber());
-    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValueList(dist);
     	        for ( Long agg: aggs ) {
     	        	columns.add(agg.toString());
     	        }
-    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist);
+    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValueList(dist);
     	        for ( Double comp: comps ) {
     	        	columns.add(comp.toString());
     	        }
@@ -239,18 +235,18 @@ public class WriteSession {
 			
 			openstats.model.District district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district != null ) {
-				ArrayList<Long> values = aggregate.getValues(district);
-				values.set(0, values.get(0) + sponsorStats.billData[0][0]);
-				values.set(0, values.get(0) + sponsorStats.billData[0][3]);
-				values.set(0, values.get(0) + sponsorStats.billData[1][0]);
-				values.set(0, values.get(0) + sponsorStats.billData[1][1]);
-				values.set(0, values.get(0) + sponsorStats.billData[1][2]);
-				values.set(0, values.get(0) + sponsorStats.billData[1][3]);
-				values.set(0, values.get(0) + sponsorStats.billData[2][0]);
-				values.set(0, values.get(0) + sponsorStats.billData[2][1]);
-				values.set(0, values.get(0) + sponsorStats.billData[2][2]);
-				values.set(0, values.get(0) + sponsorStats.billData[2][3]);
-				aggregate.setValues(district, values);
+				ArrayList<Long> valueList = aggregate.getValueList(district);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][0]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][3]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][0]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][1]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][2]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][3]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][0]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][1]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][2]);
+				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][3]);
+				aggregate.setValueList(district, valueList);
 			} else {
 				openstats.model.Legislator sLegislator = new openstats.model.Legislator();
 				sLegislator.setName(legislator.full_name);
@@ -261,18 +257,18 @@ public class WriteSession {
 				district.getLegislators().add(sLegislator); 
 				districts.getDistrictList().add(district);
 				
-				ArrayList<Long> values = new ArrayList<Long>(AGGLABELS.size());
-				values.add(sponsorStats.billData[0][0]);
-				values.add(sponsorStats.billData[0][3]);
-				values.add(sponsorStats.billData[1][0]);
-				values.add(sponsorStats.billData[1][1]);
-				values.add(sponsorStats.billData[1][2]);
-				values.add(sponsorStats.billData[1][3]);
-				values.add(sponsorStats.billData[2][0]);
-				values.add(sponsorStats.billData[2][1]);
-				values.add(sponsorStats.billData[2][2]);
-				values.add(sponsorStats.billData[2][3]);
-				aggregate.setValues(district, values);
+				ArrayList<Long> valueList = new ArrayList<Long>(AGGLABELS.size());
+				valueList.add(sponsorStats.billData[0][0]);
+				valueList.add(sponsorStats.billData[0][3]);
+				valueList.add(sponsorStats.billData[1][0]);
+				valueList.add(sponsorStats.billData[1][1]);
+				valueList.add(sponsorStats.billData[1][2]);
+				valueList.add(sponsorStats.billData[1][3]);
+				valueList.add(sponsorStats.billData[2][0]);
+				valueList.add(sponsorStats.billData[2][1]);
+				valueList.add(sponsorStats.billData[2][2]);
+				valueList.add(sponsorStats.billData[2][3]);
+				aggregate.setValueList(district, valueList);
 			}
 		}
 		computeLES(districts);
@@ -287,14 +283,14 @@ public class WriteSession {
 		double[] stats = new double[districts.getDistrictList().size()];
 		int i=0;
 		for ( District district: districts.getDistrictList() ) {
-			ArrayList<Double> values = computation.getValues(district);
-			stats[i++] = values.get(0);
+			ArrayList<Double> valueList = computation.getValueList(district);
+			stats[i++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
 		Computation compSession = session.getUserData().createComputation(GROUPLABEL, SKEWLABEL);
-		ArrayList<Double> values = compSession.createValues(session);
-		values.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		compSession.setValues(session, values);		
+		ArrayList<Double> valueList = compSession.createValueList(session);
+		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
+		compSession.setValueList(session, valueList);		
 	}
 
 	/**
@@ -972,7 +968,7 @@ public class WriteSession {
 	 * Source: Legislative Studies Quarterly, Vol. 5, No. 4 (Nov., 1980), pp. 563-585
 	 * Published
 	 * 
-	 * It assigned the following values to positions: Party Leader
+	 * It assigned the following valueList to positions: Party Leader
 	 * or Whip = 5; Committee Chair and Vice Chair simultaneously on different
 	 * committees = 4; Committee Chair only = 3; two or more Committee Vice
 	 * Chairs = 2; Committee Vice Chair only = 1; and Member only = 0.
@@ -1087,22 +1083,22 @@ public class WriteSession {
 
 		for ( openstats.model.District dist: districts.getDistrictList()) {
 
-			ArrayList<Long> values = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+			ArrayList<Long> valueList = districts.getUserData().getAggregate(GROUPLABEL).getValueList(dist);
 
-			distArray[0][0] = values.get(0);
+			distArray[0][0] = valueList.get(0);
 			distArray[0][1] = 0.0;
 			distArray[0][2] = 0.0;
-			distArray[0][3] = values.get(1); 
+			distArray[0][3] = valueList.get(1); 
 			
-			distArray[1][0] = values.get(2);
-			distArray[1][1] = values.get(3); 
-			distArray[1][2] = values.get(4); 
-			distArray[1][3] = values.get(5); 
+			distArray[1][0] = valueList.get(2);
+			distArray[1][1] = valueList.get(3); 
+			distArray[1][2] = valueList.get(4); 
+			distArray[1][3] = valueList.get(5); 
 
-			distArray[2][0] = values.get(6);
-			distArray[2][1] = values.get(7); 
-			distArray[2][2] = values.get(8); 
-			distArray[2][3] = values.get(9);
+			distArray[2][0] = valueList.get(6);
+			distArray[2][1] = valueList.get(7); 
+			distArray[2][2] = valueList.get(8); 
+			distArray[2][3] = valueList.get(9);
 				
 			// make the array inverse cumulative across rows 
 			for ( int j=0; j < 3; ++j ) {
@@ -1140,7 +1136,7 @@ public class WriteSession {
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
 			ArrayList<Double> comps = new ArrayList<Double>(LESLABEL.size());
 			comps.add(LES);
-			computation.setValues(dist, comps);
+			computation.setValueList(dist, comps);
 		}
 	}
 	

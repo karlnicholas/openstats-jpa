@@ -108,11 +108,7 @@ public class ReadSession {
             	}
 				@Override
 				public int compare(District o1, District o2) {
-					try {
-						return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
-					} catch (OpenStatsException e) {
-						throw new RuntimeException(e);
-					}
+					return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
 				}
             }
             
@@ -122,11 +118,11 @@ public class ReadSession {
             	columns.clear();
     	        columns.add(dist.getDistrict());
     	        columns.add(dist.getChamber());
-    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValues(dist);
+    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValueList(dist);
     	        for ( Long agg: aggs ) {
     	        	columns.add(agg.toString());
     	        }
-    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValues(dist);
+    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValueList(dist);
     	        for ( Double comp: comps ) {
     	        	columns.add(comp.toString());
     	        }

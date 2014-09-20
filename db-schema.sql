@@ -28,7 +28,7 @@
     alter table Computations_groups 
         drop constraint FK_84khleoxhrpyeen3r0yvqj7ks;
     alter table District 
-        drop constraint FK_13qtcv47ajonuonfu42t50bfx;
+        drop constraint FK_l9w2x489mhq946q37qwukong0;
     alter table District_Legislator 
         drop constraint FK_2uffod2ldeb2cv0yvsf750siv;
     alter table District_Legislator 
@@ -42,7 +42,7 @@
     alter table Session 
         drop constraint FK_da03b1jhsycp684r2x3ipja5v;
     alter table Session 
-        drop constraint FK_gyx9u4o13gyosob2mcowyx45h;
+        drop constraint FK_io26cn4kailrfdipirn5wxma2;
     alter table Session 
         drop constraint FK_jbaed4kf357y5nrbyax48kx3m;
     alter table UserData 
@@ -68,7 +68,7 @@
     drop table if exists Districts cascade;
     drop table if exists Districts_District cascade;
     drop table if exists Legislator cascade;
-    drop table if exists ModelKey cascade;
+    drop table if exists MapKey cascade;
     drop table if exists Session cascade;
     drop table if exists UserData cascade;
     drop sequence hibernate_sequence;
@@ -148,7 +148,7 @@
         id int8 not null,
         chamber varchar(255),
         district varchar(255),
-        modelKey_id int8,
+        mapKey_id int8,
         primary key (id)
     );
     create table District_Legislator (
@@ -172,7 +172,7 @@
         party varchar(255),
         primary key (id)
     );
-    create table ModelKey (
+    create table MapKey (
         id int8 not null,
         primary key (id)
     );
@@ -181,7 +181,7 @@
         session varchar(255),
         state varchar(255),
         districts_id int8,
-        modelKey_id int8,
+        mapKey_id int8,
         userData_id int8,
         primary key (id)
     );
@@ -204,7 +204,7 @@
     alter table Aggregate_values 
         add constraint FK_llftyissotwwc9fna33qn4ehi 
         foreign key (values_KEY) 
-        references ModelKey;
+        references MapKey;
     alter table Aggregate_values 
         add constraint FK_4w7tx3fji5ncip3omc1eyujep 
         foreign key (Aggregate_id) 
@@ -232,7 +232,7 @@
     alter table Computation_values 
         add constraint FK_7scy015qy04maxpev7fk9xc73 
         foreign key (values_KEY) 
-        references ModelKey;
+        references MapKey;
     alter table Computation_values 
         add constraint FK_8ghfiwqhrn18ibbgo0to4jdpf 
         foreign key (Computation_id) 
@@ -254,9 +254,9 @@
         foreign key (Computations_id) 
         references Computations;
     alter table District 
-        add constraint FK_13qtcv47ajonuonfu42t50bfx 
-        foreign key (modelKey_id) 
-        references ModelKey;
+        add constraint FK_l9w2x489mhq946q37qwukong0 
+        foreign key (mapKey_id) 
+        references MapKey;
     alter table District_Legislator 
         add constraint FK_2uffod2ldeb2cv0yvsf750siv 
         foreign key (legislators_id) 
@@ -282,9 +282,9 @@
         foreign key (districts_id) 
         references Districts;
     alter table Session 
-        add constraint FK_gyx9u4o13gyosob2mcowyx45h 
-        foreign key (modelKey_id) 
-        references ModelKey;
+        add constraint FK_io26cn4kailrfdipirn5wxma2 
+        foreign key (mapKey_id) 
+        references MapKey;
     alter table Session 
         add constraint FK_jbaed4kf357y5nrbyax48kx3m 
         foreign key (userData_id) 

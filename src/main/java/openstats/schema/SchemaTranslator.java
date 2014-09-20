@@ -77,8 +77,8 @@ public class SchemaTranslator {
 				Aggregates.class, 
 				Aggregate.class, 
 				Computations.class, 
-				Computation.class,
-				ModelKey.class
+				Computation.class, 
+				MapKey.class
 			};
 
 //		translator.setDialect("org.hibernate.dialect.HSQLDialect")
