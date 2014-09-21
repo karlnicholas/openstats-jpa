@@ -1,20 +1,12 @@
 
 
-import java.io.*;
 import java.util.*;
 
 import javax.persistence.*;
 
 import openstats.model.*;
 
-import org.supercsv.io.*;
-import org.supercsv.prefs.CsvPreference;
-
 public class ReadSession {
-
-	private static final String GROUPLABEL = "BILLPROGRESS";
-	private static ArrayList<String> LESLABEL = new ArrayList<String>(Arrays.asList(new String[] {"LES"}));
-	private static ArrayList<String> SKEWLABEL = new ArrayList<String>(Arrays.asList(new String[] {"SKEWNESS"}));		
 
 	public static void main(String[] args) throws Exception {
 /*		
@@ -48,7 +40,7 @@ public class ReadSession {
 		ReadAction testAction = new GATestAction();
 //		List<Session> sessions = listSessions();
 		Session session = readJpa(testAction);
-		writeCsv(session);
+		WriteCsv.writeCsv(session);
 	}
 
 	private static List<Session> listSessions() throws Exception {
@@ -66,80 +58,6 @@ public class ReadSession {
 			.setParameter("session", readAction.getSession())
 			.getSingleResult();
 	}
-
-	private static void writeCsv(Session session) throws Exception {
-        
-    	class MyCsvWriter extends AbstractCsvWriter {
-
-			public MyCsvWriter(Writer writer, CsvPreference preference) {
-				super(writer, preference);
-			}
-			public void writeRow(String... columns ) throws IOException {
-				super.writeRow(columns);
-			}
-		}
-		MyCsvWriter writer = null;
-        try {
-        	
-        	writer = new MyCsvWriter(new FileWriter("c:/users/karl/"+session.getState()+"-2013-les.csv"), CsvPreference.STANDARD_PREFERENCE);
-	        Districts districts = session.getDistricts();
-	        // the header elements are used to map the bean values to each column (names must match)
-	        List<String> columns = new ArrayList<String>();
-
-	        columns.add("district");
-	        columns.add("chamber");
-//			Aggregate aggregate = districts.getAggregate(GROUPLABEL);
-
-	        for ( String head: districts.getUserData().getAggregates().getGroup(GROUPLABEL)) {
-	        	columns.add(head);
-	        }
-	        for ( String head: districts.getUserData().getComputations().getGroup(GROUPLABEL)) {
-	        	columns.add(head);
-	        }
-
-            // write the header
-	        String[] sColumns = new String[columns.size()];
-	        sColumns = columns.toArray(sColumns);
-            writer.writeHeader(sColumns);
-            class LESComparator implements Comparator<District> {
-            	private Districts districts;
-            	public LESComparator(Districts districts) {
-            		this.districts = districts;
-            	}
-				@Override
-				public int compare(District o1, District o2) {
-					return districts.getUserData().getComputation(GROUPLABEL).getValue(o2, LESLABEL.get(0)).compareTo(districts.getUserData().getComputation(GROUPLABEL).getValue(o1, LESLABEL.get(0)));
-				}
-            }
-            
-            Collections.sort(districts.getDistrictList(), new LESComparator(districts));
-            // write the customer lists
-            for ( final openstats.model.District dist: districts.getDistrictList()) {
-            	columns.clear();
-    	        columns.add(dist.getDistrict());
-    	        columns.add(dist.getChamber());
-    	        List<Long> aggs = districts.getUserData().getAggregate(GROUPLABEL).getValueList(dist);
-    	        for ( Long agg: aggs ) {
-    	        	columns.add(agg.toString());
-    	        }
-    	        List<Double> comps = districts.getUserData().getComputation(GROUPLABEL).getValueList(dist);
-    	        for ( Double comp: comps ) {
-    	        	columns.add(comp.toString());
-    	        }
-                writer.writeRow(columns.toArray(sColumns));
-            }
-
-            writer.writeHeader(SKEWLABEL.get(0));
-            writer.writeRow(session.getUserData().getComputation(GROUPLABEL).getValue(session, SKEWLABEL.get(0)).toString());
-                
-        }
-        finally {
-            if( writer  != null ) {
-            	writer.close();
-            }
-        }
-	}
-	
 	
 	static class GATestAction implements ReadAction {
 		@Override

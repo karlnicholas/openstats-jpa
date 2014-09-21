@@ -1,170 +1,105 @@
 
-    alter table Aggregate_labels 
-        drop constraint FK_nysr57f5ydnp403697yowt1cg;
-    alter table Aggregate_values 
-        drop constraint FK_llftyissotwwc9fna33qn4ehi;
-    alter table Aggregate_values 
-        drop constraint FK_4w7tx3fji5ncip3omc1eyujep;
-    alter table Aggregates_Aggregate 
-        drop constraint FK_nm9182pu2307iqylsju0y5jiv;
-    alter table Aggregates_Aggregate 
-        drop constraint FK_78nfnn8yvd8yb94m9r37a5cee;
-    alter table Aggregates_descriptions 
-        drop constraint FK_1d8qnigcphh0s42dcg224pwkl;
-    alter table Aggregates_groups 
-        drop constraint FK_cy19jpjnkoybh2vuyp5gevadj;
-    alter table Computation_labels 
-        drop constraint FK_2f7rk3381yu7ygjb6nykbcdxf;
-    alter table Computation_values 
-        drop constraint FK_7scy015qy04maxpev7fk9xc73;
-    alter table Computation_values 
-        drop constraint FK_8ghfiwqhrn18ibbgo0to4jdpf;
-    alter table Computations_Computation 
-        drop constraint FK_cuypohr08ln7ltm3t8x9dw8rf;
-    alter table Computations_Computation 
-        drop constraint FK_fr3q7jdn6sew8wbp9foiogbnj;
-    alter table Computations_descriptions 
-        drop constraint FK_gho1imb0o3noo36x442mhxi1n;
-    alter table Computations_groups 
-        drop constraint FK_84khleoxhrpyeen3r0yvqj7ks;
-    alter table District 
-        drop constraint FK_l9w2x489mhq946q37qwukong0;
     alter table District_Legislator 
         drop constraint FK_2uffod2ldeb2cv0yvsf750siv;
     alter table District_Legislator 
         drop constraint FK_5pm9sjbqss6dnn64r4sraenc3;
-    alter table Districts 
-        drop constraint FK_d5iwmi9k6u9qgf75h6igl5scg;
+    alter table District_aggregates 
+        drop constraint FK_f8bjk7728cgug743jif4pneiy;
+    alter table District_computations 
+        drop constraint FK_ksro43goqx3hq1uggsfnkcs1h;
     alter table Districts_District 
         drop constraint FK_fiygsso958eeod0puoi09e83n;
     alter table Districts_District 
         drop constraint FK_hdk54mjpm5y8tuwj1crse9oqe;
+    alter table GroupInfo_groupDescriptions 
+        drop constraint FK_h1e036v12ho97fe283d63jkkf;
+    alter table GroupInfo_groupLabels 
+        drop constraint FK_dksf6752wqb8v0s2tw6wnml9o;
     alter table Session 
         drop constraint FK_da03b1jhsycp684r2x3ipja5v;
-    alter table Session 
-        drop constraint FK_io26cn4kailrfdipirn5wxma2;
-    alter table Session 
-        drop constraint FK_jbaed4kf357y5nrbyax48kx3m;
-    alter table UserData 
-        drop constraint FK_8qn1erjhhoxbhwbo5o1pcp3qi;
-    alter table UserData 
-        drop constraint FK_l0kxe2o7jltij466ywvc48f8;
-    drop table if exists Aggregate cascade;
-    drop table if exists Aggregate_labels cascade;
-    drop table if exists Aggregate_values cascade;
-    drop table if exists Aggregates cascade;
-    drop table if exists Aggregates_Aggregate cascade;
-    drop table if exists Aggregates_descriptions cascade;
-    drop table if exists Aggregates_groups cascade;
-    drop table if exists Computation cascade;
-    drop table if exists Computation_labels cascade;
-    drop table if exists Computation_values cascade;
-    drop table if exists Computations cascade;
-    drop table if exists Computations_Computation cascade;
-    drop table if exists Computations_descriptions cascade;
-    drop table if exists Computations_groups cascade;
+    alter table Session_aggregates 
+        drop constraint FK_ambr5rtyfpa1p177f1pxq9sl;
+    alter table Session_computations 
+        drop constraint FK_svfno1kf3n2w4g7yhtv3nlm0m;
+    alter table districts_aggregategroupmap 
+        drop constraint FK_mi5hp56igll0b9vrfm72wnje;
+    alter table districts_aggregategroupmap 
+        drop constraint FK_4rrfe3663pn4bp9k5k6fvg8ap;
+    alter table districts_computationgroupmap 
+        drop constraint FK_g6mwljbhrpt40bac4xomj34e7;
+    alter table districts_computationgroupmap 
+        drop constraint FK_idg2fsr5m4nbcxt146jasnb8k;
+    alter table session_aggregategroupmap 
+        drop constraint FK_o2ykghh9xyuyayugsjbhhhohp;
+    alter table session_aggregategroupmap 
+        drop constraint FK_f7w58rb7hkgo41pg0sk6eltxw;
+    alter table session_computationgroupmap 
+        drop constraint FK_55nn15qy8qd0qrhtpaeat7vnb;
+    alter table session_computationgroupmap 
+        drop constraint FK_68mmmkyslpo1nmc6qu969tye0;
     drop table if exists District cascade;
     drop table if exists District_Legislator cascade;
+    drop table if exists District_aggregates cascade;
+    drop table if exists District_computations cascade;
     drop table if exists Districts cascade;
     drop table if exists Districts_District cascade;
+    drop table if exists GroupInfo cascade;
+    drop table if exists GroupInfo_groupDescriptions cascade;
+    drop table if exists GroupInfo_groupLabels cascade;
     drop table if exists Legislator cascade;
-    drop table if exists MapKey cascade;
     drop table if exists Session cascade;
-    drop table if exists UserData cascade;
+    drop table if exists Session_aggregates cascade;
+    drop table if exists Session_computations cascade;
+    drop table if exists districts_aggregategroupmap cascade;
+    drop table if exists districts_computationgroupmap cascade;
+    drop table if exists session_aggregategroupmap cascade;
+    drop table if exists session_computationgroupmap cascade;
     drop sequence hibernate_sequence;
-    create table Aggregate (
-        id int8 not null,
-        primary key (id)
-    );
-    create table Aggregate_labels (
-        Aggregate_id int8 not null,
-        labels varchar(255)
-    );
-    create table Aggregate_values (
-        Aggregate_id int8 not null,
-        values bytea,
-        values_KEY int8 not null,
-        primary key (Aggregate_id, values_KEY)
-    );
-    create table Aggregates (
-        id int8 not null,
-        primary key (id)
-    );
-    create table Aggregates_Aggregate (
-        Aggregates_id int8 not null,
-        aggregateMap_id int8 not null,
-        aggregateMap_KEY varchar(255),
-        primary key (Aggregates_id, aggregateMap_KEY)
-    );
-    create table Aggregates_descriptions (
-        Aggregates_id int8 not null,
-        descriptions bytea,
-        descriptions_KEY varchar(255),
-        primary key (Aggregates_id, descriptions_KEY)
-    );
-    create table Aggregates_groups (
-        Aggregates_id int8 not null,
-        groups bytea,
-        groups_KEY varchar(255),
-        primary key (Aggregates_id, groups_KEY)
-    );
-    create table Computation (
-        id int8 not null,
-        primary key (id)
-    );
-    create table Computation_labels (
-        Computation_id int8 not null,
-        labels varchar(255)
-    );
-    create table Computation_values (
-        Computation_id int8 not null,
-        values bytea,
-        values_KEY int8 not null,
-        primary key (Computation_id, values_KEY)
-    );
-    create table Computations (
-        id int8 not null,
-        primary key (id)
-    );
-    create table Computations_Computation (
-        Computations_id int8 not null,
-        computationMap_id int8 not null,
-        computationMap_KEY varchar(255),
-        primary key (Computations_id, computationMap_KEY)
-    );
-    create table Computations_descriptions (
-        Computations_id int8 not null,
-        descriptions bytea,
-        descriptions_KEY varchar(255),
-        primary key (Computations_id, descriptions_KEY)
-    );
-    create table Computations_groups (
-        Computations_id int8 not null,
-        groups bytea,
-        groups_KEY varchar(255),
-        primary key (Computations_id, groups_KEY)
-    );
     create table District (
         id int8 not null,
         chamber varchar(255),
         district varchar(255),
-        mapKey_id int8,
         primary key (id)
     );
     create table District_Legislator (
         District_id int8 not null,
         legislators_id int8 not null
     );
+    create table District_aggregates (
+        District_id int8 not null,
+        aggregates bytea,
+        aggregates_KEY varchar(255),
+        primary key (District_id, aggregates_KEY)
+    );
+    create table District_computations (
+        District_id int8 not null,
+        computations bytea,
+        computations_KEY varchar(255),
+        primary key (District_id, computations_KEY)
+    );
     create table Districts (
         id int8 not null,
-        userData_id int8,
         primary key (id)
     );
     create table Districts_District (
         Districts_id int8 not null,
-        districtList_id int8 not null,
-        districtList_ORDER int4 not null,
-        primary key (Districts_id, districtList_ORDER)
+        districtList_id int8 not null
+    );
+    create table GroupInfo (
+        id int8 not null,
+        primary key (id)
+    );
+    create table GroupInfo_groupDescriptions (
+        GroupInfo_id int8 not null,
+        groupDescriptions varchar(255),
+        groupDescriptions_ORDER int4 not null,
+        primary key (GroupInfo_id, groupDescriptions_ORDER)
+    );
+    create table GroupInfo_groupLabels (
+        GroupInfo_id int8 not null,
+        groupLabels varchar(255),
+        groupLabels_ORDER int4 not null,
+        primary key (GroupInfo_id, groupLabels_ORDER)
     );
     create table Legislator (
         id int8 not null,
@@ -172,91 +107,61 @@
         party varchar(255),
         primary key (id)
     );
-    create table MapKey (
-        id int8 not null,
-        primary key (id)
-    );
     create table Session (
         id int8 not null,
         session varchar(255),
         state varchar(255),
         districts_id int8,
-        mapKey_id int8,
-        userData_id int8,
         primary key (id)
     );
-    create table UserData (
-        id int8 not null,
-        aggregates_id int8,
-        computations_id int8,
-        primary key (id)
+    create table Session_aggregates (
+        Session_id int8 not null,
+        aggregates bytea,
+        aggregates_KEY varchar(255),
+        primary key (Session_id, aggregates_KEY)
     );
-    alter table Computations_Computation 
-        add constraint UK_cuypohr08ln7ltm3t8x9dw8rf unique (computationMap_id);
+    create table Session_computations (
+        Session_id int8 not null,
+        computations bytea,
+        computations_KEY varchar(255),
+        primary key (Session_id, computations_KEY)
+    );
+    create table districts_aggregategroupmap (
+        Districts_id int8 not null,
+        aggregateGroupMap_id int8 not null,
+        aggregateGroupMap_KEY varchar(255),
+        primary key (Districts_id, aggregateGroupMap_KEY)
+    );
+    create table districts_computationgroupmap (
+        Districts_id int8 not null,
+        computationGroupMap_id int8 not null,
+        computationGroupMap_KEY varchar(255),
+        primary key (Districts_id, computationGroupMap_KEY)
+    );
+    create table session_aggregategroupmap (
+        Session_id int8 not null,
+        aggregateGroupMap_id int8 not null,
+        aggregateGroupMap_KEY varchar(255),
+        primary key (Session_id, aggregateGroupMap_KEY)
+    );
+    create table session_computationgroupmap (
+        Session_id int8 not null,
+        computationGroupMap_id int8 not null,
+        computationGroupMap_KEY varchar(255),
+        primary key (Session_id, computationGroupMap_KEY)
+    );
     alter table District_Legislator 
         add constraint UK_2uffod2ldeb2cv0yvsf750siv unique (legislators_id);
     alter table Districts_District 
         add constraint UK_fiygsso958eeod0puoi09e83n unique (districtList_id);
-    alter table Aggregate_labels 
-        add constraint FK_nysr57f5ydnp403697yowt1cg 
-        foreign key (Aggregate_id) 
-        references Aggregate;
-    alter table Aggregate_values 
-        add constraint FK_llftyissotwwc9fna33qn4ehi 
-        foreign key (values_KEY) 
-        references MapKey;
-    alter table Aggregate_values 
-        add constraint FK_4w7tx3fji5ncip3omc1eyujep 
-        foreign key (Aggregate_id) 
-        references Aggregate;
-    alter table Aggregates_Aggregate 
-        add constraint FK_nm9182pu2307iqylsju0y5jiv 
-        foreign key (aggregateMap_id) 
-        references Aggregate;
-    alter table Aggregates_Aggregate 
-        add constraint FK_78nfnn8yvd8yb94m9r37a5cee 
-        foreign key (Aggregates_id) 
-        references Aggregates;
-    alter table Aggregates_descriptions 
-        add constraint FK_1d8qnigcphh0s42dcg224pwkl 
-        foreign key (Aggregates_id) 
-        references Aggregates;
-    alter table Aggregates_groups 
-        add constraint FK_cy19jpjnkoybh2vuyp5gevadj 
-        foreign key (Aggregates_id) 
-        references Aggregates;
-    alter table Computation_labels 
-        add constraint FK_2f7rk3381yu7ygjb6nykbcdxf 
-        foreign key (Computation_id) 
-        references Computation;
-    alter table Computation_values 
-        add constraint FK_7scy015qy04maxpev7fk9xc73 
-        foreign key (values_KEY) 
-        references MapKey;
-    alter table Computation_values 
-        add constraint FK_8ghfiwqhrn18ibbgo0to4jdpf 
-        foreign key (Computation_id) 
-        references Computation;
-    alter table Computations_Computation 
-        add constraint FK_cuypohr08ln7ltm3t8x9dw8rf 
-        foreign key (computationMap_id) 
-        references Computation;
-    alter table Computations_Computation 
-        add constraint FK_fr3q7jdn6sew8wbp9foiogbnj 
-        foreign key (Computations_id) 
-        references Computations;
-    alter table Computations_descriptions 
-        add constraint FK_gho1imb0o3noo36x442mhxi1n 
-        foreign key (Computations_id) 
-        references Computations;
-    alter table Computations_groups 
-        add constraint FK_84khleoxhrpyeen3r0yvqj7ks 
-        foreign key (Computations_id) 
-        references Computations;
-    alter table District 
-        add constraint FK_l9w2x489mhq946q37qwukong0 
-        foreign key (mapKey_id) 
-        references MapKey;
+    alter table districts_aggregategroupmap 
+        add constraint UK_mi5hp56igll0b9vrfm72wnje unique (aggregateGroupMap_id);
+    alter table districts_computationgroupmap 
+        add constraint UK_g6mwljbhrpt40bac4xomj34e7 unique (computationGroupMap_id);
+    alter table session_aggregategroupmap 
+        add constraint UK_o2ykghh9xyuyayugsjbhhhohp unique (aggregateGroupMap_id);
+    alter table session_computationgroupmap 
+        add constraint UK_55nn15qy8qd0qrhtpaeat7vnb unique (computationGroupMap_id);
     alter table District_Legislator 
         add constraint FK_2uffod2ldeb2cv0yvsf750siv 
         foreign key (legislators_id) 
@@ -265,10 +170,14 @@
         add constraint FK_5pm9sjbqss6dnn64r4sraenc3 
         foreign key (District_id) 
         references District;
-    alter table Districts 
-        add constraint FK_d5iwmi9k6u9qgf75h6igl5scg 
-        foreign key (userData_id) 
-        references UserData;
+    alter table District_aggregates 
+        add constraint FK_f8bjk7728cgug743jif4pneiy 
+        foreign key (District_id) 
+        references District;
+    alter table District_computations 
+        add constraint FK_ksro43goqx3hq1uggsfnkcs1h 
+        foreign key (District_id) 
+        references District;
     alter table Districts_District 
         add constraint FK_fiygsso958eeod0puoi09e83n 
         foreign key (districtList_id) 
@@ -277,24 +186,56 @@
         add constraint FK_hdk54mjpm5y8tuwj1crse9oqe 
         foreign key (Districts_id) 
         references Districts;
+    alter table GroupInfo_groupDescriptions 
+        add constraint FK_h1e036v12ho97fe283d63jkkf 
+        foreign key (GroupInfo_id) 
+        references GroupInfo;
+    alter table GroupInfo_groupLabels 
+        add constraint FK_dksf6752wqb8v0s2tw6wnml9o 
+        foreign key (GroupInfo_id) 
+        references GroupInfo;
     alter table Session 
         add constraint FK_da03b1jhsycp684r2x3ipja5v 
         foreign key (districts_id) 
         references Districts;
-    alter table Session 
-        add constraint FK_io26cn4kailrfdipirn5wxma2 
-        foreign key (mapKey_id) 
-        references MapKey;
-    alter table Session 
-        add constraint FK_jbaed4kf357y5nrbyax48kx3m 
-        foreign key (userData_id) 
-        references UserData;
-    alter table UserData 
-        add constraint FK_8qn1erjhhoxbhwbo5o1pcp3qi 
-        foreign key (aggregates_id) 
-        references Aggregates;
-    alter table UserData 
-        add constraint FK_l0kxe2o7jltij466ywvc48f8 
-        foreign key (computations_id) 
-        references Computations;
+    alter table Session_aggregates 
+        add constraint FK_ambr5rtyfpa1p177f1pxq9sl 
+        foreign key (Session_id) 
+        references Session;
+    alter table Session_computations 
+        add constraint FK_svfno1kf3n2w4g7yhtv3nlm0m 
+        foreign key (Session_id) 
+        references Session;
+    alter table districts_aggregategroupmap 
+        add constraint FK_mi5hp56igll0b9vrfm72wnje 
+        foreign key (aggregateGroupMap_id) 
+        references GroupInfo;
+    alter table districts_aggregategroupmap 
+        add constraint FK_4rrfe3663pn4bp9k5k6fvg8ap 
+        foreign key (Districts_id) 
+        references Districts;
+    alter table districts_computationgroupmap 
+        add constraint FK_g6mwljbhrpt40bac4xomj34e7 
+        foreign key (computationGroupMap_id) 
+        references GroupInfo;
+    alter table districts_computationgroupmap 
+        add constraint FK_idg2fsr5m4nbcxt146jasnb8k 
+        foreign key (Districts_id) 
+        references Districts;
+    alter table session_aggregategroupmap 
+        add constraint FK_o2ykghh9xyuyayugsjbhhhohp 
+        foreign key (aggregateGroupMap_id) 
+        references GroupInfo;
+    alter table session_aggregategroupmap 
+        add constraint FK_f7w58rb7hkgo41pg0sk6eltxw 
+        foreign key (Session_id) 
+        references Session;
+    alter table session_computationgroupmap 
+        add constraint FK_55nn15qy8qd0qrhtpaeat7vnb 
+        foreign key (computationGroupMap_id) 
+        references GroupInfo;
+    alter table session_computationgroupmap 
+        add constraint FK_68mmmkyslpo1nmc6qu969tye0 
+        foreign key (Session_id) 
+        references Session;
     create sequence hibernate_sequence;
