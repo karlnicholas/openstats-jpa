@@ -7,10 +7,8 @@ import javax.persistence.*;
 import openstats.model.*;
 
 import org.openstates.bulkdata.LoadBulkData;
-import org.supercsv.io.*;
-import org.supercsv.prefs.CsvPreference;
 
-public class WriteSession {
+public class WriteAssemblies {
 
 	static class AuthorStats {
 		public AuthorStats() {
@@ -37,7 +35,7 @@ public class WriteSession {
 
 	public static void main(String[] args) throws Exception {
 		initJpa();
-/*
+
 		TestAction[] testActions = new TestAction[] {
 				new GATestAction(), 
 				new ARTestAction(), 
@@ -61,14 +59,15 @@ public class WriteSession {
 		};
 		
 		for( TestAction testAction: testActions) {
-			Session session = buildSession(testAction);
-			writeJpa(session);
+			Assembly assembly = buildAssembly(testAction);
+			writeJpa(assembly);
 		}
-*/
- 		TestAction testAction = new GATestAction();
 
- 		Session session = buildSession(testAction);
-		writeJpa(session);
+/*
+ 		TestAction testAction = new GATestAction();
+ 		Assembly assembly = buildAssembly(testAction);
+		writeJpa(assembly);
+*/		
 		
 	}
 
@@ -76,122 +75,14 @@ public class WriteSession {
 		emf = Persistence.createEntityManagerFactory("openstats");
 		em = emf.createEntityManager();
 	}
-	private static void writeJpa(Session session) throws Exception {
+	private static void writeJpa(Assembly assembly) throws Exception {
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
-		em.persist(session);
+		em.persist(assembly);
 		tx.commit();
 	}
 
-	private static void writeCsv(Session session) throws Exception {
-        
-    	class MyCsvWriter extends AbstractCsvWriter {
-
-			public MyCsvWriter(Writer writer, CsvPreference preference) {
-				super(writer, preference);
-			}
-			public void writeRow(String... columns ) throws IOException {
-				super.writeRow(columns);
-			}
-		}
-		MyCsvWriter writer = null;
-        try {
-        	
-        	writer = new MyCsvWriter(new FileWriter("c:/users/karl/"+session.getState()+"-2013-les.csv"), CsvPreference.STANDARD_PREFERENCE);
-	        Districts districts = session.getDistricts();
-	        // the header elements are used to map the bean valueList to each column (names must match)
-	        List<String> columns = new ArrayList<String>();
-
-	        columns.add("district");
-	        columns.add("chamber");
-//			Aggregate aggregate = districts.getAggregate(Labels.GROUPLABEL);
-
-	        for ( String label: districts.getAggregateGroupMap().get(Labels.GROUPLABEL).getGroupLabels()) {
-	        	columns.add(label);
-	        }
-	        for ( String label: districts.getComputationGroupMap().get(Labels.GROUPLABEL).getGroupLabels()) {
-	        	columns.add(label);
-	        }
-
-            // write the header
-	        String[] sColumns = new String[columns.size()];
-	        sColumns = columns.toArray(sColumns);
-            writer.writeHeader(sColumns);
-            class LESComparator implements Comparator<District> {
-				int index;
-            	public LESComparator(Districts districts) {
-            		 index = districts.getComputationGroupMap().get(Labels.GROUPLABEL).getGroupLabels().indexOf(Labels.LESLABEL);
-            	}
-				@Override
-				public int compare(District o1, District o2) {
-					return o2.getComputations().get(Labels.GROUPLABEL).get(index).compareTo(o1.getComputations().get(Labels.GROUPLABEL).get(index));
-				}
-            }
-            List<District> districList = new ArrayList<District>( districts.getDistrictList() );
-            Collections.sort(districList, new LESComparator(districts) );
-            // write the customer lists
-            for ( final District dist: districList) {
-            	columns.clear();
-    	        columns.add(dist.getDistrict());
-    	        columns.add(dist.getChamber());
-    	        List<Long> aggs = dist.getAggregates().get(Labels.GROUPLABEL);
-    	        for ( Long agg: aggs ) {
-    	        	columns.add(agg.toString());
-    	        }
-    	        List<Double> comps = dist.getComputations().get(Labels.GROUPLABEL);
-    	        for ( Double comp: comps ) {
-    	        	columns.add(comp.toString());
-    	        }
-                writer.writeRow(columns.toArray(sColumns));
-            }
-
-            writer.writeHeader(Labels.SKEWLABEL.get(0));
-            writer.writeRow(session.getComputations().get(Labels.GROUPLABEL).get(0).toString());
-        }
-        finally {
-            if( writer  != null ) {
-            	writer.close();
-            }
-        }
-	}
-	
-/*
-
-	System.out.print( "NAME" + "\t" + "CHAMBER" + "\t" + "DISTRICT" + "\t" + "PARTY" + "\t" + "OFFICE" + "\t");
-	System.out.print( BILLSINT.toString() + "\t" + BILLSOC.toString() + "\t" + BILLSPASSED.toString() + "\t" + BILLSCHAP.toString() + "\t" );
-	System.out.print( BILLSINT.toString() + "\t" + BILLSOC.toString() + "\t" + BILLSPASSED.toString() + "\t" + BILLSCHAP.toString() + "\t" );
-	System.out.print( BILLSINT.toString() + "\t" + BILLSOC.toString() + "\t" + BILLSPASSED.toString() + "\t" + BILLSCHAP.toString() + "\t" );
-	System.out.println( "LES");
-
-	AuthorStats sponsorStats = legislatorStats.getValue(legislator); 
-	System.out.print( legislator.full_name + "\t" + legislator.chamber + "\t" + legislator.district + "\t" + legislator.party + "\t" + sponsorStats.officeScore + "\t"  );
-	System.out.print( sponsorStats.billData[0][0] + "\t" + sponsorStats.billData[0][1] + "\t" + sponsorStats.billData[0][2] + "\t" + sponsorStats.billData[0][3] + "\t");
-	System.out.print( sponsorStats.billData[1][0] + "\t" + sponsorStats.billData[1][1] + "\t" + sponsorStats.billData[1][2] + "\t" + sponsorStats.billData[1][3] + "\t");
-	System.out.print( sponsorStats.billData[2][0] + "\t" + sponsorStats.billData[2][1] + "\t" + sponsorStats.billData[2][2] + "\t" + sponsorStats.billData[2][3] + "\t");
-	System.out.println( sponsorStats.les );
- */
-
-	/*  code that works for ca, but not sure about anywhere else .. 
-				// here, legislator.fullName can be really a committee name
-				if ( authorStats == null && sponsor != null ) {
-					String committeId = null;
-					committeId = Committees.findCommitteeKey(sponsor.name, bill.chamber);
-					if ( committeId != null ) {
-						Committee committee = Committees.getValue(committeId);
-						if ( committee != null ) {
-							legislator = determineChair(committee);
-							if ( legislator != null ) {
-								authorStats = authorSuccess.getValue( legislator );
-								cFlag = true;
-							}
-
-						}
-					}
-				}
-
-	 */
-
-	private static Session buildSession(TestAction testAction) throws Exception { 
+	private static Assembly buildAssembly(TestAction testAction) throws Exception { 
 		testAction.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
 		buildcurrentTopics(testAction);
@@ -215,10 +106,10 @@ public class WriteSession {
 			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
 		
-		Session session = new Session();
-		session.setState(testAction.getState());
-		session.setSession(testAction.getSession());
-		Districts districts = session.getDistricts();
+		Assembly assembly = new Assembly();
+		assembly.setState(testAction.getState());
+		assembly.setAssembly(testAction.getAssembly());
+		Districts districts = assembly.getDistricts();
 		GroupInfo groupInfo = new GroupInfo();
 		groupInfo.getGroupLabels().addAll(Labels.AGGLABELS);
 		districts.getAggregateGroupMap().put(Labels.GROUPLABEL, groupInfo);
@@ -266,13 +157,13 @@ public class WriteSession {
 			}
 		}
 		computeLES(districts);
-		computeSkewness(session);
-		return session;
+		computeSkewness(assembly);
+		return assembly;
 	}	
 
 	
-	public static void computeSkewness(Session session) throws OpenStatsException {
-		Districts districts = session.getDistricts();
+	public static void computeSkewness(Assembly assembly) throws OpenStatsException {
+		Districts districts = assembly.getDistricts();
 		double[] stats = new double[districts.getDistrictList().size()];
 		int i=0;
 		for ( District district: districts.getDistrictList() ) {
@@ -282,10 +173,10 @@ public class WriteSession {
 		Statistics statistics = new Statistics(stats);
 		GroupInfo groupInfo = new GroupInfo();
 		groupInfo.getGroupLabels().addAll(Labels.SKEWLABEL);
-		session.getComputationGroupMap().put(Labels.GROUPLABEL, groupInfo);
+		assembly.getComputationGroupMap().put(Labels.GROUPLABEL, groupInfo);
 		ArrayList<Double> valueList = new ArrayList<Double>(); 
 		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		session.getComputations().put(Labels.GROUPLABEL, valueList);		
+		assembly.getComputations().put(Labels.GROUPLABEL, valueList);		
 	}
 
 	/**
@@ -369,7 +260,7 @@ public class WriteSession {
 			return "GA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -400,7 +291,7 @@ public class WriteSession {
 			return "AR";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -430,7 +321,7 @@ public class WriteSession {
 			return "OK";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -458,7 +349,7 @@ public class WriteSession {
 			return "MA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "187th";
 		}
 		@Override
@@ -488,7 +379,7 @@ public class WriteSession {
 			return "NC";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -519,7 +410,7 @@ public class WriteSession {
 			return "AZ";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -543,7 +434,7 @@ public class WriteSession {
 			return "MN";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -575,7 +466,7 @@ public class WriteSession {
 			return "HI";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -608,7 +499,7 @@ public class WriteSession {
 			return "LA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -638,7 +529,7 @@ public class WriteSession {
 			return "TN";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "TN";
 		}
 		@Override
@@ -670,7 +561,7 @@ public class WriteSession {
 			return "VA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -699,7 +590,7 @@ public class WriteSession {
 			return "NJ";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "215";
 		}
 		@Override
@@ -732,7 +623,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 
@@ -766,7 +657,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 
@@ -799,7 +690,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 
@@ -830,7 +721,7 @@ public class WriteSession {
 			return -1;
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 		@Override
@@ -861,7 +752,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "83";
 		}
 
@@ -894,7 +785,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 
@@ -931,7 +822,7 @@ public class WriteSession {
 		}
 
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 
@@ -1151,7 +1042,7 @@ public class WriteSession {
 
 	private static void buildcurrentTopics(TestAction testAction) throws Exception {
 		currentTopics = new TreeSet<String>(); 
-		InputStream is = WriteSession.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
+		InputStream is = WriteAssemblies.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
 		InputStreamReader isr = new InputStreamReader(is, "ASCII");
 		BufferedReader br = new BufferedReader(isr);
 		String line;
@@ -1164,7 +1055,7 @@ public class WriteSession {
 
 	interface TestAction {
 		public String getState();
-		public String getSession();
+		public String getAssembly();
 		public void loadBulkData() throws Exception;
 		public boolean testId(String bill_id);
 		public int testAction(String chamber, String act);

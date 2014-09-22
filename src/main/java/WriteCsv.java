@@ -9,7 +9,7 @@ import org.supercsv.prefs.CsvPreference;
 
 public class WriteCsv {
 	
-	public static void writeCsv(Session session) throws Exception {
+	public static void writeCsv(Assembly session) throws Exception {
         
     	class MyCsvWriter extends AbstractCsvWriter {
 

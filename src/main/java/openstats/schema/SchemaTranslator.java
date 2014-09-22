@@ -69,7 +69,7 @@ public class SchemaTranslator {
 	public static void main(String[] args) throws IOException {
 		SchemaTranslator translator = new SchemaTranslator();
 		Class<?>[] entityClasses = {
-				Session.class, 
+				Assembly.class, 
 				Districts.class, 
 				District.class, 
 				Legislator.class, 

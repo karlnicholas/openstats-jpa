@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import openstats.model.*;
 
-public class ReadSession {
+public class ReadAssembly {
 
 	public static void main(String[] args) throws Exception {
 /*		
@@ -33,29 +33,29 @@ public class ReadSession {
 		};
 		
 		for( TestAction testAction: testActions) {
-			Session session = buildSession(testAction);
-			writeCsv(session);
+			Assembly assembly = buildAssembly(testAction);
+			writeCsv(assembly);
 		}
 */		
 		ReadAction testAction = new GATestAction();
-//		List<Session> sessions = listSessions();
-		Session session = readJpa(testAction);
-		WriteCsv.writeCsv(session);
+//		List<Assembly> assemblies = listAssemblies();
+		Assembly assembly = readJpa(testAction);
+		WriteCsv.writeCsv(assembly);
 	}
 
-	private static List<Session> listSessions() throws Exception {
+	private static List<Assembly> listAssemblies() throws Exception {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
 		EntityManager em = emf.createEntityManager();
-		return em.createNamedQuery("Session.listSessions", Session.class)
+		return em.createNamedQuery("Assembly.listAssemblies", Assembly.class)
 			.getResultList();
 	}
 
-	private static Session readJpa(ReadAction readAction) throws Exception {
+	private static Assembly readJpa(ReadAction readAction) throws Exception {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
 		EntityManager em = emf.createEntityManager();
-		return em.createNamedQuery("Session.getByStateSession", Session.class)
+		return em.createNamedQuery("Assembly.getByStateAssembly", Assembly.class)
 			.setParameter("state", readAction.getState())
-			.setParameter("session", readAction.getSession())
+			.setParameter("assembly", readAction.getAssembly())
 			.getSingleResult();
 	}
 	
@@ -65,7 +65,7 @@ public class ReadSession {
 			return "GA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -76,7 +76,7 @@ public class ReadSession {
 			return "AR";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -87,7 +87,7 @@ public class ReadSession {
 			return "OK";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -98,7 +98,7 @@ public class ReadSession {
 			return "MA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "187th";
 		}
 	}
@@ -109,7 +109,7 @@ public class ReadSession {
 			return "NC";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -120,7 +120,7 @@ public class ReadSession {
 			return "AZ";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -131,7 +131,7 @@ public class ReadSession {
 			return "MN";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -142,7 +142,7 @@ public class ReadSession {
 			return "HI";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -153,7 +153,7 @@ public class ReadSession {
 			return "LA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -164,7 +164,7 @@ public class ReadSession {
 			return "TN";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "TN";
 		}
 	}
@@ -176,7 +176,7 @@ public class ReadSession {
 			return "VA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -187,7 +187,7 @@ public class ReadSession {
 			return "NJ";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "215";
 		}
 	}
@@ -198,7 +198,7 @@ public class ReadSession {
 			return "PA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -209,7 +209,7 @@ public class ReadSession {
 			return "MD";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -219,7 +219,7 @@ public class ReadSession {
 			return "MS";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -230,7 +230,7 @@ public class ReadSession {
 			return "MO";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -241,7 +241,7 @@ public class ReadSession {
 			return "TX";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "83";
 		}
 	}
@@ -251,7 +251,7 @@ public class ReadSession {
 			return "NY";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
@@ -261,13 +261,13 @@ public class ReadSession {
 			return "CA";
 		}
 		@Override
-		public String getSession() {
+		public String getAssembly() {
 			return "2013";
 		}
 	}
 
 	interface ReadAction {
 		public String getState();
-		public String getSession();
+		public String getAssembly();
 	}
-	}
+}
