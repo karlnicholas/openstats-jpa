@@ -57,7 +57,7 @@
     drop sequence hibernate_sequence;
     create table Assembly (
         id int8 not null,
-        assembly varchar(255),
+        session varchar(255),
         state varchar(255),
         districts_id int8,
         primary key (id)

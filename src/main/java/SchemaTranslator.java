@@ -1,4 +1,4 @@
-package openstats.schema;
+
 
 import java.io.*;
 
