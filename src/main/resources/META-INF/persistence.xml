@@ -10,6 +10,9 @@
 		<class>openstats.model.Districts</class>
 		<class>openstats.model.Legislator</class>
 		<class>openstats.model.GroupInfo</class>
+		<class>openstats.model.GroupName</class>
+		<class>openstats.model.AggregateValues</class>
+		<class>openstats.model.ComputationValues</class>
 		<properties>
 			<!-- Properties for Hibernate -->
 			<property name="hibernate.hbm2ddl.auto" value="validate" />

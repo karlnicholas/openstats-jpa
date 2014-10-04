@@ -36,7 +36,7 @@ public class WriteAssemblyGroups {
 
 	public static void main(String[] args) throws Exception {
 		initJpa();
-
+/*
 		TestAction[] testActions = new TestAction[] {
 				new GATestAction(), 
 				new ARTestAction(), 
@@ -63,12 +63,11 @@ public class WriteAssemblyGroups {
 			Assembly assembly = buildAssembly(testAction);
 			writeJpa(assembly);
 		}
+*/
 
-/*
  		TestAction testAction = new GATestAction();
- 		Assembly assembly = buildAssembly(testAction);
+ 		Assembly assembly = buildAssembly(testAction, em);
 		writeJpa(assembly);
-*/		
 		
 	}
 
@@ -83,7 +82,7 @@ public class WriteAssemblyGroups {
 		tx.commit();
 	}
 
-	private static Assembly buildAssembly(TestAction testAction) throws Exception { 
+	private static Assembly buildAssembly(TestAction testAction, EntityManager em) throws Exception { 
 		testAction.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
 		buildcurrentTopics(testAction);
@@ -112,27 +111,27 @@ public class WriteAssemblyGroups {
 		assembly.setSession(testAction.getSession());
 		Districts districts = assembly.getDistricts();
 		GroupInfo groupInfo = new GroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.AGGLABELS);
-		districts.getAggregateGroupMap().put(Labels.GROUPLABEL, groupInfo);
+		groupInfo.getGroupLabels().addAll(Labels.DISTRICTSAGGREGATELABELS);
+		districts.getAggregateGroupMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), groupInfo);
 //		Aggregate aggregate = districts.getUserData().createAggregate(Labels.GROUPLABEL, AGGLABELS);
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
 			AuthorStats sponsorStats = legislatorStats.get(legislator); 
 			
-			openstats.model.District district = districts.findDistrict(legislator.chamber, legislator.district);
+			District district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district != null ) {
-				ArrayList<Long> valueList = district.getAggregates().get(Labels.GROUPLABEL);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][0]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][3]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][0]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][1]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][2]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[1][3]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][0]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][1]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][2]);
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[2][3]);
-				district.getAggregates().put(Labels.GROUPLABEL, valueList);
+				AggregateValues valueList = district.getAggregateMap().get(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em));
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[0][0]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[0][3]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[1][0]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[1][1]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[1][2]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[1][3]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[2][0]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[2][1]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[2][2]);
+				valueList.getValueList().set(0, valueList.getValueList().get(0) + sponsorStats.billData[2][3]);
+				district.getAggregateMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), valueList);
 			} else {
 				openstats.model.Legislator sLegislator = new openstats.model.Legislator();
 				sLegislator.setName(legislator.full_name);
@@ -143,18 +142,18 @@ public class WriteAssemblyGroups {
 				district.getLegislators().add(sLegislator); 
 				districts.getDistrictList().add(district);
 				
-				ArrayList<Long> valueList = new ArrayList<Long>(Labels.AGGLABELS.size());
-				valueList.add(sponsorStats.billData[0][0]);
-				valueList.add(sponsorStats.billData[0][3]);
-				valueList.add(sponsorStats.billData[1][0]);
-				valueList.add(sponsorStats.billData[1][1]);
-				valueList.add(sponsorStats.billData[1][2]);
-				valueList.add(sponsorStats.billData[1][3]);
-				valueList.add(sponsorStats.billData[2][0]);
-				valueList.add(sponsorStats.billData[2][1]);
-				valueList.add(sponsorStats.billData[2][2]);
-				valueList.add(sponsorStats.billData[2][3]);
-				district.getAggregates().put(Labels.GROUPLABEL, valueList);
+				AggregateValues valueList = new AggregateValues();
+				valueList.getValueList().add(sponsorStats.billData[0][0]);
+				valueList.getValueList().add(sponsorStats.billData[0][3]);
+				valueList.getValueList().add(sponsorStats.billData[1][0]);
+				valueList.getValueList().add(sponsorStats.billData[1][1]);
+				valueList.getValueList().add(sponsorStats.billData[1][2]);
+				valueList.getValueList().add(sponsorStats.billData[1][3]);
+				valueList.getValueList().add(sponsorStats.billData[2][0]);
+				valueList.getValueList().add(sponsorStats.billData[2][1]);
+				valueList.getValueList().add(sponsorStats.billData[2][2]);
+				valueList.getValueList().add(sponsorStats.billData[2][3]);
+				district.getAggregateMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), valueList);
 			}
 		}
 		computeLES(districts);
@@ -168,16 +167,16 @@ public class WriteAssemblyGroups {
 		double[] stats = new double[districts.getDistrictList().size()];
 		int i=0;
 		for ( District district: districts.getDistrictList() ) {
-			List<Double> valueList = district.getComputations().get(Labels.GROUPLABEL);
-			stats[i++] = valueList.get(0);
+			ComputationValues valueList = district.getComputationMap().get(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em));
+			stats[i++] = valueList.getValueList().get(0);
 		}
 		Statistics statistics = new Statistics(stats);
 		GroupInfo groupInfo = new GroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.SKEWLABEL);
-		assembly.getComputationGroupMap().put(Labels.GROUPLABEL, groupInfo);
-		ArrayList<Double> valueList = new ArrayList<Double>(); 
-		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		assembly.getComputations().put(Labels.GROUPLABEL, valueList);		
+		groupInfo.getGroupLabels().addAll(Labels.ASSEMBLYCOMPUTATIONLABEL);
+		assembly.getComputationGroupMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), groupInfo);
+		ComputationValues valueList = new ComputationValues(); 
+		valueList.getValueList().add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
+		assembly.getComputationMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), valueList);		
 	}
 
 	/**
@@ -916,27 +915,27 @@ public class WriteAssemblyGroups {
 //		Computation computation = districts.getUserData().createComputation(Labels.GROUPLABEL, Labels.LESLABEL);
 		
 		GroupInfo groupInfo = new GroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.LESLABEL);
-		districts.getComputationGroupMap().put(Labels.GROUPLABEL, groupInfo);
+		groupInfo.getGroupLabels().addAll(Labels.DISTRICTCOMPUTATIONLABEL);
+		districts.getComputationGroupMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), groupInfo);
 	
 		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
 		double[][] denomArray = new double[3][4];
 
-		denomArray[0][0] = totalFrom(districts, Labels.AGGLABELS.get(0));
+		denomArray[0][0] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(0));
 		denomArray[0][1] = 0.0;
 		denomArray[0][2] = 0.0;
-		denomArray[0][3] = totalFrom(districts, Labels.AGGLABELS.get(1)); 
+		denomArray[0][3] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(1)); 
 		
-		denomArray[1][0] = totalFrom(districts, Labels.AGGLABELS.get(2));
-		denomArray[1][1] = totalFrom(districts, Labels.AGGLABELS.get(3)); 
-		denomArray[1][2] = totalFrom(districts, Labels.AGGLABELS.get(4)); 
-		denomArray[1][3] = totalFrom(districts, Labels.AGGLABELS.get(5)); 
+		denomArray[1][0] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(2));
+		denomArray[1][1] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(3)); 
+		denomArray[1][2] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(4)); 
+		denomArray[1][3] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(5)); 
 
-		denomArray[2][0] = totalFrom(districts, Labels.AGGLABELS.get(6));
-		denomArray[2][1] = totalFrom(districts, Labels.AGGLABELS.get(7)); 
-		denomArray[2][2] = totalFrom(districts, Labels.AGGLABELS.get(8)); 
-		denomArray[2][3] = totalFrom(districts, Labels.AGGLABELS.get(9));
+		denomArray[2][0] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(6));
+		denomArray[2][1] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(7)); 
+		denomArray[2][2] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(8)); 
+		denomArray[2][3] = totalFrom(districts, Labels.DISTRICTSAGGREGATELABELS.get(9));
 		
 		// make the array inverse cumulative across rows 
 		for ( int j=0; j < 3; ++j ) {
@@ -974,22 +973,22 @@ public class WriteAssemblyGroups {
 
 		for ( openstats.model.District dist: districts.getDistrictList()) {
 
-			List<Long> valueList = dist.getAggregates().get(Labels.GROUPLABEL);
+			AggregateValues valueList = dist.getAggregateMap().get(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em));
 
-			distArray[0][0] = valueList.get(0);
+			distArray[0][0] = valueList.getValueList().get(0);
 			distArray[0][1] = 0.0;
 			distArray[0][2] = 0.0;
-			distArray[0][3] = valueList.get(1); 
+			distArray[0][3] = valueList.getValueList().get(1); 
 			
-			distArray[1][0] = valueList.get(2);
-			distArray[1][1] = valueList.get(3); 
-			distArray[1][2] = valueList.get(4); 
-			distArray[1][3] = valueList.get(5); 
+			distArray[1][0] = valueList.getValueList().get(2);
+			distArray[1][1] = valueList.getValueList().get(3); 
+			distArray[1][2] = valueList.getValueList().get(4); 
+			distArray[1][3] = valueList.getValueList().get(5); 
 
-			distArray[2][0] = valueList.get(6);
-			distArray[2][1] = valueList.get(7); 
-			distArray[2][2] = valueList.get(8); 
-			distArray[2][3] = valueList.get(9);
+			distArray[2][0] = valueList.getValueList().get(6);
+			distArray[2][1] = valueList.getValueList().get(7); 
+			distArray[2][2] = valueList.getValueList().get(8); 
+			distArray[2][3] = valueList.getValueList().get(9);
 				
 			// make the array inverse cumulative across rows 
 			for ( int j=0; j < 3; ++j ) {
@@ -1025,17 +1024,17 @@ public class WriteAssemblyGroups {
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			ArrayList<Double> comps = new ArrayList<Double>(Labels.LESLABEL.size());
-			comps.add(LES);
-			dist.getComputations().put(Labels.GROUPLABEL, comps);
+			ComputationValues comps = new ComputationValues();
+			comps.getValueList().add(LES);
+			dist.getComputationMap().put(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em), comps);
 		}
 	}
 	
 	private static double totalFrom(Districts districts, String label) throws OpenStatsException {
 		double ret = 0.0;
-		int index = districts.getAggregateGroupMap().get(Labels.GROUPLABEL).getGroupLabels().indexOf(label);
-		for ( openstats.model.District dist: districts.getDistrictList()) {
-			Long iVal = dist.getAggregates().get(Labels.GROUPLABEL).get(index);
+		int index = districts.getAggregateGroupMap().get(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em)).getGroupLabels().indexOf(label);
+		for ( District dist: districts.getDistrictList()) {
+			Long iVal = dist.getAggregateMap().get(GroupNameHandler.getGroupName(Labels.LESGROUPNAME, em)).getValueList().get(index);
 			ret = ret + iVal;
 		}
 		return ret;

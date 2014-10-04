@@ -74,6 +74,9 @@ public class SchemaTranslator {
 				District.class, 
 				Legislator.class, 
 				GroupInfo.class,
+				GroupName.class, 
+				AggregateValues.class, 
+				ComputationValues.class, 
 			};
 
 //		translator.setDialect("org.hibernate.dialect.HSQLDialect")

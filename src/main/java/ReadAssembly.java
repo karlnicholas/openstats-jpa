@@ -5,6 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import openstats.model.*;
+import openstats.util.AssemblyCsvHandler;
 
 public class ReadAssembly {
 
@@ -40,7 +41,7 @@ public class ReadAssembly {
 		ReadAction testAction = new GATestAction();
 //		List<Assembly> assemblies = listAssemblies();
 		Assembly assembly = readJpa(testAction);
-		WriteCsv.writeCsv(assembly);
+		new AssemblyCsvHandler().writeCsv(System.out, assembly, new ArrayList<GroupName>());
 	}
 
 	private static List<Assembly> listAssemblies() throws Exception {
