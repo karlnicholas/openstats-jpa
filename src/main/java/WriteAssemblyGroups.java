@@ -16,16 +16,16 @@ public class WriteAssemblyGroups {
 	private static EntityManager em;
 
 	public static void main(String[] args) throws Exception {
-		initJpa();
+//		initJpa();
 
 		TestAction[] testActions = new TestAction[] {
 				new GATestAction(), 
+/*				
 				new ARTestAction(), 
 				new OKTestAction(), 
 				new MATestAction(), 
 				new NCTestAction(), 
 				new AZTestAction(),
-/*				
 //				new MNTestAction(), 
 				new HITestAction(), 
 				new LATestAction(), 
@@ -47,7 +47,7 @@ public class WriteAssemblyGroups {
 		for( TestAction testAction: testActions) {
 			
 			OSAssembly osAssembly = computeAssembly.computeAssembly(testAction);
-			writeJpa(osAssembly);
+//			writeJpa(osAssembly);
 		}
 
 /*

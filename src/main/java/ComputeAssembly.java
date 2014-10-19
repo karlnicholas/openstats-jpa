@@ -4,7 +4,6 @@ import java.util.*;
 import openstats.client.les.*;
 import openstats.client.openstates.TestAction;
 import openstats.client.util.Statistics;
-import openstats.model.OpenStatsException;
 import openstats.osmodel.*;
 
 public class ComputeAssembly {
@@ -46,22 +45,20 @@ public class ComputeAssembly {
 			}
 			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
-		
-		OSAssembly assembly = new OSAssembly();
-		assembly.setState(testAction.getState());
-		assembly.setSession(testAction.getSession());
-		OSDistricts districts = assembly.getOSDistricts();
-		OSGroupInfo groupInfo = new OSGroupInfo();
+
+		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for osDistricts and skewness of all scores for the osAssembly.");
+		OSAssembly osAssembly = new OSAssembly(testAction.getState(), testAction.getSession(), osGroup);
+		OSDistricts osDistricts = osAssembly.getOSDistricts();
+		OSGroupInfo groupInfo = osDistricts.getAggregateGroupInfo();
 		groupInfo.getGroupLabels().addAll(Labels.DISTRICTSAGGREGATELABELS);
-		districts.setAggregateGroupInfo(groupInfo);
-//		Aggregate aggregate = districts.getUserData().createAggregate(Labels.GROUPLABEL, AGGLABELS);
+		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
 			AuthorStats sponsorStats = legislatorStats.get(legislator); 
 			
-			OSDistrict district = districts.findOSDistrict(legislator.chamber, legislator.district);
-			if ( district != null ) {
-				List<Long> valueList = district.getAggregateValues();
+			OSDistrict osDistrict = osDistricts.findOSDistrict(legislator.chamber, legislator.district);
+			if ( osDistrict != null ) {
+				List<Long> valueList = osDistrict.getAggregateValues();
 				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][0]);
 				valueList.set(1, valueList.get(1) + sponsorStats.billData[0][3]);
 				valueList.set(2, valueList.get(2) + sponsorStats.billData[1][0]);
@@ -73,12 +70,12 @@ public class ComputeAssembly {
 				valueList.set(8, valueList.get(8) + sponsorStats.billData[2][2]);
 				valueList.set(9, valueList.get(9) + sponsorStats.billData[2][3]);
 			} else {
-				openstats.model.DBLegislator sLegislator = new openstats.model.DBLegislator();
-				sLegislator.setName(legislator.full_name);
-				sLegislator.setParty(legislator.party);
-				district = new OSDistrict(legislator.chamber, legislator.district);
-//				district.getLegislators().add(sLegislator); 
-				districts.getOSDistrictList().add(district);
+//				openstats.model.DBLegislator sLegislator = new openstats.model.DBLegislator();
+//				sLegislator.setName(legislator.full_name);
+//				sLegislator.setParty(legislator.party);
+				osDistrict = new OSDistrict(legislator.chamber, legislator.district);
+//				osDistrict.getLegislators().add(sLegislator); 
+				osDistricts.getOSDistrictList().add(osDistrict);
 				
 				List<Long> valueList = new ArrayList<Long>();
 				valueList.add(sponsorStats.billData[0][0]);
@@ -91,30 +88,29 @@ public class ComputeAssembly {
 				valueList.add(sponsorStats.billData[2][1]);
 				valueList.add(sponsorStats.billData[2][2]);
 				valueList.add(sponsorStats.billData[2][3]);
-				district.setAggregateValues(valueList);
+				osDistrict.setAggregateValues(valueList);
 			}
 		}
-		computeLES(districts);
-		computeSkewness(assembly);
-		return assembly;
+		computeLES(osDistricts);
+		computeSkewness(osAssembly);
+		return osAssembly;
 	}	
 
 	
-	public static void computeSkewness(OSAssembly assembly) throws OpenStatsException {
-		OSDistricts districts = assembly.getOSDistricts();
-		double[] stats = new double[districts.getOSDistrictList().size()];
+	public static void computeSkewness(OSAssembly osAssembly) {
+		OSDistricts osDistricts = osAssembly.getOSDistricts();
+		double[] stats = new double[osDistricts.getOSDistrictList().size()];
 		int i=0;
-		for ( OSDistrict district: districts.getOSDistrictList() ) {
-			List<Double> valueList = district.getComputationValues();
+		for ( OSDistrict osDistrict: osDistricts.getOSDistrictList() ) {
+			List<Double> valueList = osDistrict.getComputationValues();
 			stats[i++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
-		OSGroupInfo groupInfo = new OSGroupInfo();
+		OSGroupInfo groupInfo = osAssembly.getComputationGroupInfo();
 		groupInfo.getGroupLabels().addAll(Labels.ASSEMBLYCOMPUTATIONLABEL);
-		assembly.setAggregateGroupInfo(groupInfo);
 		List<Double> valueList = new ArrayList<Double>(); 
 		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		assembly.setComputationValues(valueList);		
+		osAssembly.setComputationValues(valueList);		
 	}
 
 
@@ -228,33 +224,31 @@ public class ComputeAssembly {
 		}
 	}
 	
-	public static void computeLES(OSDistricts districts) throws OpenStatsException {
+	public static void computeLES(OSDistricts osDistricts) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
-//		Computation computation = districts.getUserData().createComputation(Labels.GROUPLABEL, Labels.LESLABEL);
 		
-		OSGroupInfo groupInfo = new OSGroupInfo();
+		OSGroupInfo groupInfo = osDistricts.getComputationGroupInfo();
 		groupInfo.getGroupLabels().addAll(Labels.DISTRICTCOMPUTATIONLABEL);
-//		districts.getComputationGroupMap().put(GroupNameHandler.getOSGroup(Labels.LESGROUPNAME, em), groupInfo);
 	
-		double LESMult = new Double(districts.getOSDistrictList().size()/4.0);
+		double LESMult = new Double(osDistricts.getOSDistrictList().size()/4.0);
 
 		double[][] denomArray = new double[3][4];
 
-		denomArray[0][0] = totalFrom(districts, 0);
+		denomArray[0][0] = totalFrom(osDistricts, 0);
 		denomArray[0][1] = 0.0;
 		denomArray[0][2] = 0.0;
-		denomArray[0][3] = totalFrom(districts, 1); 
+		denomArray[0][3] = totalFrom(osDistricts, 1); 
 		
-		denomArray[1][0] = totalFrom(districts, 2);
-		denomArray[1][1] = totalFrom(districts, 3); 
-		denomArray[1][2] = totalFrom(districts, 4); 
-		denomArray[1][3] = totalFrom(districts, 5); 
+		denomArray[1][0] = totalFrom(osDistricts, 2);
+		denomArray[1][1] = totalFrom(osDistricts, 3); 
+		denomArray[1][2] = totalFrom(osDistricts, 4); 
+		denomArray[1][3] = totalFrom(osDistricts, 5); 
 
-		denomArray[2][0] = totalFrom(districts, 6);
-		denomArray[2][1] = totalFrom(districts, 7); 
-		denomArray[2][2] = totalFrom(districts, 8); 
-		denomArray[2][3] = totalFrom(districts, 9);
+		denomArray[2][0] = totalFrom(osDistricts, 6);
+		denomArray[2][1] = totalFrom(osDistricts, 7); 
+		denomArray[2][2] = totalFrom(osDistricts, 8); 
+		denomArray[2][3] = totalFrom(osDistricts, 9);
 		
 		// make the array inverse cumulative across rows 
 		for ( int j=0; j < 3; ++j ) {
@@ -290,7 +284,7 @@ public class ComputeAssembly {
 
 		double[][] distArray = new double[3][4];
 
-		for ( OSDistrict dist: districts.getOSDistrictList()) {
+		for ( OSDistrict dist: osDistricts.getOSDistrictList()) {
 
 			List<Long> valueList = dist.getAggregateValues();
 
@@ -349,9 +343,9 @@ public class ComputeAssembly {
 		}
 	}
 	
-	private static double totalFrom(OSDistricts districts, int index) throws OpenStatsException {
+	private static double totalFrom(OSDistricts osDistricts, int index) {
 		double ret = 0.0;
-		for ( OSDistrict dist: districts.getOSDistrictList()) {
+		for ( OSDistrict dist: osDistricts.getOSDistrictList()) {
 			Long iVal = dist.getAggregateValues().get(index);
 			ret = ret + iVal;
 		}
