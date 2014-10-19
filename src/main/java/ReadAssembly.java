@@ -5,7 +5,6 @@ import java.util.*;
 import javax.persistence.*;
 
 import openstats.model.*;
-import openstats.util.AssemblyCsvHandler;
 
 public class ReadAssembly {
 
@@ -34,29 +33,29 @@ public class ReadAssembly {
 		};
 		
 		for( TestAction testAction: testActions) {
-			Assembly assembly = buildAssembly(testAction);
-			writeCsv(assembly);
+			Assembly dbAssembly = buildAssembly(testAction);
+			writeCsv(dbAssembly);
 		}
 */		
 		ReadAction testAction = new GATestAction();
 //		List<Assembly> assemblies = listAssemblies();
-		Assembly assembly = readJpa(testAction);
-		new AssemblyCsvHandler().writeCsv(System.out, assembly, new ArrayList<GroupName>());
+		DBAssembly dbAssembly = readJpa(testAction);
+//		new AssemblyCsvHandler().writeCsv(System.out, dbAssembly, new ArrayList<OSGroup>());
 	}
 
-	private static List<Assembly> listAssemblies() throws Exception {
+	private static List<DBAssembly> listAssemblies() throws Exception {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
 		EntityManager em = emf.createEntityManager();
-		return em.createNamedQuery("Assembly.listAssemblies", Assembly.class)
+		return em.createNamedQuery("Assembly.listAssemblies", DBAssembly.class)
 			.getResultList();
 	}
 
-	private static Assembly readJpa(ReadAction readAction) throws Exception {
+	private static DBAssembly readJpa(ReadAction readAction) throws Exception {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
 		EntityManager em = emf.createEntityManager();
-		return em.createNamedQuery("Assembly.getByStateAssembly", Assembly.class)
+		return em.createNamedQuery("Assembly.getByStateAssembly", DBAssembly.class)
 			.setParameter("state", readAction.getState())
-			.setParameter("assembly", readAction.getAssembly())
+			.setParameter("dbAssembly", readAction.getAssembly())
 			.getSingleResult();
 	}
 	

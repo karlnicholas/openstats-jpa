@@ -1,3 +1,4 @@
+package openstats.client.util;
 
 import java.util.Arrays;
 
@@ -12,7 +13,7 @@ public class Statistics
         size = data.length;
     }   
 
-    double getMean()
+    public double getMean()
     {
         double sum = 0.0;
         for(double a : data) 
@@ -20,7 +21,7 @@ public class Statistics
         return sum/size;
     }
 
-    double getVariance()
+    public double getVariance()
     {
         double mean = getMean();
         double temp = 0;
@@ -29,7 +30,7 @@ public class Statistics
         return temp/size;
     }
 
-    double getStdDev()
+    public double getStdDev()
     {
         return Math.sqrt(getVariance());
     }

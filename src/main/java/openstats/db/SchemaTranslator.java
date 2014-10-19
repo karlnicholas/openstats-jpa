@@ -1,8 +1,10 @@
+package openstats.db;
 
 
 import java.io.*;
 
 import openstats.model.*;
+import openstats.osmodel.*;
 
 import org.hibernate.cfg.*;
 import org.hibernate.dialect.Dialect;
@@ -69,12 +71,12 @@ public class SchemaTranslator {
 	public static void main(String[] args) throws IOException {
 		SchemaTranslator translator = new SchemaTranslator();
 		Class<?>[] entityClasses = {
-				Assembly.class, 
-				Districts.class, 
-				District.class, 
-				Legislator.class, 
-				GroupInfo.class,
-				GroupName.class, 
+				DBAssembly.class, 
+				DBDistricts.class, 
+				DBDistrict.class, 
+				DBLegislator.class, 
+				DBGroupInfo.class,
+				OSGroup.class, 
 				AggregateValues.class, 
 				ComputationValues.class, 
 			};

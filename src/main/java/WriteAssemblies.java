@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import openstats.client.openstates.TestAction;
 import openstats.model.*;
 
 import org.openstates.bulkdata.LoadBulkData;
@@ -19,12 +20,14 @@ public class WriteAssemblies {
 		initJpa();
 
 		TestAction[] testActions = new TestAction[] {
+/*				
 				new GATestAction(), 
 				new ARTestAction(), 
 				new OKTestAction(), 
 				new MATestAction(), 
 				new NCTestAction(), 
-				new AZTestAction(), 
+				new AZTestAction(),
+*/				 
 //				new MNTestAction(), 
 				new HITestAction(), 
 				new LATestAction(), 
@@ -41,7 +44,7 @@ public class WriteAssemblies {
 		};
 		
 		for( TestAction testAction: testActions) {
-			Assembly assembly = buildAssembly(testAction);
+			DBAssembly assembly = buildAssembly(testAction);
 			writeJpa(assembly);
 		}
 /*
@@ -56,31 +59,31 @@ public class WriteAssemblies {
 		emf = Persistence.createEntityManagerFactory("openstats");
 		em = emf.createEntityManager();
 	}
-	private static void writeJpa(Assembly assembly) throws Exception {
+	private static void writeJpa(DBAssembly assembly) throws Exception {
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		em.persist(assembly);
 		tx.commit();
 	}
 
-	private static Assembly buildAssembly(TestAction testAction) throws Exception { 
+	private static DBAssembly buildAssembly(TestAction testAction) throws Exception { 
 		testAction.loadBulkData();
 
 		buildcurrentTopics(testAction);
 		
-		Assembly assembly = new Assembly();
+		DBAssembly assembly = new DBAssembly();
 		assembly.setState(testAction.getState());
 		assembly.setSession(testAction.getSession());
-		Districts districts = assembly.getDistricts();
+		DBDistricts districts = assembly.getDistricts();
 		
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 			
-			openstats.model.District district = districts.findDistrict(legislator.chamber, legislator.district);
+			openstats.model.DBDistrict district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district == null ) {
-				openstats.model.Legislator sLegislator = new openstats.model.Legislator();
+				openstats.model.DBLegislator sLegislator = new openstats.model.DBLegislator();
 				sLegislator.setName(legislator.full_name);
 				sLegislator.setParty(legislator.party);
-				district = new openstats.model.District();
+				district = new openstats.model.DBDistrict();
 				district.setChamber(legislator.chamber);
 				district.setDistrict(legislator.district);
 				district.getLegislators().add(sLegislator); 
@@ -699,14 +702,6 @@ public class WriteAssemblies {
 //		System.out.println(currentTopics);
 	}
 
-	interface TestAction {
-		public String getState();
-		public String getSession();
-		public void loadBulkData() throws Exception;
-		public boolean testId(String bill_id);
-		public int testAction(String chamber, String act);
-	}
-	
 	static class MyAction implements Comparable<MyAction> {
 		public org.openstates.data.Bill.Action action; 
 		public MyAction(org.openstates.data.Bill.Action action) {

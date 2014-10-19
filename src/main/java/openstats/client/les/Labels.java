@@ -1,3 +1,4 @@
+package openstats.client.les;
 
 import java.util.*;
 
