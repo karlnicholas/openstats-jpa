@@ -4,7 +4,6 @@ package openstats.db;
 import java.io.*;
 
 import openstats.model.*;
-import openstats.osmodel.*;
 
 import org.hibernate.cfg.*;
 import org.hibernate.dialect.Dialect;
@@ -76,7 +75,7 @@ public class SchemaTranslator {
 				DBDistrict.class, 
 				DBLegislator.class, 
 				DBGroupInfo.class,
-				OSGroup.class, 
+				DBGroup.class, 
 				AggregateValues.class, 
 				ComputationValues.class, 
 			};

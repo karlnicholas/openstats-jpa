@@ -8,21 +8,21 @@ import openstats.osmodel.*;
 
 public class ComputeAssembly {
 
-	static class MyAction implements Comparable<MyAction> {
+	class BillAction implements Comparable<BillAction> {
 		public org.openstates.data.Bill.Action action; 
-		public MyAction(org.openstates.data.Bill.Action action) {
+		public BillAction(org.openstates.data.Bill.Action action) {
 			this.action = action;
 		}
 		@Override
-		public int compareTo(MyAction o) {
+		public int compareTo(BillAction o) {
 			return action.date.compareTo(o.action.date);
 		}
 		
 	}
 
-	private static TreeSet<String> currentTopics;
+	private TreeSet<String> currentTopics;
 
-	public static OSAssembly computeAssembly(TestAction testAction) throws Exception { 
+	public OSAssembly computeAssemblyLES(TestAction testAction) throws Exception { 
 		testAction.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
 		buildcurrentTopics(testAction);
@@ -49,8 +49,7 @@ public class ComputeAssembly {
 		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for osDistricts and skewness of all scores for the osAssembly.");
 		OSAssembly osAssembly = new OSAssembly(testAction.getState(), testAction.getSession(), osGroup);
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
-		OSGroupInfo groupInfo = osDistricts.getAggregateGroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.DISTRICTSAGGREGATELABELS);
+		osDistricts.setAggregateGroupInfo(new OSGroupInfo( Labels.DISTRICTSAGGREGATELABELS, Labels.DISTRICTSAGGREGATELABELS));
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -97,7 +96,7 @@ public class ComputeAssembly {
 	}	
 
 	
-	public static void computeSkewness(OSAssembly osAssembly) {
+	public void computeSkewness(OSAssembly osAssembly) {
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
 		double[] stats = new double[osDistricts.getOSDistrictList().size()];
 		int i=0;
@@ -106,15 +105,14 @@ public class ComputeAssembly {
 			stats[i++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
-		OSGroupInfo groupInfo = osAssembly.getComputationGroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.ASSEMBLYCOMPUTATIONLABEL);
+		osAssembly.setComputationGroupInfo(new OSGroupInfo(Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONLABEL));
 		List<Double> valueList = new ArrayList<Double>(); 
 		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
 		osAssembly.setComputationValues(valueList);		
 	}
 
 
-	private static void determinePrincipalSponsors(
+	private void determinePrincipalSponsors(
 		org.openstates.data.Bill bill, 
 		ArrayList<org.openstates.data.Bill.Sponsor> sponsors
 	) {
@@ -123,7 +121,7 @@ public class ComputeAssembly {
 		}
 	}
 	
-	private static void determineBillProgress(
+	private void determineBillProgress(
 		org.openstates.data.Bill bill, 
 		AuthorStats sponsorStats, TestAction testAction
 	) {
@@ -137,14 +135,14 @@ public class ComputeAssembly {
 		}
 		else cat = 0;
 		
-		List<MyAction> actions = new ArrayList<MyAction>();
+		List<BillAction> actions = new ArrayList<BillAction>();
 		for ( org.openstates.data.Bill.Action action: bill.actions ) {
-			actions.add(new MyAction(action));
+			actions.add(new BillAction(action));
 		}
 		Collections.sort(actions);
 		
 		int progress = 0;
-		for ( MyAction myAction: actions ) {
+		for ( BillAction myAction: actions ) {
 			String act = myAction.action.action.toLowerCase();
 //			if ( bill.bill_id.contains("SR") ) System.out.println(bill.bill_id + ":" + bill.chamber+":"+act);
 			int tprog = testAction.testAction(bill.chamber, act);
@@ -154,7 +152,7 @@ public class ComputeAssembly {
 
 	}
 
-	private static TreeMap<org.openstates.data.Legislator, AuthorStats> readLegislators() throws Exception {
+	private TreeMap<org.openstates.data.Legislator, AuthorStats> readLegislators() throws Exception {
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislators = new TreeMap<>();
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 			legislators.put(legislator, new AuthorStats());
@@ -177,7 +175,7 @@ public class ComputeAssembly {
 	 * Added -1 if no office held
 	 * 
 	 */
-	private static void determineOfficeScores(
+	private void determineOfficeScores(
 		TreeMap<org.openstates.data.Legislator, AuthorStats> authorSuccess
 	) {
 		for ( org.openstates.data.Committee committee: org.openstates.model.Committees.values() ) {
@@ -224,12 +222,11 @@ public class ComputeAssembly {
 		}
 	}
 	
-	public static void computeLES(OSDistricts osDistricts) {
+	public void computeLES(OSDistricts osDistricts) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
 		
-		OSGroupInfo groupInfo = osDistricts.getComputationGroupInfo();
-		groupInfo.getGroupLabels().addAll(Labels.DISTRICTCOMPUTATIONLABEL);
+		osDistricts.setComputationGroupInfo(new OSGroupInfo(Labels.DISTRICTCOMPUTATIONLABEL, Labels.DISTRICTCOMPUTATIONLABEL));
 	
 		double LESMult = new Double(osDistricts.getOSDistrictList().size()/4.0);
 
@@ -343,7 +340,7 @@ public class ComputeAssembly {
 		}
 	}
 	
-	private static double totalFrom(OSDistricts osDistricts, int index) {
+	private double totalFrom(OSDistricts osDistricts, int index) {
 		double ret = 0.0;
 		for ( OSDistrict dist: osDistricts.getOSDistrictList()) {
 			Long iVal = dist.getAggregateValues().get(index);
@@ -352,7 +349,7 @@ public class ComputeAssembly {
 		return ret;
 	}
 
-	private static void buildcurrentTopics(TestAction testAction) throws Exception {
+	private void buildcurrentTopics(TestAction testAction) throws Exception {
 		currentTopics = new TreeSet<String>(); 
 		InputStream is = WriteAssemblyGroups.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
 		InputStreamReader isr = new InputStreamReader(is, "ASCII");

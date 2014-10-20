@@ -4,8 +4,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
-import openstats.client.les.*;
 import openstats.client.openstates.TestAction;
+import openstats.data.DBGroupFacade;
 import openstats.osmodel.*;
 
 import org.openstates.bulkdata.LoadBulkData;
@@ -16,7 +16,7 @@ public class WriteAssemblyGroups {
 	private static EntityManager em;
 
 	public static void main(String[] args) throws Exception {
-//		initJpa();
+		initJpa();
 
 		TestAction[] testActions = new TestAction[] {
 				new GATestAction(), 
@@ -43,11 +43,11 @@ public class WriteAssemblyGroups {
 		};
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
+		DBGroupFacade dbGroupFacade = new DBGroupFacade(em); 
 		
 		for( TestAction testAction: testActions) {
-			
-			OSAssembly osAssembly = computeAssembly.computeAssembly(testAction);
-//			writeJpa(osAssembly);
+			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
+			dbGroupFacade.writeOSAssembly(osAssembly);
 		}
 
 /*
@@ -61,13 +61,6 @@ public class WriteAssemblyGroups {
 	private static void initJpa() throws Exception {
 		emf = Persistence.createEntityManagerFactory("openstats");
 		em = emf.createEntityManager();
-	}
-
-	private static void writeJpa(OSAssembly assembly) throws Exception {
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		em.persist(assembly);
-		tx.commit();
 	}
 
 	static class GATestAction implements TestAction {
@@ -669,7 +662,6 @@ public class WriteAssemblyGroups {
 			System.out.println(action);
 		}
 	}
-*/
 	private static TreeMap<org.openstates.data.Legislator, AuthorStats> readLegislators() throws Exception {
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislators = new TreeMap<>();
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
@@ -677,6 +669,6 @@ public class WriteAssemblyGroups {
 		}
 		return legislators;
 	}
-	
+*/
 	
 }
