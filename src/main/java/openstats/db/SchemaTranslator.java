@@ -3,7 +3,7 @@ package openstats.db;
 
 import java.io.*;
 
-import openstats.model.*;
+import openstats.dbmodel.*;
 
 import org.hibernate.cfg.*;
 import org.hibernate.dialect.Dialect;

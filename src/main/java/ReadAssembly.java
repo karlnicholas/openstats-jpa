@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import openstats.client.les.Labels;
 import openstats.data.DBGroupFacade;
-import openstats.model.*;
+import openstats.dbmodel.*;
 import openstats.osmodel.OSAssembly;
 
 public class ReadAssembly {

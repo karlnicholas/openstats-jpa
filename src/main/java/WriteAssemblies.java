@@ -6,7 +6,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import openstats.client.openstates.TestAction;
-import openstats.model.*;
+import openstats.dbmodel.*;
 
 import org.openstates.bulkdata.LoadBulkData;
 
@@ -78,12 +78,12 @@ public class WriteAssemblies {
 		
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 			
-			openstats.model.DBDistrict district = districts.findDistrict(legislator.chamber, legislator.district);
+			openstats.dbmodel.DBDistrict district = districts.findDistrict(legislator.chamber, legislator.district);
 			if ( district == null ) {
-				openstats.model.DBLegislator sLegislator = new openstats.model.DBLegislator();
+				openstats.dbmodel.DBLegislator sLegislator = new openstats.dbmodel.DBLegislator();
 				sLegislator.setName(legislator.full_name);
 				sLegislator.setParty(legislator.party);
-				district = new openstats.model.DBDistrict();
+				district = new openstats.dbmodel.DBDistrict();
 				district.setChamber(legislator.chamber);
 				district.setDistrict(legislator.district);
 				district.getLegislators().add(sLegislator); 
