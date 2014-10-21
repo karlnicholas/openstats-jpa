@@ -46,7 +46,7 @@ public class ComputeAssembly {
 			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
 
-		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for osDistricts and skewness of all scores for the osAssembly.");
+		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for Districts and skewness of all scores for the Assembly.");
 		OSAssembly osAssembly = new OSAssembly(testAction.getState(), testAction.getSession(), osGroup);
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
 		osDistricts.setAggregateGroupInfo(new OSGroupInfo( Labels.DISTRICTSAGGREGATELABELS, Labels.DISTRICTSAGGREGATELABELS));
