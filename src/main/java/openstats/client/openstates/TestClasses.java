@@ -1,74 +1,12 @@
+package openstats.client.openstates;
 
-
-import java.net.URI;
-import java.util.*;
-
-import javax.ws.rs.client.*;
-import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
-
-import openstats.client.openstates.TestAction;
-import openstats.osmodel.*;
+import java.util.TimeZone;
 
 import org.openstates.bulkdata.LoadBulkData;
 
-public class WriteAssemblyJson {
+public class TestClasses {
 
-	public static void main(String[] args) throws Exception {
-		/*				
-
-		TestAction[] testActions = new TestAction[] {
-				new ARTestAction(), 
-				new GATestAction(), 
-				new OKTestAction(), 
-				new MATestAction(), 
-				new NCTestAction(), 
-				new AZTestAction(),
-//				new MNTestAction(), 
-				new HITestAction(), 
-				new LATestAction(), 
-				new TNTestAction(), 
-				new VATestAction(), 
-				new NJTestAction(), 
-				new PATestAction(), 
-				new MDTestAction(), 
-				new MSTestAction(), 
-				new MOTestAction(), 
-				new TXTestAction(), 
-				new NYTestAction(), 
-				new CATestAction(),
-		};
-*/				 
-		
-		ComputeAssembly computeAssembly = new ComputeAssembly(); 
-		
-		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new NCTestAction());
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		String json = objectMapper.writeValueAsString(osAssembly);
-//		System.out.println(json);
-		
-		Client client = ClientBuilder.newClient();
-		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
-		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		Response response = builder.post(Entity.json(osAssembly), Response.class);
-		
-		if (response.getStatus() != Status.CREATED.getStatusCode() ) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-		}
-	 
-		URI location = response.getLocation();
-		System.out.println(location.toString());
-	 
-
-/*
- 		TestAction testAction = new GATestAction();
- 		Assembly assembly = buildAssembly(testAction, em);
-		writeJpa(assembly);
-*/		
-		
-	}
-
-	static class GATestAction implements TestAction {
+	public static class GATestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -98,7 +36,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class ARTestAction implements TestAction {
+	public static class ARTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -129,7 +67,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class OKTestAction implements TestAction {
+	public static class OKTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -159,7 +97,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class MATestAction implements TestAction {
+	public static class MATestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("H ") || bill_id.contains("S ") ) return true;
@@ -187,7 +125,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class NCTestAction implements TestAction {
+	public static class NCTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -217,7 +155,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class AZTestAction implements TestAction {
+	public static class AZTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -248,7 +186,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class MNTestAction implements TestAction {
+	public static class MNTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HF") || bill_id.contains("SF") ) return true;
@@ -272,7 +210,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class HITestAction implements TestAction {
+	public static class HITestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -304,7 +242,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class LATestAction implements TestAction {
+	public static class LATestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
@@ -337,7 +275,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class TNTestAction implements TestAction {
+	public static class TNTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB")) return true;
@@ -368,7 +306,7 @@ public class WriteAssemblyJson {
 	}
 
 
-	static class VATestAction implements TestAction {
+	public static class VATestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB")) return true;
@@ -399,7 +337,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class NJTestAction implements TestAction {
+	public static class NJTestAction implements TestAction {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("A ") || bill_id.contains("S ")) return true;
@@ -429,7 +367,7 @@ public class WriteAssemblyJson {
 		
 	}
 
-	static class PATestAction implements TestAction {
+	public static class PATestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -462,7 +400,7 @@ public class WriteAssemblyJson {
 		}
 	}
 
-	static class MDTestAction implements TestAction {
+	public static class MDTestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -496,7 +434,7 @@ public class WriteAssemblyJson {
 		}
 		
 	}
-	static class MSTestAction implements TestAction {
+	public static class MSTestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -530,7 +468,7 @@ public class WriteAssemblyJson {
 		
 	}
 
-	static class MOTestAction implements TestAction {
+	public static class MOTestAction implements TestAction {
 		@Override
 		public String getState() {
 			return "MO";
@@ -558,7 +496,7 @@ public class WriteAssemblyJson {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-mo-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
 	}
-	static class TXTestAction implements TestAction {
+	public static class TXTestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -591,7 +529,7 @@ public class WriteAssemblyJson {
 		}
 
 	}
-	static class NYTestAction implements TestAction {
+	public static class NYTestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -624,7 +562,7 @@ public class WriteAssemblyJson {
 		}
 		
 	}
-	static class CATestAction implements TestAction {
+	public static class CATestAction implements TestAction {
 
 		@Override
 		public String getState() {
@@ -661,19 +599,5 @@ public class WriteAssemblyJson {
 		}
 		
 	}
-/*
-	private static void printAllActions(Bill bill) {
-		for ( Bill.Action action: bill.actions ) {
-			System.out.println(action);
-		}
-	}
-	private static TreeMap<org.openstates.data.Legislator, AuthorStats> readLegislators() throws Exception {
-		TreeMap<org.openstates.data.Legislator, AuthorStats> legislators = new TreeMap<>();
-		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
-			legislators.put(legislator, new AuthorStats());
-		}
-		return legislators;
-	}
-*/
-	
+
 }

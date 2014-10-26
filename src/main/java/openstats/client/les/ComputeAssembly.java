@@ -1,7 +1,8 @@
+package openstats.client.les;
+
 import java.io.*;
 import java.util.*;
 
-import openstats.client.les.*;
 import openstats.client.openstates.TestAction;
 import openstats.client.util.Statistics;
 import openstats.osmodel.*;
@@ -351,7 +352,7 @@ public class ComputeAssembly {
 
 	private void buildcurrentTopics(TestAction testAction) throws Exception {
 		currentTopics = new TreeSet<String>(); 
-		InputStream is = WriteAssemblyGroups.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
+		InputStream is = ComputeAssembly.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
 		InputStreamReader isr = new InputStreamReader(is, "ASCII");
 		BufferedReader br = new BufferedReader(isr);
 		String line;
