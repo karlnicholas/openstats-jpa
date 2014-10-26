@@ -5,41 +5,41 @@ import java.util.*;
 import javax.persistence.*;
 
 import openstats.client.les.Labels;
-import openstats.data.DBGroupFacade;
 import openstats.dbmodel.*;
+import openstats.facades.AssemblyFacade;
 import openstats.osmodel.OSAssembly;
 
 public class ReadAssembly {
 
 	EntityManagerFactory emf;
 	EntityManager em;
-	DBGroupFacade dbGroupFacade;
+	AssemblyFacade assemblyFacade;
 
 	public static void main(String[] args) throws Exception {
 /*		
-		TestAction[] testActions = new TestAction[] {
-				new GATestAction(), 
-				new ARTestAction(), 
-				new OKTestAction(), 
-				new MATestAction(), 
-				new NCTestAction(), 
-				new AZTestAction(), 
-//				new MNTestAction(), 
-				new HITestAction(), 
-				new LATestAction(), 
-				new TNTestAction(), 
-				new VATestAction(), 
-				new NJTestAction(), 
-				new PATestAction(), 
-				new MDTestAction(), 
-				new MSTestAction(), 
-				new MOTestAction(), 
-				new TXTestAction(), 
-				new NYTestAction(), 
-				new CATestAction(), 
+		ReadAction[] testActions = new ReadAction[] {
+				new GAReadAction(), 
+				new ARReadAction(), 
+				new OKReadAction(), 
+				new MAReadAction(), 
+				new NCReadAction(), 
+				new AZReadAction(), 
+//				new MNReadAction(), 
+				new HIReadAction(), 
+				new LAReadAction(), 
+				new TNReadAction(), 
+				new VAReadAction(), 
+				new NJReadAction(), 
+				new PAReadAction(), 
+				new MDReadAction(), 
+				new MSReadAction(), 
+				new MOReadAction(), 
+				new TXReadAction(), 
+				new NYReadAction(), 
+				new CAReadAction(), 
 		};
 		
-		for( TestAction testAction: testActions) {
+		for( ReadAction testAction: testActions) {
 			Assembly dbAssembly = buildAssembly(testAction);
 			writeCsv(dbAssembly);
 		}
@@ -51,14 +51,16 @@ public class ReadAssembly {
 		initJpa();
 		
 		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		OSAssembly osAssembly = dbGroupFacade.buildOSAssembly(dbGroup, "GA", "2013");
+		OSAssembly osAssembly = assemblyFacade.buildOSAssembly(dbGroup, "GA", "2013");
+
+		System.out.println(osAssembly.getOSDistricts().getAggregateGroupInfo().getGroupLabels());
 
 	}
 
 	private void initJpa() throws Exception {
 		emf = Persistence.createEntityManagerFactory("openstats");
 		em = emf.createEntityManager();
-		dbGroupFacade = new DBGroupFacade(em);
+		assemblyFacade = new AssemblyFacade(em);
 	}
 
 	private List<DBAssembly> listAssemblies() throws Exception {
@@ -75,7 +77,7 @@ public class ReadAssembly {
 			.getSingleResult();
 	}
 	
-	class GATestAction implements ReadAction {
+	class GAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "GA";
@@ -86,7 +88,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class ARTestAction implements ReadAction {
+	class ARReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "AR";
@@ -97,7 +99,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class OKTestAction implements ReadAction {
+	class OKReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "OK";
@@ -108,7 +110,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class MATestAction implements ReadAction {
+	class MAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "MA";
@@ -119,7 +121,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class NCTestAction implements ReadAction {
+	class NCReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "NC";
@@ -130,7 +132,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class AZTestAction implements ReadAction {
+	class AZReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "AZ";
@@ -141,7 +143,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class MNTestAction implements ReadAction {
+	class MNReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "MN";
@@ -152,7 +154,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class HITestAction implements ReadAction {
+	class HIReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "HI";
@@ -163,7 +165,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class LATestAction implements ReadAction {
+	class LAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "LA";
@@ -174,7 +176,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class TNTestAction implements ReadAction {
+	class TNReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "TN";
@@ -186,7 +188,7 @@ public class ReadAssembly {
 	}
 
 
-	class VATestAction implements ReadAction {
+	class VAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "VA";
@@ -197,7 +199,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class NJTestAction implements ReadAction {
+	class NJReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "NJ";
@@ -208,7 +210,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class PATestAction implements ReadAction {
+	class PAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "PA";
@@ -219,7 +221,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class MDTestAction implements ReadAction {
+	class MDReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "MD";
@@ -229,7 +231,7 @@ public class ReadAssembly {
 			return "2013";
 		}
 	}
-	class MSTestAction implements ReadAction {
+	class MSReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "MS";
@@ -240,7 +242,7 @@ public class ReadAssembly {
 		}
 	}
 
-	class MOTestAction implements ReadAction {
+	class MOReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "MO";
@@ -250,7 +252,7 @@ public class ReadAssembly {
 			return "2013";
 		}
 	}
-	class TXTestAction implements ReadAction {
+	class TXReadAction implements ReadAction {
 
 		@Override
 		public String getState() {
@@ -261,7 +263,7 @@ public class ReadAssembly {
 			return "83";
 		}
 	}
-	class NYTestAction implements ReadAction {
+	class NYReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "NY";
@@ -271,7 +273,7 @@ public class ReadAssembly {
 			return "2013";
 		}
 	}
-	class CATestAction implements ReadAction {
+	class CAReadAction implements ReadAction {
 		@Override
 		public String getState() {
 			return "CA";

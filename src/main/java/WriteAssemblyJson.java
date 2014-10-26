@@ -1,15 +1,16 @@
 
 
-import java.io.*;
+import java.net.URI;
 import java.util.*;
+
+import javax.ws.rs.client.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.core.Response.Status;
 
 import openstats.client.openstates.TestAction;
 import openstats.osmodel.*;
 
-import org.jboss.resteasy.client.*;
 import org.openstates.bulkdata.LoadBulkData;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WriteAssemblyJson {
 
@@ -19,7 +20,6 @@ public class WriteAssemblyJson {
 		TestAction[] testActions = new TestAction[] {
 				new ARTestAction(), 
 				new GATestAction(), 
-				new ARTestAction(), 
 				new OKTestAction(), 
 				new MATestAction(), 
 				new NCTestAction(), 
@@ -42,29 +42,23 @@ public class WriteAssemblyJson {
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
 		
-		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new ARTestAction());
+		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new NCTestAction());
 //		ObjectMapper objectMapper = new ObjectMapper();
 //		String json = objectMapper.writeValueAsString(osAssembly);
 //		System.out.println(json);
 		
-		ClientRequest request = new ClientRequest("http://localhost:8080/openstats/rest/assemblies");
-			request.accept("application/json");
-			request.body("application/json", osAssembly);
+		Client client = ClientBuilder.newClient();
+		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
+		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
+		Response response = builder.post(Entity.json(osAssembly), Response.class);
+		
+		if (response.getStatus() != Status.CREATED.getStatusCode() ) {
+			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		}
 	 
-			ClientResponse<String> response = request.post(String.class);
+		URI location = response.getLocation();
+		System.out.println(location.toString());
 	 
-			if (response.getStatus() != 201) {
-				throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-			}
-	 
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-				new ByteArrayInputStream(response.getEntity().getBytes())));
-	 
-			String output;
-			System.out.println("Output from Server .... \n");
-			while ((output = br.readLine()) != null) {
-				System.out.println(output);
-			}
 
 /*
  		TestAction testAction = new GATestAction();

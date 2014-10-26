@@ -5,7 +5,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import openstats.client.openstates.TestAction;
-import openstats.data.DBGroupFacade;
+import openstats.facades.AssemblyFacade;
 import openstats.osmodel.*;
 
 import org.openstates.bulkdata.LoadBulkData;
@@ -43,11 +43,11 @@ public class WriteAssemblyGroups {
 		};
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
-		DBGroupFacade dbGroupFacade = new DBGroupFacade(em); 
+		AssemblyFacade assemblyFacade = new AssemblyFacade(em); 
 		
 		for( TestAction testAction: testActions) {
 			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
-			dbGroupFacade.writeOSAssembly(osAssembly);
+			assemblyFacade.writeOSAssembly(osAssembly);
 		}
 
 /*
