@@ -11,30 +11,30 @@ public class RestDeleteAssembly {
 	public static void main(String[] args) throws Exception {
 
 /*
-		ReadAction[] readActions = new ReadAction[] {
-				new ReadClasses.GAReadAction(), 
-				new ReadClasses.ARReadAction(), 
-				new ReadClasses.OKReadAction(), 
-				new ReadClasses.MAReadAction(), 
-				new ReadClasses.NCReadAction(), 
-				new ReadClasses.AZReadAction(), 
-//				new ReadClasses.MNReadAction(), 
-				new ReadClasses.HIReadAction(), 
-				new ReadClasses.LAReadAction(), 
-				new ReadClasses.TNReadAction(), 
-				new ReadClasses.VAReadAction(), 
-				new ReadClasses.NJReadAction(), 
-				new ReadClasses.PAReadAction(), 
-				new ReadClasses.MDReadAction(), 
-				new ReadClasses.MSReadAction(), 
-				new ReadClasses.MOReadAction(), 
-				new ReadClasses.TXReadAction(), 
-				new ReadClasses.NYReadAction(), 
-				new ReadClasses.CAReadAction(),
+		OpenState[] readActions = new OpenState[] {
+				new OpenStatesClasses.GAOpenState(), 
+				new OpenStatesClasses.AROpenState(), 
+				new OpenStatesClasses.OKOpenState(), 
+				new OpenStatesClasses.MAOpenState(), 
+				new OpenStatesClasses.NCOpenState(), 
+				new OpenStatesClasses.AZOpenState(), 
+//				new OpenStatesClasses.MNOpenState(), 
+				new OpenStatesClasses.HIOpenState(), 
+				new OpenStatesClasses.LAOpenState(), 
+				new OpenStatesClasses.TNOpenState(), 
+				new OpenStatesClasses.VAOpenState(), 
+				new OpenStatesClasses.NJOpenState(), 
+				new OpenStatesClasses.PAOpenState(), 
+				new OpenStatesClasses.MDOpenState(), 
+				new OpenStatesClasses.MSOpenState(), 
+				new OpenStatesClasses.MOOpenState(), 
+				new OpenStatesClasses.TXOpenState(), 
+				new OpenStatesClasses.NYOpenState(), 
+				new OpenStatesClasses.CAOpenState(),
 		}; 
 */
 		
-		ReadAction readAction = new ReadClasses.NCReadAction();
+		OpenState readAction = new OpenStateClasses.NCOpenState();
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget myResource = client.target("http://localhost:8080/openstats/rest/BILLPROGESS/"+readAction.getState()+"/"+readAction.getSession());
@@ -44,29 +44,13 @@ public class RestDeleteAssembly {
 		if (response.getStatus() != Status.OK.getStatusCode() ) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
-		
-
 
 /*
- 		ReadAction testAction = new GAReadAction();
+ 		OpenState testAction = new GAOpenState();
  		Assembly assembly = buildAssembly(testAction, em);
 		writeJpa(assembly);
 */		
 		
-	}
-
-	static class CAReadAction implements ReadAction {
-
-		@Override
-		public String getState() {
-			return "CA";
-		}
-
-		@Override
-		public String getSession() {
-			return "2013";
-		}
-
 	}
 
 }

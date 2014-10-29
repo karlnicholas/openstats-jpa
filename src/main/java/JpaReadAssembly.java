@@ -1,16 +1,16 @@
 
 
-import java.util.*;
+import java.io.*;
 
 import javax.persistence.*;
 
 import openstats.client.les.Labels;
-import openstats.client.openstates.*;
 import openstats.dbmodel.*;
 import openstats.facades.AssemblyFacade;
 import openstats.osmodel.OSAssembly;
+import openstats.util.AssemblyCsvHandler;
 
-public class JPAReadAssembly {
+public class JpaReadAssembly {
 
 	EntityManagerFactory emf;
 	EntityManager em;
@@ -46,7 +46,7 @@ public class JPAReadAssembly {
 			writeCsv(osAssembly);
 		}
 */
-		new JPAReadAssembly().run();
+		new JpaReadAssembly().run();
 	}
 	
 	private void run() throws Exception {
@@ -54,8 +54,10 @@ public class JPAReadAssembly {
 		
 		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
 		OSAssembly osAssembly = assemblyFacade.buildOSAssembly(dbGroup, "GA", "2013");
-
-		System.out.println(osAssembly.getOSDistricts().getAggregateGroupInfo().getGroupLabels());
+		Writer writer = new OutputStreamWriter(System.out);
+		
+		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
+		csvHandler.writeCsv(writer, osAssembly);
 
 	}
 
@@ -64,20 +66,5 @@ public class JPAReadAssembly {
 		em = emf.createEntityManager();
 		assemblyFacade = new AssemblyFacade(em);
 	}
-
-	private List<DBAssembly> listAssemblies() throws Exception {
-		return em.createNamedQuery("Assembly.listAssemblies", DBAssembly.class)
-			.getResultList();
-	}
-
-	private DBAssembly readJpa(ReadAction readAction) throws Exception {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("openstats");
-		EntityManager em = emf.createEntityManager();
-		return em.createNamedQuery("Assembly.getByStateAssembly", DBAssembly.class)
-			.setParameter("state", readAction.getState())
-			.setParameter("dbAssembly", readAction.getSession())
-			.getSingleResult();
-	}
-	
 
 }

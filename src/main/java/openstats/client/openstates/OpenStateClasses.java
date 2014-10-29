@@ -4,16 +4,400 @@ import java.util.TimeZone;
 
 import org.openstates.bulkdata.LoadBulkData;
 
-public class TestClasses {
+public class OpenStateClasses {
 
-	public static class GATestAction implements TestAction {
+	public static class NDOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "ND";
+		}
+
+		@Override
+		public String getSession() {
+			return "62";
+		}
+
 		@Override
 		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("received from house") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("received from senate") ) return 1;
+			else if (category != 0 && act.contains("sent to the governor") ) return 2;
+			else if (category != 0 && act.contains("signed by governor") ) return 3;
+			else if ( category ==0 && act.contains("filed with secretary of state") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-nd-json.zip", "62", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class MEOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "ME";
+		}
+
+		@Override
+		public String getSession() {
+			return "125";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SP") || bill_id.contains("HP") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("sent for concurrence") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("sent down forthwith for concurrence") ) return 1;
+			else if (category != 0 && act.contains("sent to the governor") ) return 2;
+			else if (category != 0 && act.contains("passed to be enacted") ) return 3;
+			else if (category != 0 && act.contains("governor") ) return 2;
+			else if ( category ==0 && act.contains("resolution adopted") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-me-json.zip", "125", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class KSOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "KS";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-ks-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class ILOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "IL";
+		}
+
+		@Override
+		public String getSession() {
+			return "97";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("arrive in senate") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("arrive in house") ) return 1;
+			else if (category != 0 && act.contains("sent to the governor") ) return 2;
+			else if (category != 0 && act.contains("governor approved") ) return 3;
+			else if ( category ==0 && act.contains("resolution adopted") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-il-json.zip", "97", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class IAOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "IA";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SF") || bill_id.contains("HF") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-ia-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class FLOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "FL";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("S ") || bill_id.contains("H ") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("in messages") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("in messages") ) return 1;
+			else if (category != 0 && act.contains("ordered enrolled") ) return 3;
+			else if (category != 0 && act.contains("ordered engrossed, then enrolled") ) return 3;
+			else if ( category ==0 && chamber.equals("lower") && act.contains("passed in house by voice vote") ) return 3;
+			else if ( category ==0 && chamber.equals("upper") && act.contains("passed by senate") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-fl-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class DEOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "DE";
+		}
+
+		@Override
+		public String getSession() {
+			return "146";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("passed by house of representatives") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("passed by senate") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("passed by house of representatives") ) return 2;
+			else if (category != 0 && chamber.equals("lower") && act.contains("passed by senate") ) return 2;
+			else if (category != 0 && act.contains("signed by governor") ) return 3;
+			else if ( category ==0 && chamber.equals("lower") && act.contains("passed in house by voice vote") ) return 3;
+			else if ( category ==0 && chamber.equals("upper") && act.contains("passed by senate") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-de-json.zip", "146", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class COOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "CO";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("introduced in senate") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("introduced in house") ) return 1;
+			else if (category != 0 && act.contains("sent to the governor") ) return 2;
+			else if (category != 0 && act.contains("governor action - signed") ) return 3;
+			else if ( category ==0 && chamber.equals("lower") && act.contains("signed by the speaker of the house") ) return 3;
+			else if ( category ==0 && chamber.equals("upper") && act.contains("signed by the president of the senate") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-co-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class ALOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "AL";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("referred to the senate") ) return 1;
+			else if (category != 0 && chamber.equals("upper") && act.contains("referred to the house") ) return 1;
+			else if (category != 0 && chamber.equals("lower") && act.contains("clerk of the house certification") ) return 2;
+			else if (category != 0 && chamber.equals("upper") && act.equals("enrolled") ) return 2;
+			else if (act.contains("assigned act no.") ) return 3;
+			else if ( category ==0 && act.contains("adopted voice vote") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-al-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class AKOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "AK";
+		}
+
+		@Override
+		public String getSession() {
+			return "27";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (category != 0 && chamber.equals("lower") && act.contains("transmitted to (s)") ) return 1;
+			else if (chamber.equals("upper") && act.contains("transmitted to (h)") ) return 1;
+			else if (act.contains("transmitted to governor") ) return 2;
+			else if ( act.contains("signed into law") ) return 3;
+			else if ( category ==0 && act.contains("permanently filed") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-07-ak-json.zip", "27", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class KYOpenState implements OpenState {
+
+		@Override
+		public String getState() {
+			return "KY";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
+		}
+
+		@Override
+		public boolean testId(String bill_id) {
+			if ( bill_id.contains("SB") || bill_id.contains("HB") ) return true;
+			return false;
+		}
+
+		@Override
+		public int testAction(String chamber, String act, int category) {
+			if (chamber.equals("lower") && act.contains("received in senate") ) return 1;
+			else if (chamber.equals("upper") && act.contains("received in house") ) return 1;
+			else if (act.contains("delivered to governor") ) return 2;
+			else if ( act.contains("signed by governor") ) return 3;
+			else if ( category == 0 && act.contains("adopted by voice vote") ) return 3;
+			else if ( category == 0 && chamber.equals("upper") && act.contains("; adopted ") ) return 3;
+			return -1;
+		}
+
+		@Override
+		public void loadBulkData() throws Exception {
+			new LoadBulkData().loadCurrentTerm( "2013-10-01-ky-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+		
+	}
+
+	public static class GAOpenState implements OpenState {
+		@Override
+		public boolean testId(String bill_id) {
+//System.out.println(bill_id);
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
+//System.out.println(chamber+":"+act);
 			if (chamber.equals("lower") && act.contains("senate read and referred") ) return 1;
 			else if (chamber.equals("upper") && act.contains("house first readers") ) return 1;
 			else if (act.contains("house sent to governor") ) return 2;
@@ -36,14 +420,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class ARTestAction implements TestAction {
+	public static class AROpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("transmitted to the senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("transmitted  to the house") ) return 1;
 			else if (chamber.equals("upper") && act.contains("transmitted to the house") ) return 1;
@@ -67,14 +451,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class OKTestAction implements TestAction {
+	public static class OKOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("engrossed, signed, to senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("engrossed to house") ) return 1;
 			else if (act.contains("sent to governor") ) return 2;
@@ -97,14 +481,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class MATestAction implements TestAction {
+	public static class MAOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("H ") || bill_id.contains("S ") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("senate concurred") ) return 1;
 			else if (chamber.equals("upper") && act.contains("house concurred") ) return 1;
 			else if (act.contains("enacted and laid before the governor") ) return 2;
@@ -125,14 +509,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class NCTestAction implements TestAction {
+	public static class NCOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("rec from house") ) return 1;
 			else if (chamber.equals("upper") && act.contains("rec from senate") ) return 1;
 			else if (act.contains("ratified") ) return 2;
@@ -155,14 +539,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class AZTestAction implements TestAction {
+	public static class AZOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("transmit to house") ) return 1;
 			else if (chamber.equals("upper") && act.contains("transmitted to house") ) return 1;
 			else if (act.contains("transmitted to governor") ) return 2;
@@ -186,14 +570,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class MNTestAction implements TestAction {
+	public static class MNOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HF") || bill_id.contains("SF") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			return -1;
 		}
 		@Override
@@ -210,14 +594,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class HITestAction implements TestAction {
+	public static class HIOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("transmitted to senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("transmitted to house") ) return 1;
 			else if (act.contains("transmitted to governor") ) return 2;
@@ -242,14 +626,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class LATestAction implements TestAction {
+	public static class LAOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB") ) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 //			if ( bill.bill_id.contains("SCR") ) System.out.println(bill.bill_id + ":" + bill.chamber+":"+act);
 			if (chamber.equals("lower") && act.contains("received in the senate.") ) return 1;
 			else if (chamber.equals("lower") && act.contains("enrolled and signed by the speaker of the house.") ) return 1;
@@ -275,14 +659,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class TNTestAction implements TestAction {
+	public static class TNOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB")) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("ready for transmission to sen") ) return 1;
 			else if (chamber.equals("upper") && act.contains("ready for transmission to house") ) return 1;
 			else if (act.contains("transmitted to gov. for action") ) return 2;
@@ -306,14 +690,14 @@ public class TestClasses {
 	}
 
 
-	public static class VATestAction implements TestAction {
+	public static class VAOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("HB") || bill_id.contains("SB")) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("passed house") ) return 1;
 			else if (chamber.equals("upper") && act.contains("passed senate") ) return 1;
 			else if (act.contains("enrolled") ) return 2;
@@ -337,14 +721,14 @@ public class TestClasses {
 		}
 	}
 
-	public static class NJTestAction implements TestAction {
+	public static class NJOpenState implements OpenState {
 		@Override
 		public boolean testId(String bill_id) {
 			if ( bill_id.contains("A ") || bill_id.contains("S ")) return true;
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("received in the senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("received in the assembly") ) return 1;
 			else if (act.contains("passed both houses") ) return 2;
@@ -367,7 +751,7 @@ public class TestClasses {
 		
 	}
 
-	public static class PATestAction implements TestAction {
+	public static class PAOpenState implements OpenState {
 
 		@Override
 		public String getState() {
@@ -381,7 +765,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("laid on the table") ) return 1;
 			else if (chamber.equals("upper") && act.contains("laid on the table") ) return 1;
 			else if (act.contains("presented to the governor") ) return 2;
@@ -400,7 +784,7 @@ public class TestClasses {
 		}
 	}
 
-	public static class MDTestAction implements TestAction {
+	public static class MDOpenState implements OpenState {
 
 		@Override
 		public String getState() {
@@ -414,7 +798,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("first reading senate rules") ) return 1;
 			else if (chamber.equals("upper") && act.contains("first reading") && !act.contains("first reading senate rules")) return 1;
 			else if (act.contains("passed enrolled") ) return 2;
@@ -434,7 +818,7 @@ public class TestClasses {
 		}
 		
 	}
-	public static class MSTestAction implements TestAction {
+	public static class MSOpenState implements OpenState {
 
 		@Override
 		public String getState() {
@@ -448,7 +832,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("transmitted to senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("transmitted to house") ) return 1;
 			else if (act.contains("enrolled bill signed") ) return 2;
@@ -468,7 +852,7 @@ public class TestClasses {
 		
 	}
 
-	public static class MOTestAction implements TestAction {
+	public static class MOOpenState implements OpenState {
 		@Override
 		public String getState() {
 			return "MO";
@@ -479,7 +863,7 @@ public class TestClasses {
 			return false;
 		}
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("reported to the senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("reported to the assembly") ) return 1;
 			else if (act.contains("truly agreed to and finally passed") ) return 2;
@@ -496,7 +880,7 @@ public class TestClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-mo-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
 	}
-	public static class TXTestAction implements TestAction {
+	public static class TXOpenState implements OpenState {
 
 		@Override
 		public String getState() {
@@ -510,7 +894,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("received from the house") ) return 1;
 			else if (chamber.equals("upper") && act.contains("received from the senate") ) return 1;
 			else if (act.contains("sent to the governor") ) return 2;
@@ -529,7 +913,7 @@ public class TestClasses {
 		}
 
 	}
-	public static class NYTestAction implements TestAction {
+	public static class NYOpenState implements OpenState {
 
 		@Override
 		public String getState() {
@@ -543,7 +927,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("delivered to senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("delivered to assembly") ) return 1;
 			else if (act.contains("delivered to governor") ) return 2;
@@ -562,11 +946,16 @@ public class TestClasses {
 		}
 		
 	}
-	public static class CATestAction implements TestAction {
+	public static class CAOpenState implements OpenState {
 
 		@Override
 		public String getState() {
 			return "CA";
+		}
+
+		@Override
+		public String getSession() {
+			return "2013";
 		}
 
 		@Override
@@ -576,7 +965,7 @@ public class TestClasses {
 		}
 
 		@Override
-		public int testAction(String chamber, String act) {
+		public int testAction(String chamber, String act, int category) {
 			if (chamber.equals("lower") && act.contains("to the senate") ) return 1;
 			else if (chamber.equals("lower") && act.contains("in senate") ) return 1;
 			else if (chamber.equals("upper") && act.contains("to the assembly") ) return 1;
@@ -586,11 +975,6 @@ public class TestClasses {
 			else if ( act.contains("approved by the governor") ) return 3;
 			else if ( act.contains("chaptered by secretary of state") ) return 3;
 			return -1;
-		}
-
-		@Override
-		public String getSession() {
-			return "2013";
 		}
 
 		@Override

@@ -3,7 +3,7 @@ package openstats.client.les;
 import java.io.*;
 import java.util.*;
 
-import openstats.client.openstates.TestAction;
+import openstats.client.openstates.OpenState;
 import openstats.client.util.Statistics;
 import openstats.osmodel.*;
 
@@ -23,12 +23,13 @@ public class ComputeAssembly {
 
 	private TreeSet<String> currentTopics;
 
-	public OSAssembly computeAssemblyLES(TestAction testAction) throws Exception { 
-		testAction.loadBulkData();
+	public OSAssembly computeAssemblyLES(OpenState openState) throws Exception { 
+		openState.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
-		buildcurrentTopics(testAction);
+		buildcurrentTopics(openState);
 		determineOfficeScores(legislatorStats);
 		ArrayList<org.openstates.data.Bill.Sponsor> sponsors = new ArrayList<org.openstates.data.Bill.Sponsor>();
+		int determineCount = 0;
 		Collection<org.openstates.data.Bill> bills = org.openstates.model.Bills.values();
 		for ( org.openstates.data.Bill bill:  bills ) {
 	//		System.out.println(bill.bill_id+"---------------------------------------");
@@ -41,14 +42,17 @@ public class ComputeAssembly {
 					legislator = org.openstates.model.Legislators.get(sponsor.leg_id);
 					if ( legislator != null ) sponsorStats = legislatorStats.get(legislator);
 				}
-				if ( sponsorStats != null ) determineBillProgress(bill, sponsorStats, testAction);
+				if ( sponsorStats != null ) {
+					determineCount++;
+					determineBillProgress(bill, sponsorStats, openState);
+				}
 	
 			}
 			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
-
+		System.out.println("Determine count = " + determineCount);
 		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for Districts and skewness of all scores for the Assembly.");
-		OSAssembly osAssembly = new OSAssembly(testAction.getState(), testAction.getSession(), osGroup);
+		OSAssembly osAssembly = new OSAssembly(openState.getState(), openState.getSession(), osGroup);
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
 		osDistricts.setAggregateGroupInfo(new OSGroupInfo( Labels.DISTRICTSAGGREGATELABELS, Labels.DISTRICTSAGGREGATELABELS));
 		// skipping descriptions for the moment
@@ -97,7 +101,7 @@ public class ComputeAssembly {
 	}	
 
 	
-	public void computeSkewness(OSAssembly osAssembly) {
+	public double computeSkewness(OSAssembly osAssembly) {
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
 		double[] stats = new double[osDistricts.getOSDistrictList().size()];
 		int i=0;
@@ -107,9 +111,23 @@ public class ComputeAssembly {
 		}
 		Statistics statistics = new Statistics(stats);
 		osAssembly.setComputationGroupInfo(new OSGroupInfo(Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONLABEL));
-		List<Double> valueList = new ArrayList<Double>(); 
-		valueList.add((3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev()); 
-		osAssembly.setComputationValues(valueList);		
+		List<Double> valueList = new ArrayList<Double>();
+
+		double mean = statistics.getMean();
+		double variance = statistics.getVariance();
+		
+		double thirdmoment = 0;
+		for ( double v: stats )
+			thirdmoment += Math.pow((v-mean), 3.0);
+		thirdmoment /= stats.length;
+
+		// same a skew.p() in excel.
+		double skewness = thirdmoment / Math.pow(variance, (3.0/2.0));
+
+//		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
+		valueList.add(skewness); 
+		osAssembly.setComputationValues(valueList);
+		return skewness;
 	}
 
 
@@ -118,16 +136,17 @@ public class ComputeAssembly {
 		ArrayList<org.openstates.data.Bill.Sponsor> sponsors
 	) {
 		for ( org.openstates.data.Bill.Sponsor sponsor: bill.sponsors ) {
+// if ( !sponsor.type.toLowerCase().equals("primary") ) System.out.print(".");
 			if ( sponsor.type.toLowerCase().equals("primary") ) sponsors.add(sponsor);
 		}
 	}
 	
 	private void determineBillProgress(
 		org.openstates.data.Bill bill, 
-		AuthorStats sponsorStats, TestAction testAction
+		AuthorStats sponsorStats, OpenState openState
 	) {
 		int cat;	// default resolution
-		if ( testAction.testId(bill.bill_id) == true ) {
+		if ( openState.testId(bill.bill_id) == true ) {
 			if ( currentTopics.contains(bill.bill_id) ) {
 //				System.out.println("Topic: " + bill.bill_id);
 				cat = 2;
@@ -142,11 +161,19 @@ public class ComputeAssembly {
 		}
 		Collections.sort(actions);
 		
+if ( bill.chamber.toLowerCase().equals("upper") && cat == 0 ) {
+	for ( BillAction action: actions ) {
+		System.out.println(bill.bill_id+":"+action.action.action);
+	}
+}
+
+
+		
 		int progress = 0;
 		for ( BillAction myAction: actions ) {
 			String act = myAction.action.action.toLowerCase();
 //			if ( bill.bill_id.contains("SR") ) System.out.println(bill.bill_id + ":" + bill.chamber+":"+act);
-			int tprog = testAction.testAction(bill.chamber, act);
+			int tprog = openState.testAction(bill.chamber, act, cat);
 			if ( tprog >= 0 ) progress = tprog;
 		}
 		sponsorStats.billData[cat][progress]++;
@@ -350,9 +377,9 @@ public class ComputeAssembly {
 		return ret;
 	}
 
-	private void buildcurrentTopics(TestAction testAction) throws Exception {
+	private void buildcurrentTopics(OpenState openState) throws Exception {
 		currentTopics = new TreeSet<String>(); 
-		InputStream is = ComputeAssembly.class.getResourceAsStream("/topics/" + testAction.getState() + "TopicBills2013.txt");
+		InputStream is = ComputeAssembly.class.getResourceAsStream("/topics/" + openState.getState() + "TopicBills2013.txt");
 		InputStreamReader isr = new InputStreamReader(is, "ASCII");
 		BufferedReader br = new BufferedReader(isr);
 		String line;
@@ -362,6 +389,5 @@ public class ComputeAssembly {
 		is.close();
 //		System.out.println(currentTopics);
 	}
-
 
 }

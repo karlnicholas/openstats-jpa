@@ -7,7 +7,7 @@ import openstats.client.openstates.*;
 import openstats.facades.AssemblyFacade;
 import openstats.osmodel.*;
 
-public class WriteAssemblyGroups {
+public class JpaWriteAssembly {
 
 	private static EntityManagerFactory emf;
 	private static EntityManager em;
@@ -15,40 +15,40 @@ public class WriteAssemblyGroups {
 	public static void main(String[] args) throws Exception {
 		initJpa();
 
-		TestAction[] testActions = new TestAction[] {
-				new TestClasses.GATestAction(), 
+		OpenState[] testActions = new OpenState[] {
+				new OpenStateClasses.GAOpenState(), 
 /*				
-				new ARTestAction(), 
-				new OKTestAction(), 
-				new MATestAction(), 
-				new NCTestAction(), 
-				new AZTestAction(),
-//				new MNTestAction(), 
-				new HITestAction(), 
-				new LATestAction(), 
-				new TNTestAction(), 
-				new VATestAction(), 
-				new NJTestAction(), 
-				new PATestAction(), 
-				new MDTestAction(), 
-				new MSTestAction(), 
-				new MOTestAction(), 
-				new TXTestAction(), 
-				new NYTestAction(), 
-				new CATestAction(),
+				new OpenStateClasses.AROpenState(), 
+				new OpenStateClasses.OKOpenState(), 
+				new OpenStateClasses.MAOpenState(), 
+				new OpenStateClasses.NCOpenState(), 
+				new OpenStateClasses.AZOpenState(),
+//				new OpenStateClasses.MNOpenState(), 
+				new OpenStateClasses.HIOpenState(), 
+				new OpenStateClasses.LAOpenState(), 
+				new OpenStateClasses.TNOpenState(), 
+				new OpenStateClasses.VAOpenState(), 
+				new OpenStateClasses.NJOpenState(), 
+				new OpenStateClasses.PAOpenState(), 
+				new OpenStateClasses.MDOpenState(), 
+				new OpenStateClasses.MSOpenState(), 
+				new OpenStateClasses.MOOpenState(), 
+				new OpenStateClasses.TXOpenState(), 
+				new OpenStateClasses.NYOpenState(), 
+				new OpenStateClasses.CAOpenState(),
 */				 
 		};
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
 		AssemblyFacade assemblyFacade = new AssemblyFacade(em); 
 		
-		for( TestAction testAction: testActions) {
+		for( OpenState testAction: testActions) {
 			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
 			assemblyFacade.writeOSAssembly(osAssembly);
 		}
 
 /*
- 		TestAction testAction = new GATestAction();
+ 		OpenState testAction = new GAOpenState();
  		Assembly assembly = buildAssembly(testAction, em);
 		writeJpa(assembly);
 */		
