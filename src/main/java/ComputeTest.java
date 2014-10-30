@@ -12,10 +12,28 @@ public class ComputeTest {
 	public static void main(String[] args) throws Exception {
 /*
 		OpenState[] testActions = new OpenState[] {
-			new OpenStateClasses.MEOpenState()
-//			new OpenStateClasses.KSOpenState()		
-			new OpenStateClasses.ILOpenState()		
-//			new OpenStateClasses.IAOpenState()		
+			new OpenStateClasses.MIOpenState(),
+			new OpenStateClasses.MTOpenState(),
+			new OpenStateClasses.INOpenState(),
+//			new OpenStateClasses.IDOpenState(),		
+			new OpenStateClasses.CTOpenState(), 
+			new OpenStateClasses.VTOpenState(), 
+			new OpenStateClasses.UTOpenState(), 
+			new OpenStateClasses.SDOpenState(), 
+			new OpenStateClasses.OROpenState(), 
+			new OpenStateClasses.OHOpenState(), 
+			new OpenStateClasses.WYOpenState(), 
+//			new OpenStateClasses.SCOpenState(),
+			new OpenStateClasses.RIOpenState(),
+			new OpenStateClasses.NVOpenState(),
+			new OpenStateClasses.NMOpenState(),
+			new OpenStateClasses.NHOpenState(),	
+			new OpenStateClasses.NEOpenState(),
+			new OpenStateClasses.NDOpenState(),
+			new OpenStateClasses.MEOpenState(),
+//			new OpenStateClasses.KSOpenState(),	
+			new OpenStateClasses.ILOpenState(),	
+//			new OpenStateClasses.IAOpenState(),	
 			new OpenStateClasses.FLOpenState(), 
 			new OpenStateClasses.COOpenState(), 
 			new OpenStateClasses.ALOpenState(), 
@@ -55,7 +73,7 @@ public class ComputeTest {
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly();
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
-		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.NDOpenState());
+		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.NJOpenState());
 		Writer writer = new OutputStreamWriter(System.out);
 		csvHandler.writeCsv(writer, osAssembly);
 		writer.flush();		

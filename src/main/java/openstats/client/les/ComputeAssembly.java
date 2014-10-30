@@ -161,7 +161,7 @@ public class ComputeAssembly {
 		}
 		Collections.sort(actions);
 		
-if ( bill.chamber.toLowerCase().equals("upper") && cat == 0 ) {
+if ( bill.chamber.toLowerCase().equals("lower") && cat == 0 ) {
 	for ( BillAction action: actions ) {
 		System.out.println(bill.bill_id+":"+action.action.action);
 	}
