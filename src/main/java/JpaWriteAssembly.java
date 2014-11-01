@@ -30,7 +30,7 @@ public class JpaWriteAssembly {
 		EntityTransaction et = em.getTransaction();
 		et.begin();
 		
-		for( OpenState testAction: OpenStateClasses.getTestActions()) {
+		for( OpenState testAction: OpenStateClasses.getOpenStates()) {
 			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
 			assemblyFacade.writeOSAssembly(osAssembly);
 		}

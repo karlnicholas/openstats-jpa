@@ -5,7 +5,6 @@ import java.io.*;
 import javax.persistence.*;
 
 import openstats.client.les.Labels;
-import openstats.client.openstates.OpenStateClasses;
 import openstats.dbmodel.*;
 import openstats.facades.AssemblyFacade;
 import openstats.osmodel.OSAssembly;
@@ -38,6 +37,8 @@ public class JpaReadAssembly {
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 		csvHandler.writeCsv(writer, osAssembly);
+		
+		writer.flush();
 
 	}
 

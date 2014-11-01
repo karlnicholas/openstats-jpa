@@ -1,10 +1,10 @@
 
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
 
-import openstats.client.les.ComputeAssembly;
+import openstats.client.les.*;
 import openstats.client.openstates.*;
 import openstats.osmodel.*;
 
@@ -15,11 +15,26 @@ public class RestCreateAssembly {
 	}
 	
 	public void run() throws Exception {
-        Client client = ClientBuilder.newBuilder().build();
-        WebTarget target = client.target("http://foo.com/resource");
-        Response response = target.request().get();
-        String value = response.readEntity(String.class);
-        response.close();  // You should close connections!
+		ComputeAssembly computeAssembly = new ComputeAssembly(); 
+		
+		Client client = ClientBuilder.newClient();
+
+		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(openState);
+			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
+			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
+			Response response = null;
+			try {
+				response = builder.post(Entity.json(osAssembly), Response.class);
+				System.out.println(response.getLocation().toString());
+			} catch ( BadRequestException e ) {
+				System.out.print("BadRequest : " + e.getMessage()+":");
+				System.out.println(builder.head().getHeaderString("error"));
+			} finally {
+				if ( response != null ) response.close();
+			}
+		}
+		client.close();
         
 	}
 	

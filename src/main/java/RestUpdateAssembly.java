@@ -1,64 +1,43 @@
 
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
 
-import openstats.client.les.ComputeAssembly;
+import openstats.client.les.*;
 import openstats.client.openstates.*;
 import openstats.osmodel.*;
 
 public class RestUpdateAssembly {
 
 	public static void main(String[] args) throws Exception {
-		/*				
-
-		OpenState[] testActions = new OpenState[] {
-				new OpenStateClasses.AROpenState(), 
-				new OpenStateClasses.GAOpenState(), 
-				new OpenStateClasses.OKOpenState(), 
-				new OpenStateClasses.MAOpenState(), 
-				new OpenStateClasses.NCOpenState(), 
-				new OpenStateClasses.AZOpenState(),
-//				new OpenStateClasses.MNOpenState(), 
-				new OpenStateClasses.HIOpenState(), 
-				new OpenStateClasses.LAOpenState(), 
-				new OpenStateClasses.TNOpenState(), 
-				new OpenStateClasses.VAOpenState(), 
-				new OpenStateClasses.NJOpenState(), 
-				new OpenStateClasses.PAOpenState(), 
-				new OpenStateClasses.MDOpenState(), 
-				new OpenStateClasses.MSOpenState(), 
-				new OpenStateClasses.MOOpenState(), 
-				new OpenStateClasses.TXOpenState(), 
-				new OpenStateClasses.NYOpenState(), 
-				new OpenStateClasses.CAOpenState(),
-		};
-*/				 
+		new RestUpdateAssembly().run();
+	}
+	
+	public void run() throws Exception {
 		
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
 		
-		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.NCOpenState());
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		String json = objectMapper.writeValueAsString(osAssembly);
-//		System.out.println(json);
-		
 		Client client = ClientBuilder.newClient();
-		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
-		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		Response response = builder.put(Entity.json(osAssembly), Response.class);
 		
-		if (response.getStatus() != Status.OK.getStatusCode() ) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
-		}
-	 
+		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
 
-/*
- 		OpenState testAction = new GAOpenState();
- 		Assembly assembly = buildAssembly(testAction, em);
-		writeJpa(assembly);
-*/		
+			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(openState);
 		
+			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
+			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
+			Response response=null;
+			try {
+				response = builder.put(Entity.json(osAssembly));
+			} catch ( BadRequestException e ) {
+				System.out.print("BadRequest : " + e.getMessage()+":");
+				System.out.println(builder.head().getHeaderString("error"));
+			} finally {
+				if ( response != null ) response.close();
+			}
+		}
+		
+		client.close();
 	}
 
 /*

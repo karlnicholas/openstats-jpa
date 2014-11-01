@@ -14,7 +14,7 @@ public class ComputeTest {
 		ComputeAssembly computeAssembly = new ComputeAssembly();
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 //		Writer writer = new OutputStreamWriter(System.out);
-		for( OpenState testAction: OpenStateClasses.getTestActions() ) {
+		for( OpenState testAction: OpenStateClasses.getOpenStates() ) {
 			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
 //			csvHandler.writeCsv(writer, osAssembly);
 //			writer.flush();

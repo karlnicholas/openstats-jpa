@@ -1,7 +1,7 @@
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
-import javax.ws.rs.core.Response.Status;
 
 import openstats.client.les.Labels;
 import openstats.client.openstates.*;
@@ -11,35 +11,31 @@ public class RestReadAssembly {
 
 	public static void main(String[] args) throws Exception {
 		new RestReadAssembly().run();
-		
 	}
 	
 	public void run() throws Exception {
         
-		OpenState openState = new OpenStateClasses.AROpenState();
-
 		Client client = ClientBuilder.newClient();
-
-		WebTarget myResource = client.target("http://localhost:8080/openstats/rest/BILLPROGESS/"+openState.getState()+"/"+openState.getSession());
-		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		OSAssembly osAssembly = builder.get(OSAssembly.class);
-/*		
-		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
-		myResource.path("{group}/{state}/{session}");
-		myResource.resolveTemplate("group", Labels.LESGROUPNAME);
-		myResource.resolveTemplate("state", openState.getState());
-		myResource.resolveTemplate("session", openState.getSession());
-
-		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		OSAssembly osAssembly = builder.get(OSAssembly.class);
-*/		
-		Response response = builder.head();
 		
-		if (builder.head().getStatus() != Status.OK.getStatusCode() ) {
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+		
+			WebTarget myResource = client.target("http://localhost:8080/openstats/rest")
+					.path("/{group}/{state}/{session}")
+					.resolveTemplate("group", Labels.LESGROUPNAME)
+					.resolveTemplate("state", openState.getState())
+					.resolveTemplate("session", openState.getSession());
+	
+			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
+			try {
+				OSAssembly osAssembly = builder.get(OSAssembly.class);
+				System.out.println(osAssembly.getState()+"-"+osAssembly.getSession()+" " + osAssembly.getComputationValues().get(0));
+			} catch ( BadRequestException e ) {
+				System.out.print("BadRequest : " + e.getMessage()+":");
+				System.out.println(builder.head().getHeaderString("error"));
+			}
+
 		}
-	 
-		System.out.println(osAssembly.toString());
+		client.close();
 
 	}
 

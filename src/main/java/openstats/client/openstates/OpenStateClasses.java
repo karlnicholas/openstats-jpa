@@ -7,15 +7,17 @@ import org.openstates.data.Bill;
 
 public class OpenStateClasses {
 
-	public static OpenState[] getTestActions() {
+	public static OpenState[] getOpenStates() {
 		return new OpenState[] {
+/*				
 			new OpenStateClasses.GAOpenState(), 
 			new OpenStateClasses.MIOpenState(),
 			new OpenStateClasses.MTOpenState(),
 			new OpenStateClasses.INOpenState(),
 //		new OpenStateClasses.IDOpenState(),		
 			new OpenStateClasses.CTOpenState(), 
-			new OpenStateClasses.VTOpenState(), 
+			new OpenStateClasses.VTOpenState(),
+*/			 
 			new OpenStateClasses.UTOpenState(), 
 			new OpenStateClasses.SDOpenState(), 
 			new OpenStateClasses.OROpenState(), 
