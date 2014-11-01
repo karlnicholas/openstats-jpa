@@ -210,27 +210,27 @@
         primary key (DBAssembly_id, computationGroupMap_KEY)
     );
     alter table DBAssembly_AggregateValues 
-        add constraint UK_3a7dhcfqcohp0ekisruas2cjn unique (aggregateMap_id);
+        add constraint UK_3a7dhcfqcohp0ekisruas2cjn  unique (aggregateMap_id);
     alter table DBAssembly_ComputationValues 
-        add constraint UK_s1lkv43eai929j0xpis2c9wie unique (computationMap_id);
+        add constraint UK_s1lkv43eai929j0xpis2c9wie  unique (computationMap_id);
     alter table DBDistrict_AggregateValues 
-        add constraint UK_70e84lpj56by1to85mjpeuytn unique (aggregateMap_id);
+        add constraint UK_70e84lpj56by1to85mjpeuytn  unique (aggregateMap_id);
     alter table DBDistrict_ComputationValues 
-        add constraint UK_m7dib6v28rut51c2mjgcec1md unique (computationMap_id);
+        add constraint UK_m7dib6v28rut51c2mjgcec1md  unique (computationMap_id);
     alter table DBDistrict_DBLegislator 
-        add constraint UK_neyks3k879m3g9wuqutimjdce unique (legislators_id);
+        add constraint UK_neyks3k879m3g9wuqutimjdce  unique (legislators_id);
     alter table DBDistricts_DBDistrict 
-        add constraint UK_2uiahvgobqsuby3loxlaaw7yb unique (districtList_id);
+        add constraint UK_2uiahvgobqsuby3loxlaaw7yb  unique (districtList_id);
     alter table DBDistricts_aggregateGroupMap 
-        add constraint UK_8591nauyvlo84o69e4af265wh unique (aggregateGroupMap_id);
+        add constraint UK_8591nauyvlo84o69e4af265wh  unique (aggregateGroupMap_id);
     alter table DBDistricts_computationGroupMap 
-        add constraint UK_j4hurmg0j2bu09y48uy4jmbik unique (computationGroupMap_id);
+        add constraint UK_j4hurmg0j2bu09y48uy4jmbik  unique (computationGroupMap_id);
     alter table DBGroup 
-        add constraint UK_fnj4ivbsm7v9e9b4q29g7k9vk unique (groupName);
+        add constraint UK_fnj4ivbsm7v9e9b4q29g7k9vk  unique (groupName);
     alter table assembly_aggregategroupmap 
-        add constraint UK_9poknpmgasyyp1obdt5qoe5le unique (aggregateGroupMap_id);
+        add constraint UK_9poknpmgasyyp1obdt5qoe5le  unique (aggregateGroupMap_id);
     alter table assembly_computationgroupmap 
-        add constraint UK_ob68eulskxrjds0u3vhe0u84b unique (computationGroupMap_id);
+        add constraint UK_ob68eulskxrjds0u3vhe0u84b  unique (computationGroupMap_id);
     alter table AggregateValues_valueList 
         add constraint FK_bgs8w1ud2yry8h1u3mmn515wg 
         foreign key (AggregateValues_id) 

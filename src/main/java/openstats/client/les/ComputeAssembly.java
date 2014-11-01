@@ -3,7 +3,9 @@ package openstats.client.les;
 import java.io.*;
 import java.util.*;
 
-import openstats.client.openstates.OpenState;
+import openstats.client.openstates.*;
+import openstats.client.openstates.OpenState.BILLACTION;
+import openstats.client.openstates.OpenState.BILLTYPE;
 import openstats.client.util.Statistics;
 import openstats.osmodel.*;
 
@@ -48,9 +50,9 @@ public class ComputeAssembly {
 				}
 	
 			}
-			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
+//			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
-		System.out.println("Determine count = " + determineCount);
+//		System.out.println("Determine count = " + determineCount);
 		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for Districts and skewness of all scores for the Assembly.");
 		OSAssembly osAssembly = new OSAssembly(openState.getState(), openState.getSession(), osGroup);
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
@@ -96,7 +98,7 @@ public class ComputeAssembly {
 			}
 		}
 		computeLES(osDistricts);
-		computeSkewness(osAssembly);
+		System.out.println(openState.getState()+":"+computeSkewness(osAssembly));
 		return osAssembly;
 	}	
 
@@ -145,43 +147,36 @@ public class ComputeAssembly {
 		org.openstates.data.Bill bill, 
 		AuthorStats sponsorStats, OpenState openState
 	) {
-		int cat;	// default resolution
-		if ( openState.testId(bill.bill_id) == true ) {
-			if ( currentTopics.contains(bill.bill_id) ) {
-//				System.out.println("Topic: " + bill.bill_id);
-				cat = 2;
-			}
-			else cat = 1;
-		}
-		else cat = 0;
+		BILLTYPE billType = openState.getBillType(bill, currentTopics);	// default resolution
+		if ( billType == BILLTYPE.UNKNOWN ) throw new RuntimeException("Cannot determine bill type:" + bill.bill_id+":" + bill.title);
 		
 		List<BillAction> actions = new ArrayList<BillAction>();
 		for ( org.openstates.data.Bill.Action action: bill.actions ) {
 			actions.add(new BillAction(action));
 		}
 		Collections.sort(actions);
-		
-if ( bill.chamber.toLowerCase().equals("lower") && cat == 0 ) {
+
+/*
+if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTION) {
 	for ( BillAction action: actions ) {
 		System.out.println(bill.bill_id+":"+action.action.action);
 	}
 }
-
-
+*/
 		
 		int progress = 0;
 		for ( BillAction myAction: actions ) {
 			String act = myAction.action.action.toLowerCase();
 //			if ( bill.bill_id.contains("SR") ) System.out.println(bill.bill_id + ":" + bill.chamber+":"+act);
-			int tprog = openState.testAction(bill.chamber, act, cat);
-			if ( tprog >= 0 ) progress = tprog;
+			BILLACTION billProgress = openState.getBillAction(bill.chamber, act, billType);
+			if ( billProgress != BILLACTION.OTHER && billProgress.ordinal() > progress ) progress = billProgress.ordinal();
 		}
-		sponsorStats.billData[cat][progress]++;
+		sponsorStats.billData[billType.ordinal()][progress]++;
 
 	}
 
 	private TreeMap<org.openstates.data.Legislator, AuthorStats> readLegislators() throws Exception {
-		TreeMap<org.openstates.data.Legislator, AuthorStats> legislators = new TreeMap<>();
+		TreeMap<org.openstates.data.Legislator, AuthorStats> legislators = new TreeMap<org.openstates.data.Legislator, AuthorStats>();
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 			legislators.put(legislator, new AuthorStats());
 		}

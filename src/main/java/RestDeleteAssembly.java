@@ -9,30 +9,6 @@ import openstats.client.openstates.*;
 public class RestDeleteAssembly {
 
 	public static void main(String[] args) throws Exception {
-
-/*
-		OpenState[] readActions = new OpenState[] {
-				new OpenStatesClasses.GAOpenState(), 
-				new OpenStatesClasses.AROpenState(), 
-				new OpenStatesClasses.OKOpenState(), 
-				new OpenStatesClasses.MAOpenState(), 
-				new OpenStatesClasses.NCOpenState(), 
-				new OpenStatesClasses.AZOpenState(), 
-//				new OpenStatesClasses.MNOpenState(), 
-				new OpenStatesClasses.HIOpenState(), 
-				new OpenStatesClasses.LAOpenState(), 
-				new OpenStatesClasses.TNOpenState(), 
-				new OpenStatesClasses.VAOpenState(), 
-				new OpenStatesClasses.NJOpenState(), 
-				new OpenStatesClasses.PAOpenState(), 
-				new OpenStatesClasses.MDOpenState(), 
-				new OpenStatesClasses.MSOpenState(), 
-				new OpenStatesClasses.MOOpenState(), 
-				new OpenStatesClasses.TXOpenState(), 
-				new OpenStatesClasses.NYOpenState(), 
-				new OpenStatesClasses.CAOpenState(),
-		}; 
-*/
 		
 		OpenState readAction = new OpenStateClasses.NCOpenState();
 		

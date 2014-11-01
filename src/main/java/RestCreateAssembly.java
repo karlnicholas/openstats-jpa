@@ -1,7 +1,5 @@
 
 
-import java.net.URI;
-
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
@@ -13,31 +11,22 @@ import openstats.osmodel.*;
 public class RestCreateAssembly {
 
 	public static void main(String[] args) throws Exception {
-		/*				
+		new RestCreateAssembly().run();
+	}
+	
+	public void run() throws Exception {
+        Client client = ClientBuilder.newBuilder().build();
+        WebTarget target = client.target("http://foo.com/resource");
+        Response response = target.request().get();
+        String value = response.readEntity(String.class);
+        response.close();  // You should close connections!
+        
+	}
+	
 
-		OpenState[] testActions = new OpenState[] {
-				new OpenStateClasses.AROpenState(), 
-				new OpenStateClasses.GAOpenState(), 
-				new OpenStateClasses.OKOpenState(), 
-				new OpenStateClasses.MAOpenState(), 
-				new OpenStateClasses.NCOpenState(), 
-				new OpenStateClasses.AZOpenState(),
-//				new OpenStateClasses.MNOpenState(), 
-				new OpenStateClasses.HIOpenState(), 
-				new OpenStateClasses.LAOpenState(), 
-				new OpenStateClasses.TNOpenState(), 
-				new OpenStateClasses.VAOpenState(), 
-				new OpenStateClasses.NJOpenState(), 
-				new OpenStateClasses.PAOpenState(), 
-				new OpenStateClasses.MDOpenState(), 
-				new OpenStateClasses.MSOpenState(), 
-				new OpenStateClasses.MOOpenState(), 
-				new OpenStateClasses.TXOpenState(), 
-				new OpenStateClasses.NYOpenState(), 
-				new OpenStateClasses.CAOpenState(),
-		};
-*/				 
-		
+/*
+
+	
 		ComputeAssembly computeAssembly = new ComputeAssembly(); 
 		
 		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.NCOpenState());
@@ -54,19 +43,15 @@ public class RestCreateAssembly {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
 	 
-		URI location = response.getLocation();
-		System.out.println(location.toString());
+//		URI location = response.getLocation();
+//		System.out.println(location.toString());
 	 
 
-/*
  		OpenState testAction = new GAOpenState();
  		Assembly assembly = buildAssembly(testAction, em);
-		writeJpa(assembly);
-*/		
+		writeJpa(assembly);	
 		
-	}
 
-/*
 	private static void printAllActions(Bill bill) {
 		for ( Bill.Action action: bill.actions ) {
 			System.out.println(action);

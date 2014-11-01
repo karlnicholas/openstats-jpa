@@ -5,6 +5,7 @@ import java.io.*;
 import javax.persistence.*;
 
 import openstats.client.les.Labels;
+import openstats.client.openstates.OpenStateClasses;
 import openstats.dbmodel.*;
 import openstats.facades.AssemblyFacade;
 import openstats.osmodel.OSAssembly;
@@ -20,28 +21,7 @@ public class JpaReadAssembly {
 		/*		
 //		initJpa();
 
-		ReadAction[] testActions = new ReadAction[] {
-				new ReadClasses.GAReadAction(), 
-				new ReadClasses.ARReadAction(), 
-				new ReadClasses.OKReadAction(), 
-				new ReadClasses.MAReadAction(), 
-				new ReadClasses.NCReadAction(), 
-				new ReadClasses.AZReadAction(), 
-//				new ReadClasses.MNReadAction(), 
-				new ReadClasses.HIReadAction(), 
-				new ReadClasses.LAReadAction(), 
-				new ReadClasses.TNReadAction(), 
-				new ReadClasses.VAReadAction(), 
-				new ReadClasses.NJReadAction(), 
-				new ReadClasses.PAReadAction(), 
-				new ReadClasses.MDReadAction(), 
-				new ReadClasses.MSReadAction(), 
-				new ReadClasses.MOReadAction(), 
-				new ReadClasses.TXReadAction(), 
-				new ReadClasses.NYReadAction(), 
-				new ReadClasses.CAReadAction(), 
-		};
-		for( ReadAction testAction: testActions) {
+		for( ReadAction testAction: OpenStateClasses.getTestActions() ) {
 			OSAssembly osAssembly = buildAssembly(testAction);
 			writeCsv(osAssembly);
 		}

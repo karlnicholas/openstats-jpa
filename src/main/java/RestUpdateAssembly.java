@@ -1,7 +1,5 @@
 
 
-import java.net.URI;
-
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
@@ -48,14 +46,11 @@ public class RestUpdateAssembly {
 		Client client = ClientBuilder.newClient();
 		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		Response response = builder.post(Entity.json(osAssembly), Response.class);
+		Response response = builder.put(Entity.json(osAssembly), Response.class);
 		
-		if (response.getStatus() != Status.CREATED.getStatusCode() ) {
+		if (response.getStatus() != Status.OK.getStatusCode() ) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
-	 
-		URI location = response.getLocation();
-		System.out.println(location.toString());
 	 
 
 /*
