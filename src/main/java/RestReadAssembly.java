@@ -5,7 +5,7 @@ import javax.ws.rs.core.*;
 
 import openstats.client.les.Labels;
 import openstats.client.openstates.*;
-import openstats.osmodel.OSAssembly;
+import openstats.model.Assembly;
 
 public class RestReadAssembly {
 
@@ -27,7 +27,7 @@ public class RestReadAssembly {
 	
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			try {
-				OSAssembly osAssembly = builder.get(OSAssembly.class);
+				Assembly osAssembly = builder.get(Assembly.class);
 				System.out.println(osAssembly.getState()+"-"+osAssembly.getSession()+" " + osAssembly.getComputationValues().get(0));
 			} catch ( BadRequestException e ) {
 				System.out.print("BadRequest : " + e.getMessage()+":");

@@ -2,7 +2,7 @@
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
-import openstats.osmodel.OSAssembly;
+import openstats.model.Assembly;
 import openstats.util.AssemblyCsvHandler;
 
 public class ComputeTest {
@@ -15,7 +15,7 @@ public class ComputeTest {
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 //		Writer writer = new OutputStreamWriter(System.out);
 		for( OpenState testAction: OpenStateClasses.getOpenStates() ) {
-			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
+			Assembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
 //			csvHandler.writeCsv(writer, osAssembly);
 //			writer.flush();
 		}

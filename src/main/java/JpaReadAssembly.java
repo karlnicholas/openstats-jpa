@@ -7,7 +7,7 @@ import javax.persistence.*;
 import openstats.client.les.Labels;
 import openstats.dbmodel.*;
 import openstats.facades.AssemblyFacade;
-import openstats.osmodel.OSAssembly;
+import openstats.model.Assembly;
 import openstats.util.AssemblyCsvHandler;
 
 public class JpaReadAssembly {
@@ -32,7 +32,7 @@ public class JpaReadAssembly {
 		initJpa();
 		
 		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		OSAssembly osAssembly = assemblyFacade.buildOSAssembly(dbGroup, "GA", "2013");
+		Assembly osAssembly = assemblyFacade.buildOSAssembly(dbGroup, "GA", "2013");
 		Writer writer = new OutputStreamWriter(System.out);
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();

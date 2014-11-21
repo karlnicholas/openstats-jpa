@@ -6,7 +6,7 @@ import javax.ws.rs.core.*;
 
 import openstats.client.les.*;
 import openstats.client.openstates.*;
-import openstats.osmodel.*;
+import openstats.model.*;
 
 public class RestUpdateAssembly {
 
@@ -22,7 +22,7 @@ public class RestUpdateAssembly {
 		
 		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
 
-			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(openState);
+			Assembly osAssembly = computeAssembly.computeAssemblyLES(openState);
 		
 			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);

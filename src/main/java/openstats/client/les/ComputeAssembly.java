@@ -7,7 +7,7 @@ import openstats.client.openstates.*;
 import openstats.client.openstates.OpenState.BILLACTION;
 import openstats.client.openstates.OpenState.BILLTYPE;
 import openstats.client.util.Statistics;
-import openstats.osmodel.*;
+import openstats.model.*;
 
 public class ComputeAssembly {
 
@@ -25,7 +25,7 @@ public class ComputeAssembly {
 
 	private TreeSet<String> currentTopics;
 
-	public OSAssembly computeAssemblyLES(OpenState openState) throws Exception { 
+	public Assembly computeAssemblyLES(OpenState openState) throws Exception { 
 		openState.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
 		buildcurrentTopics(openState);
@@ -53,20 +53,20 @@ public class ComputeAssembly {
 //			if ( sponsors.size() == 0 ) System.out.println("Principal Sponsor Not Found:" + bill.bill_id );
 		}
 //		System.out.println("Determine count = " + determineCount);
-		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for Districts and skewness of all scores for the Assembly.");
-		OSAssembly osAssembly = new OSAssembly(openState.getState(), openState.getSession(), osGroup);
-		OSDistricts osDistricts = osAssembly.getOSDistricts();
-		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		Group osGroup = new Group(Labels.LESGROUPNAME, Labels.LESGROUPDESCR);
+		Assembly osAssembly = new Assembly(openState.getState(), openState.getSession(), osGroup);
+		Districts osDistricts = osAssembly.getOSDistricts();
+		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
-			osInfoItems.add( new OSInfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATELABELS.get(i)) );
+			osInfoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		osDistricts.setAggregateGroupInfo(new OSGroupInfo(osInfoItems));
+		osDistricts.setAggregateGroupInfo(new GroupInfo(osInfoItems));
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
 			AuthorStats sponsorStats = legislatorStats.get(legislator); 
 			
-			OSDistrict osDistrict = osDistricts.findOSDistrict(legislator.chamber, legislator.district);
+			District osDistrict = osDistricts.findOSDistrict(legislator.chamber, legislator.district);
 			if ( osDistrict != null ) {
 				List<Long> valueList = osDistrict.getAggregateValues();
 				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][0]);
@@ -83,7 +83,7 @@ public class ComputeAssembly {
 //				openstats.model.DBLegislator sLegislator = new openstats.model.DBLegislator();
 //				sLegislator.setName(legislator.full_name);
 //				sLegislator.setParty(legislator.party);
-				osDistrict = new OSDistrict(legislator.chamber, legislator.district);
+				osDistrict = new District(legislator.chamber, legislator.district);
 //				osDistrict.getLegislators().add(sLegislator); 
 				osDistricts.getOSDistrictList().add(osDistrict);
 				
@@ -107,20 +107,20 @@ public class ComputeAssembly {
 	}	
 
 	
-	public double computeSkewness(OSAssembly osAssembly) {
-		OSDistricts osDistricts = osAssembly.getOSDistricts();
+	public double computeSkewness(Assembly osAssembly) {
+		Districts osDistricts = osAssembly.getOSDistricts();
 		double[] stats = new double[osDistricts.getOSDistrictList().size()];
 		int idx=0;
-		for ( OSDistrict osDistrict: osDistricts.getOSDistrictList() ) {
+		for ( District osDistrict: osDistricts.getOSDistrictList() ) {
 			List<Double> valueList = osDistrict.getComputationValues();
 			stats[idx++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
-		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
-			osInfoItems.add( new OSInfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONLABEL.get(i)) );
+			osInfoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
-		osAssembly.setComputationGroupInfo(new OSGroupInfo(osInfoItems));
+		osAssembly.setComputationGroupInfo(new GroupInfo(osInfoItems));
 		List<Double> valueList = new ArrayList<Double>();
 
 		double mean = statistics.getMean();
@@ -253,15 +253,15 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		}
 	}
 	
-	public void computeLES(OSDistricts osDistricts) {
+	public void computeLES(Districts osDistricts) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
 		
-		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
-			osInfoItems.add( new OSInfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONLABEL.get(i)) );
+			osInfoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		osDistricts.setComputationGroupInfo(new OSGroupInfo(osInfoItems));
+		osDistricts.setComputationGroupInfo(new GroupInfo(osInfoItems));
 	
 		double LESMult = new Double(osDistricts.getOSDistrictList().size()/4.0);
 
@@ -316,7 +316,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 		double[][] distArray = new double[3][4];
 
-		for ( OSDistrict dist: osDistricts.getOSDistrictList()) {
+		for ( District dist: osDistricts.getOSDistrictList()) {
 
 			List<Long> valueList = dist.getAggregateValues();
 
@@ -375,9 +375,9 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		}
 	}
 	
-	private double totalFrom(OSDistricts osDistricts, int index) {
+	private double totalFrom(Districts osDistricts, int index) {
 		double ret = 0.0;
-		for ( OSDistrict dist: osDistricts.getOSDistrictList()) {
+		for ( District dist: osDistricts.getOSDistrictList()) {
 			Long iVal = dist.getAggregateValues().get(index);
 			ret = ret + iVal;
 		}

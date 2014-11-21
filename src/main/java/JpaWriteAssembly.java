@@ -5,7 +5,7 @@ import javax.persistence.*;
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
 import openstats.facades.AssemblyFacade;
-import openstats.osmodel.*;
+import openstats.model.*;
 
 public class JpaWriteAssembly {
 
@@ -31,7 +31,7 @@ public class JpaWriteAssembly {
 		et.begin();
 		
 		for( OpenState testAction: OpenStateClasses.getOpenStates()) {
-			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
+			Assembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
 			assemblyFacade.writeOSAssembly(osAssembly);
 		}
 

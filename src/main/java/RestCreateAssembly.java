@@ -6,7 +6,7 @@ import javax.ws.rs.core.*;
 
 import openstats.client.les.*;
 import openstats.client.openstates.*;
-import openstats.osmodel.*;
+import openstats.model.*;
 
 public class RestCreateAssembly {
 
@@ -20,13 +20,16 @@ public class RestCreateAssembly {
 		Client client = ClientBuilder.newClient();
 
 		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-			OSAssembly osAssembly = computeAssembly.computeAssemblyLES(openState);
+			Assembly osAssembly = computeAssembly.computeAssemblyLES(openState);
 			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			Response response = null;
 			try {
 				response = builder.post(Entity.json(osAssembly), Response.class);
-				System.out.println(response.getLocation().toString());
+				if ( response.getStatusInfo() == Response.Status.CREATED )
+					System.out.println(response.getLocation().toString());
+				else
+					System.out.println("Failure status: " + response.getStatus() + ":" + response.getEntity());
 			} catch ( BadRequestException e ) {
 				System.out.print("BadRequest : " + e.getMessage()+":");
 				System.out.println(builder.head().getHeaderString("error"));
