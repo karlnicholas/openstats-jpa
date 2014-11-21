@@ -56,7 +56,11 @@ public class ComputeAssembly {
 		OSGroup osGroup = new OSGroup(Labels.LESGROUPNAME, "Legislative Effectiveness Scores for Districts and skewness of all scores for the Assembly.");
 		OSAssembly osAssembly = new OSAssembly(openState.getState(), openState.getSession(), osGroup);
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
-		osDistricts.setAggregateGroupInfo(new OSGroupInfo( Labels.DISTRICTSAGGREGATELABELS, Labels.DISTRICTSAGGREGATELABELS));
+		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
+			osInfoItems.add( new OSInfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATELABELS.get(i)) );
+		}
+		osDistricts.setAggregateGroupInfo(new OSGroupInfo(osInfoItems));
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -106,13 +110,17 @@ public class ComputeAssembly {
 	public double computeSkewness(OSAssembly osAssembly) {
 		OSDistricts osDistricts = osAssembly.getOSDistricts();
 		double[] stats = new double[osDistricts.getOSDistrictList().size()];
-		int i=0;
+		int idx=0;
 		for ( OSDistrict osDistrict: osDistricts.getOSDistrictList() ) {
 			List<Double> valueList = osDistrict.getComputationValues();
-			stats[i++] = valueList.get(0);
+			stats[idx++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
-		osAssembly.setComputationGroupInfo(new OSGroupInfo(Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONLABEL));
+		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
+			osInfoItems.add( new OSInfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONLABEL.get(i)) );
+		}
+		osAssembly.setComputationGroupInfo(new OSGroupInfo(osInfoItems));
 		List<Double> valueList = new ArrayList<Double>();
 
 		double mean = statistics.getMean();
@@ -249,7 +257,11 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 				
 //		ArrayList<Long> lidsAll = makeRList();
 		
-		osDistricts.setComputationGroupInfo(new OSGroupInfo(Labels.DISTRICTCOMPUTATIONLABEL, Labels.DISTRICTCOMPUTATIONLABEL));
+		List<OSInfoItem> osInfoItems = new ArrayList<OSInfoItem>();
+		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
+			osInfoItems.add( new OSInfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONLABEL.get(i)) );
+		}
+		osDistricts.setComputationGroupInfo(new OSGroupInfo(osInfoItems));
 	
 		double LESMult = new Double(osDistricts.getOSDistrictList().size()/4.0);
 

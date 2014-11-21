@@ -75,6 +75,7 @@ public class SchemaTranslator {
 				DBDistrict.class, 
 				DBLegislator.class, 
 				DBGroupInfo.class,
+				DBInfoItem.class,
 				DBGroup.class, 
 				AggregateValues.class, 
 				ComputationValues.class, 

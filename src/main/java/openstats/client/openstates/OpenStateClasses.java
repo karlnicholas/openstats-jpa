@@ -8,8 +8,7 @@ import org.openstates.data.Bill;
 public class OpenStateClasses {
 
 	public static OpenState[] getOpenStates() {
-		return new OpenState[] {
-/*				
+		return new OpenState[] {			
 			new OpenStateClasses.GAOpenState(), 
 			new OpenStateClasses.MIOpenState(),
 			new OpenStateClasses.MTOpenState(),
@@ -17,7 +16,6 @@ public class OpenStateClasses {
 //		new OpenStateClasses.IDOpenState(),		
 			new OpenStateClasses.CTOpenState(), 
 			new OpenStateClasses.VTOpenState(),
-*/			 
 			new OpenStateClasses.UTOpenState(), 
 			new OpenStateClasses.SDOpenState(), 
 			new OpenStateClasses.OROpenState(), 
@@ -1494,7 +1492,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public String getSession() {
-			return "TN";
+			return "108";
 		}
 		@Override
 		public void loadBulkData() throws Exception {

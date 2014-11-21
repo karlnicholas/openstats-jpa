@@ -43,7 +43,7 @@ public class JpaWriteAssembly {
 		writeJpa(assembly);
 */		
 		
-		
+		emf.close();
 	}
 
 /*

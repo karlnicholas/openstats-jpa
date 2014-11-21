@@ -49,10 +49,10 @@
         drop constraint FK_438t43u5g59cwbut6fxohjm1r;
     alter table DBDistricts_computationGroupMap 
         drop constraint FK_epe6ngy0pw6dqbfbx0gj9f2nd;
-    alter table DBGroupInfo_groupDescriptions 
-        drop constraint FK_a0cpmxhjv0c8pyd95pu4l0u17;
-    alter table DBGroupInfo_groupLabels 
-        drop constraint FK_2k0wmkwmht2f3kcsikvnrnash;
+    alter table DBGroupInfo_DBInfoItem 
+        drop constraint FK_gk2n11lfx77klw8ndyxy4mg8j;
+    alter table DBGroupInfo_DBInfoItem 
+        drop constraint FK_e9e3y0koemwc0yg16s1f1xpkw;
     alter table assembly_aggregategroupmap 
         drop constraint FK_9poknpmgasyyp1obdt5qoe5le;
     alter table assembly_aggregategroupmap 
@@ -82,8 +82,8 @@
     drop table if exists DBDistricts_computationGroupMap cascade;
     drop table if exists DBGroup cascade;
     drop table if exists DBGroupInfo cascade;
-    drop table if exists DBGroupInfo_groupDescriptions cascade;
-    drop table if exists DBGroupInfo_groupLabels cascade;
+    drop table if exists DBGroupInfo_DBInfoItem cascade;
+    drop table if exists DBInfoItem cascade;
     drop table if exists DBLegislator cascade;
     drop table if exists assembly_aggregategroupmap cascade;
     drop table if exists assembly_computationgroupmap cascade;
@@ -179,17 +179,17 @@
         id int8 not null,
         primary key (id)
     );
-    create table DBGroupInfo_groupDescriptions (
+    create table DBGroupInfo_DBInfoItem (
         DBGroupInfo_id int8 not null,
-        groupDescriptions varchar(255),
-        groupDescriptions_ORDER int4 not null,
-        primary key (DBGroupInfo_id, groupDescriptions_ORDER)
+        groupItems_id int8 not null,
+        groupItems_ORDER int4 not null,
+        primary key (DBGroupInfo_id, groupItems_ORDER)
     );
-    create table DBGroupInfo_groupLabels (
-        DBGroupInfo_id int8 not null,
-        groupLabels varchar(255),
-        groupLabels_ORDER int4 not null,
-        primary key (DBGroupInfo_id, groupLabels_ORDER)
+    create table DBInfoItem (
+        id int8 not null,
+        Label varchar(255),
+        description varchar(1023),
+        primary key (id)
     );
     create table DBLegislator (
         id int8 not null,
@@ -227,6 +227,8 @@
         add constraint UK_j4hurmg0j2bu09y48uy4jmbik  unique (computationGroupMap_id);
     alter table DBGroup 
         add constraint UK_fnj4ivbsm7v9e9b4q29g7k9vk  unique (groupName);
+    alter table DBGroupInfo_DBInfoItem 
+        add constraint UK_gk2n11lfx77klw8ndyxy4mg8j  unique (groupItems_id);
     alter table assembly_aggregategroupmap 
         add constraint UK_9poknpmgasyyp1obdt5qoe5le  unique (aggregateGroupMap_id);
     alter table assembly_computationgroupmap 
@@ -331,12 +333,12 @@
         add constraint FK_epe6ngy0pw6dqbfbx0gj9f2nd 
         foreign key (DBDistricts_id) 
         references DBDistricts;
-    alter table DBGroupInfo_groupDescriptions 
-        add constraint FK_a0cpmxhjv0c8pyd95pu4l0u17 
-        foreign key (DBGroupInfo_id) 
-        references DBGroupInfo;
-    alter table DBGroupInfo_groupLabels 
-        add constraint FK_2k0wmkwmht2f3kcsikvnrnash 
+    alter table DBGroupInfo_DBInfoItem 
+        add constraint FK_gk2n11lfx77klw8ndyxy4mg8j 
+        foreign key (groupItems_id) 
+        references DBInfoItem;
+    alter table DBGroupInfo_DBInfoItem 
+        add constraint FK_e9e3y0koemwc0yg16s1f1xpkw 
         foreign key (DBGroupInfo_id) 
         references DBGroupInfo;
     alter table assembly_aggregategroupmap 

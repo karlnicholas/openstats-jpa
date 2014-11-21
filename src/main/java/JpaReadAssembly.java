@@ -39,6 +39,8 @@ public class JpaReadAssembly {
 		csvHandler.writeCsv(writer, osAssembly);
 		
 		writer.flush();
+		
+		emf.close();
 
 	}
 
