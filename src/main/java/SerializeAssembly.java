@@ -20,7 +20,7 @@ public class SerializeAssembly {
 		OpenState testAction = new OpenStateClasses.AKOpenState();
 		Assembly assembly = new ComputeAssembly().computeAssemblyLES(testAction);
 		JAXBContext ctx = JAXBContext.newInstance(Assembly.class);
-		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-47.XML")));
+		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.XML")));
 		System.out.flush();
 		
 	}

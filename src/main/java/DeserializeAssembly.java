@@ -19,7 +19,7 @@ public class DeserializeAssembly {
 		OpenState testAction = new OpenStateClasses.AKOpenState();
 		Assembly assembly = new ComputeAssembly().computeAssemblyLES(testAction);
 		JAXBContext ctx = JAXBContext.newInstance(Assembly.class);
-		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-47.xml")));
+		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.xml")));
 		
 	}
 
