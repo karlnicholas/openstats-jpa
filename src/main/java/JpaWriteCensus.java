@@ -8,8 +8,8 @@ import javax.persistence.*;
 import openstats.client.census.CensusAssembly;
 import openstats.client.census.CensusTable;
 import openstats.client.census.CensusTable.StringPair;
-import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
+import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;
 
@@ -28,13 +28,10 @@ public class JpaWriteCensus {
 	}
 	
 	private void run() throws Exception {
-//		initJpa();
+		initJpa();
 		
 		CensusAssembly censusAssembly = new CensusAssembly();
 		AssemblyFacade assemblyFacade = new AssemblyFacade(em);
-		
-//		EntityTransaction et = em.getTransaction();
-//		et.begin();
 		
 		CensusTable censusTable = new CensusTable();
 		censusTable.tableId = "B19301";
@@ -62,10 +59,17 @@ public class JpaWriteCensus {
 		cells.add(new StringPair("B19301I_001M", "Margin of Error: People who are Hispanic or Latino"));
 		censusTable.cells = cells;
 		
-		Assembly assembly = censusAssembly.censusAssembly(censusTable);
-		assemblyFacade.writeOSAssembly(assembly);
+		EntityTransaction et = em.getTransaction();
+		et.begin();
 
-//		et.commit();
+		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
+			censusAssembly.censusAssembly(openState, censusTable, assembly);
+			assemblyFacade.writeAssembly(assembly);
+			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
+		}
+
+		et.commit();
 
 /*
  		OpenState testAction = new GAOpenState();
@@ -73,7 +77,7 @@ public class JpaWriteCensus {
 		writeJpa(assembly);
 */		
 		
-//		emf.close();
+		emf.close();
 	}
 
 /*

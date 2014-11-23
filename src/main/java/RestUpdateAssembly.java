@@ -21,14 +21,14 @@ public class RestUpdateAssembly {
 		Client client = ClientBuilder.newClient();
 		
 		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-
-			Assembly osAssembly = computeAssembly.computeAssemblyLES(openState);
+			Assembly assembly = new Assembly();
+			computeAssembly.computeAssemblyLES(openState, assembly);
 		
 			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			Response response=null;
 			try {
-				response = builder.put(Entity.json(osAssembly));
+				response = builder.put(Entity.json(assembly));
 			} catch ( BadRequestException e ) {
 				System.out.print("BadRequest : " + e.getMessage()+":");
 				System.out.println(builder.head().getHeaderString("error"));

@@ -14,5 +14,7 @@ public interface OpenState {
 	public BILLACTION getBillAction(String chamber, String act, BILLTYPE billType);
 //
 	public void loadBulkData() throws Exception;
+//
+	public String getCensusCode();
 }
 	

@@ -4,13 +4,14 @@ import javax.persistence.*;
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
+import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;
 
 public class JpaWriteAssembly {
 
-	private static EntityManagerFactory emf;
-	private static EntityManager em;
+	private EntityManagerFactory emf;
+	private EntityManager em;
 
 	public static void main(String[] args) throws Exception {
 		new JpaWriteAssembly().run();
@@ -30,9 +31,10 @@ public class JpaWriteAssembly {
 		EntityTransaction et = em.getTransaction();
 		et.begin();
 		
-		for( OpenState testAction: OpenStateClasses.getOpenStates()) {
-			Assembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
-			assemblyFacade.writeOSAssembly(osAssembly);
+		for( OpenState openState: OpenStateClasses.getOpenStates()) {
+			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
+			computeAssembly.computeAssemblyLES(openState, assembly);
+			assemblyFacade.writeAssembly(assembly);
 		}
 
 		et.commit();

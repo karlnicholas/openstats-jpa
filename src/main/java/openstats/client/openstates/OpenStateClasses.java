@@ -5,6 +5,8 @@ import java.util.*;
 import org.openstates.bulkdata.LoadBulkData;
 import org.openstates.data.Bill;
 
+
+
 public class OpenStateClasses {
 
 	public static OpenState[] getOpenStates() {
@@ -97,6 +99,11 @@ public class OpenStateClasses {
 			else if (billType == BILLTYPE.RESOLUTION && act.equals("adopted") ) return BILLACTION.ENACTED;
 			return BILLACTION.OTHER;
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "26";
+		}
 		
 	}
 
@@ -134,6 +141,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-mt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "30"; // 			030 Montana
 		}
 		
 	}
@@ -174,6 +186,11 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-in-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "18";	// 			018 Indiana
+		}
 		
 	}
 
@@ -207,6 +224,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-id-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "16";	// 			016 Idaho
 		}
 		
 	}
@@ -247,6 +269,12 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-ct-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "09";	// 			009 Connecticut
+
+		}
+
 	}
 
 	public static class WIOpenState implements OpenState {
@@ -283,6 +311,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-wi-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "55";	// 			055 Wisconsin
 		}
 
 	}
@@ -324,6 +357,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-vt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "50";	// 			050 Vermont
+		}
+
 	}
 
 	public static class UTOpenState implements OpenState {
@@ -362,6 +400,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-ut-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "49";	// 			049 Utah
+		}
+
 	}
 
 	public static class SDOpenState implements OpenState {
@@ -398,6 +441,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-sd-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "46";	// 			046 South Dakota
 		}
 		
 	}
@@ -439,6 +487,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-or-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "41";	// 			041 Oregon
+		}
+
 	}
 
 	public static class OHOpenState implements OpenState {
@@ -478,6 +531,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-oh-json.zip", "129", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "39";	// 			039 Ohio
+		}
+
 	}
 
 	public static class WYOpenState implements OpenState {
@@ -513,6 +571,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-wy-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "56";	// 			056 Wyoming	
 		}
 
 	}
@@ -552,6 +615,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-sc-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "45";	// 			045 South Carolina
+		}
+
 		
 	}
 
@@ -588,6 +656,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ri-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "44";	// 			044 Rhode Island
 		}
 
 	}
@@ -629,6 +702,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-nv-json.zip", "77", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "32";	// 032 Nevada
+		}
+
 	}
 
 	public static class NMOpenState implements OpenState {
@@ -667,6 +745,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-nm-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "35";	// 			035 New Mexico
+		}
+
 	}
 
 	public static class NHOpenState implements OpenState {
@@ -702,6 +785,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-nh-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "33";	// 			033 New Hampshire
 		}
 		
 	}
@@ -740,6 +828,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ne-json.zip", "102", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "31";	// 			031 Nebraska
+		}
+
 	}
 
 	public static class NDOpenState implements OpenState {
@@ -776,6 +869,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-nd-json.zip", "62", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "38";	// 			038 North Dakota
 		}
 
 	}
@@ -817,6 +915,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-me-json.zip", "125", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "23";	// 			023 Maine
+		}
+
 	}
 
 	public static class KSOpenState implements OpenState {
@@ -848,6 +951,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ks-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "20";	// 			020 Kansas
 		}
 
 	}
@@ -887,6 +995,11 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-il-json.zip", "97", TimeZone.getTimeZone("GMT-08:00") );			
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "17";	// 			017 Illinois
+		}
 		
 	}
 
@@ -919,6 +1032,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ia-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "19";	// 019 Iowa
 		}
 
 	}
@@ -958,6 +1076,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-fl-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "12";	// 			012 Florida
 		}
 
 	}
@@ -1000,6 +1123,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-de-json.zip", "146", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "10";	// 			010 Delaware
+		}
+
 	}
 
 	public static class COOpenState implements OpenState {
@@ -1037,6 +1165,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-co-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "08";	// 			008 Colorado
 		}
 
 	}
@@ -1078,6 +1211,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-al-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "01";	// 			001 Alabama 
+		}
+
 	}
 
 	public static class AKOpenState implements OpenState {
@@ -1114,6 +1252,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ak-json.zip", "27", TimeZone.getTimeZone("GMT-08:00") );			
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "02";	// 			002 Alaska
 		}
 
 	}
@@ -1154,6 +1297,11 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-01-ky-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "21";	// 			021 Kentucky
+		}
 		
 	}
 
@@ -1190,6 +1338,11 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ga-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "13";	// 			013 Georgia
+		}
 	}
 
 	public static class AROpenState implements OpenState {
@@ -1224,6 +1377,10 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ar-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
+		@Override
+		public String getCensusCode() {
+			return "05";	//			005 Arkansas
+		}
 	}
 
 	public static class OKOpenState implements OpenState {
@@ -1256,6 +1413,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-ok-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );			
+		}
+		@Override
+		public String getCensusCode() {
+			return "40";	// 			040 Oklahoma
 		}
 	}
 
@@ -1300,6 +1461,10 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-ma-json.zip", "187th", TimeZone.getTimeZone("GMT-05:00") );
 		}
+		@Override
+		public String getCensusCode() {
+			return "25";	// 			025 Massachusetts
+		}
 	}
 
 	public static class NCOpenState implements OpenState {
@@ -1332,6 +1497,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-nc-json.zip", "2013", TimeZone.getTimeZone("GMT-07:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "37";	// 			037 North Carolina
 		}
 	}
 
@@ -1367,6 +1536,10 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-az-json.zip", "51st-1st", TimeZone.getTimeZone("GMT-07:00") );
 		}
+		@Override
+		public String getCensusCode() {
+			return "04";	//			004 Arizona
+		}
 	}
 
 	public static class MNOpenState implements OpenState {
@@ -1393,6 +1566,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-11-01-mn-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "27";	// 			027 Minnesota
 		}
 	}
 
@@ -1428,6 +1605,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-hi-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "15";	//			015 Hawaii
 		}
 	}
 
@@ -1465,6 +1646,10 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-la-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
+		@Override
+		public String getCensusCode() {
+			return "22";	// 			022 Louisiana
+		}
 	}
 
 	public static class TNOpenState implements OpenState {
@@ -1497,6 +1682,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-tn-json.zip", "108", TimeZone.getTimeZone("GMT-05:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "47";	// 			047 Tennessee
 		}
 	}
 
@@ -1533,6 +1722,10 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-va-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
+		@Override
+		public String getCensusCode() {
+			return "51";	//			051 Virginia
+		}
 	}
 
 	public static class NJOpenState implements OpenState {
@@ -1564,6 +1757,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-11-01-nj-json.zip", "215", TimeZone.getTimeZone("GMT-05:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "34";	// 			034 New Jersey
 		}
 	}
 
@@ -1600,6 +1797,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-pa-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "42";	// 			042 Pennsylvania
 		}
 	}
 
@@ -1638,6 +1840,11 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-md-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "24";	// 			024 Maryland
+		}
 		
 	}
 	public static class MSOpenState implements OpenState {
@@ -1675,6 +1882,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ms-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "28";	//			028 Mississippi
+		}
+
 	}
 
 	public static class MOOpenState implements OpenState {
@@ -1706,6 +1918,10 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-09-mo-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
+		}
+		@Override
+		public String getCensusCode() {
+			return "29";	//  			029 Missouri
 		}
 	}
 	public static class TXOpenState implements OpenState {
@@ -1743,6 +1959,11 @@ public class OpenStateClasses {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-tx-json.zip", "83", TimeZone.getTimeZone("GMT-06:00") );
 		}
 
+		@Override
+		public String getCensusCode() {
+			return "48";	// 			048 Texas
+		}
+
 	}
 	public static class NYOpenState implements OpenState {
 
@@ -1777,6 +1998,11 @@ public class OpenStateClasses {
 		@Override
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-08-ny-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+		}
+
+		@Override
+		public String getCensusCode() {
+			return "36";	// 			036 New York
 		}
 		
 	}
@@ -1818,7 +2044,23 @@ public class OpenStateClasses {
 		public void loadBulkData() throws Exception {
 			new LoadBulkData().loadCurrentTerm( "2013-10-07-ca-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
+
+		@Override
+		public String getCensusCode() {
+			return "06";	 // 			006 California
+		}
 		
 	}
 
 }
+
+/*
+003 Not Used
+007 Not Used
+011 District of Columbia
+014 Not Used
+043 Not Used
+052 Not Used
+053 Washington
+054 West Virginia
+*/

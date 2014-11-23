@@ -21,8 +21,8 @@ public class JpaReadMultiple {
 //		initJpa();
 
 		for( ReadAction testAction: OpenStateClasses.getTestActions() ) {
-			OSAssembly osAssembly = buildAssembly(testAction);
-			writeCsv(osAssembly);
+			Assembly Assembly = buildAssembly(testAction);
+			writeCsv(Assembly);
 		}
 */
 		new JpaReadMultiple().run();
@@ -32,11 +32,11 @@ public class JpaReadMultiple {
 		initJpa();
 		
 		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		Assembly osAssembly = assemblyFacade.buildOSAssembly(dbGroup, "GA", "2013");
+		Assembly Assembly = assemblyFacade.buildAssembly(dbGroup, "GA", "2013");
 		Writer writer = new OutputStreamWriter(System.out);
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
-		csvHandler.writeCsv(writer, osAssembly);
+		csvHandler.writeCsv(writer, Assembly);
 		
 		writer.flush();
 		

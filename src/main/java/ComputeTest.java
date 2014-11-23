@@ -15,8 +15,9 @@ public class ComputeTest {
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 //		Writer writer = new OutputStreamWriter(System.out);
 		for( OpenState testAction: OpenStateClasses.getOpenStates() ) {
-			Assembly osAssembly = computeAssembly.computeAssemblyLES(testAction);
-//			csvHandler.writeCsv(writer, osAssembly);
+			Assembly assembly = new Assembly();
+			computeAssembly.computeAssemblyLES(testAction, assembly);
+//			csvHandler.writeCsv(writer, assembly);
 //			writer.flush();
 		}
 
@@ -24,9 +25,9 @@ public class ComputeTest {
 /*
 		ComputeAssembly computeAssembly = new ComputeAssembly();
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
-		OSAssembly osAssembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.MAOpenState());
+		OSAssembly assembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.MAOpenState());
 		Writer writer = new OutputStreamWriter(System.out);
-		csvHandler.writeCsv(writer, osAssembly);
+		csvHandler.writeCsv(writer, assembly);
 		writer.flush();		
 */
 		

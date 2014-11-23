@@ -129,8 +129,10 @@
     );
     create table DBDistrict (
         id int8 not null,
-        chamber varchar(255),
-        district varchar(255),
+        chamber int4,
+        description varchar(255),
+        district varchar(3),
+        name varchar(255),
         primary key (id)
     );
     create table DBDistrict_AggregateValues (

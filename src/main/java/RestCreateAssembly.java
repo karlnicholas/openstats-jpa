@@ -20,12 +20,13 @@ public class RestCreateAssembly {
 		Client client = ClientBuilder.newClient();
 
 		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-			Assembly osAssembly = computeAssembly.computeAssemblyLES(openState);
+			Assembly assembly = new Assembly(); 
+			computeAssembly.computeAssemblyLES(openState, assembly);
 			WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			Response response = null;
 			try {
-				response = builder.post(Entity.json(osAssembly), Response.class);
+				response = builder.post(Entity.json(assembly), Response.class);
 				if ( response.getStatusInfo() == Response.Status.CREATED )
 					System.out.println(response.getLocation().toString());
 				else
