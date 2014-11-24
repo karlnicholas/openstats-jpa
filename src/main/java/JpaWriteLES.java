@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
+import openstats.client.openstates.OpenStateClasses.GAOpenState;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;
@@ -32,6 +33,7 @@ public class JpaWriteLES {
 		et.begin();
 		
 		for( OpenState openState: OpenStateClasses.getOpenStates()) {
+//		OpenState openState = new OpenStateClasses.MIOpenState();
 			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 			computeAssembly.computeAssemblyLES(openState, assembly);
 			assemblyFacade.writeAssembly(assembly);

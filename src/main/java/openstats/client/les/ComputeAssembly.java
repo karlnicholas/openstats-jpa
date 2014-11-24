@@ -2,6 +2,7 @@ package openstats.client.les;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 import openstats.client.openstates.*;
 import openstats.client.openstates.OpenState.BILLACTION;
@@ -11,6 +12,7 @@ import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
 public class ComputeAssembly {
+	private static final Logger logger = Logger.getLogger(ComputeAssembly.class.getName());
 
 	class BillAction implements Comparable<BillAction> {
 		public org.openstates.data.Bill.Action action; 
@@ -58,11 +60,11 @@ public class ComputeAssembly {
 		assembly.setGroup(new Group(Labels.LESGROUPNAME, Labels.LESGROUPDESCR));
 		
 		Districts districts = assembly.getDistricts();
-		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
+		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
-			osInfoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
+			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		districts.setAggregateGroupInfo(new GroupInfo(osInfoItems));
+		districts.setAggregateGroupInfo(new GroupInfo(infoItems));
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -72,8 +74,19 @@ public class ComputeAssembly {
 			if ( legislator.chamber.equals("upper") ) chamber = CHAMBER.UPPER;
 			else if ( legislator.chamber.equals("lower") ) chamber = CHAMBER.LOWER;
 			else throw new RuntimeException("Chamber not found:" + legislator.chamber);
-			District district = districts.findDistrict(chamber, legislator.district);
-			if (district == null ) throw new RuntimeException("District not found:"+":"+legislator.chamber+":"+ legislator.district );
+			String dNum = legislator.district;
+			if ( dNum.length() != 3 ) {
+				try {
+					dNum = String.format("%03d", Integer.parseInt(dNum));
+				} catch (Exception ignored ) {
+					dNum = String.format("%3s", dNum);
+				}
+			}
+			District district = districts.findDistrict(chamber, dNum);
+			if (district == null ) {
+				logger.warning("District not found:"+":"+legislator.chamber+":"+ legislator.district );
+				continue;
+			}
 			
 			if ( district.getAggregateValues() != null ) {
 				List<Long> valueList = district.getAggregateValues();
@@ -116,11 +129,11 @@ public class ComputeAssembly {
 			stats[idx++] = valueList.get(0);
 		}
 		Statistics statistics = new Statistics(stats);
-		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
+		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
-			osInfoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
+			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
-		assembly.setComputationGroupInfo(new GroupInfo(osInfoItems));
+		assembly.setComputationGroupInfo(new GroupInfo(infoItems));
 		List<Double> valueList = new ArrayList<Double>();
 
 		double mean = statistics.getMean();
@@ -257,11 +270,11 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 				
 //		ArrayList<Long> lidsAll = makeRList();
 		
-		List<InfoItem> osInfoItems = new ArrayList<InfoItem>();
+		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
-			osInfoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
+			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		districts.setComputationGroupInfo(new GroupInfo(osInfoItems));
+		districts.setComputationGroupInfo(new GroupInfo(infoItems));
 	
 		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
@@ -319,21 +332,23 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( District dist: districts.getDistrictList()) {
 
 			List<Long> valueList = dist.getAggregateValues();
+			if ( valueList != null ) {
 
-			distArray[0][0] = valueList.get(0);
-			distArray[0][1] = 0.0;
-			distArray[0][2] = 0.0;
-			distArray[0][3] = valueList.get(1); 
-			
-			distArray[1][0] = valueList.get(2);
-			distArray[1][1] = valueList.get(3); 
-			distArray[1][2] = valueList.get(4); 
-			distArray[1][3] = valueList.get(5); 
-
-			distArray[2][0] = valueList.get(6);
-			distArray[2][1] = valueList.get(7); 
-			distArray[2][2] = valueList.get(8); 
-			distArray[2][3] = valueList.get(9);
+				distArray[0][0] = valueList.get(0);
+				distArray[0][1] = 0.0;
+				distArray[0][2] = 0.0;
+				distArray[0][3] = valueList.get(1); 
+				
+				distArray[1][0] = valueList.get(2);
+				distArray[1][1] = valueList.get(3); 
+				distArray[1][2] = valueList.get(4); 
+				distArray[1][3] = valueList.get(5); 
+	
+				distArray[2][0] = valueList.get(6);
+				distArray[2][1] = valueList.get(7); 
+				distArray[2][2] = valueList.get(8); 
+				distArray[2][3] = valueList.get(9);
+			}
 				
 			// make the array inverse cumulative across rows 
 			for ( int j=0; j < 3; ++j ) {
@@ -378,8 +393,11 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 	private double totalFrom(Districts districts, int index) {
 		double ret = 0.0;
 		for ( District dist: districts.getDistrictList()) {
-			Long iVal = dist.getAggregateValues().get(index);
-			ret = ret + iVal;
+			List<Long> values = dist.getAggregateValues();
+			if ( values != null ) {
+				Long iVal = values.get(index);
+				ret = ret + iVal;
+			}
 		}
 		return ret;
 	}

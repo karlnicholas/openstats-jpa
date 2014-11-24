@@ -10,6 +10,7 @@ import openstats.client.census.CensusTable;
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.*;
 import openstats.client.openstates.OpenStateClasses.AKOpenState;
+import openstats.client.openstates.OpenStateClasses.GAOpenState;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;

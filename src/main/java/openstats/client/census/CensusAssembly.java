@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
@@ -11,7 +12,7 @@ import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
 public class CensusAssembly {
-
+	private static final Logger logger = Logger.getLogger(CensusAssembly.class.getName());
 	public Assembly censusAssembly(OpenState openState, CensusTable censusTable, Assembly assembly) throws Exception {			
 		
 //		System.out.println("Determine count = " + determineCount);
@@ -62,7 +63,10 @@ public class CensusAssembly {
 		results.remove(0);
 		for(List<String> row: results) {
 			District district = districts.findDistrict(chamber, row.get(21));
-			if ( district == null ) continue;
+			if ( district == null ) {
+				logger.warning("District not found for state " + row.get(20)+":"+chamber+":"+row.get(21));
+				continue;
+			}
 //			if ( district == null ) throw new RuntimeException("District not found:"+row.get(21));
 			
 			List<Long> valueList = new ArrayList<Long>();
