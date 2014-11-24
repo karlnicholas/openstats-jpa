@@ -31,8 +31,8 @@ public class JpaReadAssembly {
 	private void run() throws Exception {
 		initJpa();
 		
-		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		Assembly Assembly = assemblyFacade.buildAssembly(dbGroup, "GA", "2013");
+		DBGroup dbGroup = DBGroupHandler.getDBGroup("B19301", em);
+		Assembly Assembly = assemblyFacade.buildAssembly(dbGroup, "CA", "2013");
 		Writer writer = new OutputStreamWriter(System.out);
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();

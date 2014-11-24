@@ -136,6 +136,7 @@ public class CensusApi {
 				terms.append( value );	// URL encoding is done by the URI constructor
 			}
 		}
+		terms.append("&key=587b0a7bd7ac44e7ec42b799f07e5858d9254134");
 			
 		// construct the URI ..
 		URI uri = new URI(

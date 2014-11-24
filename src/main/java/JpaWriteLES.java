@@ -8,13 +8,13 @@ import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;
 
-public class JpaWriteAssembly {
+public class JpaWriteLES {
 
 	private EntityManagerFactory emf;
 	private EntityManager em;
 
 	public static void main(String[] args) throws Exception {
-		new JpaWriteAssembly().run();
+		new JpaWriteLES().run();
 	}
 
 	private void initJpa() throws Exception {

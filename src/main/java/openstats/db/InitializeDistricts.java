@@ -12,6 +12,7 @@ import java.util.zip.ZipFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import openstats.client.openstates.OpenState;
@@ -38,6 +39,8 @@ public class InitializeDistricts {
 	
 	private void run() throws Exception {
 		initJpa();
+		EntityTransaction et = em.getTransaction();
+		et.begin();
 		for(OpenState openState: OpenStateClasses.getOpenStates()) {
 			ZipFile zipFile = null;
 			String entryName = null;
@@ -68,7 +71,7 @@ public class InitializeDistricts {
 			}
 			DBAssemblyHandler.createAssembly(assembly, em);
 		}
-		
+		et.commit();
 		emf.close();
 	}
 	

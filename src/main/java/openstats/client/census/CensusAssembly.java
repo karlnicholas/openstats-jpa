@@ -59,12 +59,11 @@ public class CensusAssembly {
 	}
 	
 	private void buildDistricts(CensusTable censusTable, Districts districts, List<List<String>> results, CHAMBER chamber) {
-		int rowNum = 1;
 		results.remove(0);
 		for(List<String> row: results) {
-			String dNum = Integer.toString(rowNum++);
-			District district = districts.findDistrict(chamber, dNum);
-			districts.getDistrictList().add(district);
+			District district = districts.findDistrict(chamber, row.get(21));
+			if ( district == null ) continue;
+//			if ( district == null ) throw new RuntimeException("District not found:"+row.get(21));
 			
 			List<Long> valueList = new ArrayList<Long>();
 			for( int idx = 0, idxE = censusTable.cells.size(); idx<idxE; ++idx ) {
