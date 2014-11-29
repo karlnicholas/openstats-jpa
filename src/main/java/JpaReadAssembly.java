@@ -1,10 +1,11 @@
 
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 
-import openstats.client.les.Labels;
 import openstats.dbmodel.*;
 import openstats.facades.AssemblyFacade;
 import openstats.model.Assembly;
@@ -31,9 +32,11 @@ public class JpaReadAssembly {
 	private void run() throws Exception {
 		initJpa();
 		
-		DBGroup dbGroup = DBGroupHandler.getDBGroup("B19301", em);
+		List<DBGroup> dbGroups = new ArrayList<DBGroup>();
+		dbGroups.add( DBGroupHandler.getDBGroup("B19301", em));
+		dbGroups.add( DBGroupHandler.getDBGroup("BILLPROGRESS", em));
 //		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		Assembly Assembly = assemblyFacade.buildAssembly(dbGroup, "GA", "2013");
+		Assembly Assembly = assemblyFacade.buildAssembly2(dbGroups, "GA", "2013");
 		Writer writer = new OutputStreamWriter(System.out);
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
