@@ -104,6 +104,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "26";
 		}
+
+		@Override
+		public String getStateName() {
+			return "Michigan";
+		}
 		
 	}
 
@@ -146,6 +151,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "30"; // 			030 Montana
+		}
+
+		@Override
+		public String getStateName() {
+			return "Montana";
 		}
 		
 	}
@@ -191,6 +201,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "18";	// 			018 Indiana
 		}
+
+		@Override
+		public String getStateName() {
+			return "Indiana";
+		}
 		
 	}
 
@@ -229,6 +244,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "16";	// 			016 Idaho
+		}
+
+		@Override
+		public String getStateName() {
+			return "Idaho";
 		}
 		
 	}
@@ -275,6 +295,11 @@ public class OpenStateClasses {
 
 		}
 
+		@Override
+		public String getStateName() {
+			return "Connecticut";
+		}
+
 	}
 
 	public static class WIOpenState implements OpenState {
@@ -316,6 +341,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "55";	// 			055 Wisconsin
+		}
+
+		@Override
+		public String getStateName() {
+			return "Wisconsin";
 		}
 
 	}
@@ -362,6 +392,11 @@ public class OpenStateClasses {
 			return "50";	// 			050 Vermont
 		}
 
+		@Override
+		public String getStateName() {
+			return "Vermont";
+		}
+
 	}
 
 	public static class UTOpenState implements OpenState {
@@ -405,6 +440,11 @@ public class OpenStateClasses {
 			return "49";	// 			049 Utah
 		}
 
+		@Override
+		public String getStateName() {
+			return "Utah";
+		}
+
 	}
 
 	public static class SDOpenState implements OpenState {
@@ -446,6 +486,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "46";	// 			046 South Dakota
+		}
+
+		@Override
+		public String getStateName() {
+			return "South Dakota";
 		}
 		
 	}
@@ -492,6 +537,11 @@ public class OpenStateClasses {
 			return "41";	// 			041 Oregon
 		}
 
+		@Override
+		public String getStateName() {
+			return "Oregon";
+		}
+
 	}
 
 	public static class OHOpenState implements OpenState {
@@ -536,6 +586,11 @@ public class OpenStateClasses {
 			return "39";	// 			039 Ohio
 		}
 
+		@Override
+		public String getStateName() {
+			return "Ohio";
+		}
+
 	}
 
 	public static class WYOpenState implements OpenState {
@@ -576,6 +631,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "56";	// 			056 Wyoming	
+		}
+
+		@Override
+		public String getStateName() {
+			return "Wyoming";
 		}
 
 	}
@@ -620,6 +680,11 @@ public class OpenStateClasses {
 			return "45";	// 			045 South Carolina
 		}
 
+		@Override
+		public String getStateName() {
+			return "South Carolina";
+		}
+
 		
 	}
 
@@ -661,6 +726,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "44";	// 			044 Rhode Island
+		}
+
+		@Override
+		public String getStateName() {
+			return "Rhode Island";
 		}
 
 	}
@@ -707,6 +777,11 @@ public class OpenStateClasses {
 			return "32";	// 032 Nevada
 		}
 
+		@Override
+		public String getStateName() {
+			return "Nevada";
+		}
+
 	}
 
 	public static class NMOpenState implements OpenState {
@@ -750,6 +825,11 @@ public class OpenStateClasses {
 			return "35";	// 			035 New Mexico
 		}
 
+		@Override
+		public String getStateName() {
+			return "New Mexico";
+		}
+
 	}
 
 	public static class NHOpenState implements OpenState {
@@ -790,6 +870,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "33";	// 			033 New Hampshire
+		}
+
+		@Override
+		public String getStateName() {
+			return "New Hampshire";
 		}
 		
 	}
@@ -833,6 +918,11 @@ public class OpenStateClasses {
 			return "31";	// 			031 Nebraska
 		}
 
+		@Override
+		public String getStateName() {
+			return "Nebraska";
+		}
+
 	}
 
 	public static class NDOpenState implements OpenState {
@@ -874,6 +964,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "38";	// 			038 North Dakota
+		}
+
+		@Override
+		public String getStateName() {
+			return "North Dakota";
 		}
 
 	}
@@ -920,6 +1015,11 @@ public class OpenStateClasses {
 			return "23";	// 			023 Maine
 		}
 
+		@Override
+		public String getStateName() {
+			return "Maine";
+		}
+
 	}
 
 	public static class KSOpenState implements OpenState {
@@ -956,6 +1056,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "20";	// 			020 Kansas
+		}
+
+		@Override
+		public String getStateName() {
+			return "Kansas";
 		}
 
 	}
@@ -1000,6 +1105,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "17";	// 			017 Illinois
 		}
+
+		@Override
+		public String getStateName() {
+			return "Illinois";
+		}
 		
 	}
 
@@ -1037,6 +1147,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "19";	// 019 Iowa
+		}
+
+		@Override
+		public String getStateName() {
+			return "Iowa";
 		}
 
 	}
@@ -1081,6 +1196,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "12";	// 			012 Florida
+		}
+
+		@Override
+		public String getStateName() {
+			return "Florida";
 		}
 
 	}
@@ -1128,6 +1248,11 @@ public class OpenStateClasses {
 			return "10";	// 			010 Delaware
 		}
 
+		@Override
+		public String getStateName() {
+			return "Delaware";
+		}
+
 	}
 
 	public static class COOpenState implements OpenState {
@@ -1170,6 +1295,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "08";	// 			008 Colorado
+		}
+
+		@Override
+		public String getStateName() {
+			return "Colorado";
 		}
 
 	}
@@ -1216,6 +1346,11 @@ public class OpenStateClasses {
 			return "01";	// 			001 Alabama 
 		}
 
+		@Override
+		public String getStateName() {
+			return "Alabama";
+		}
+
 	}
 
 	public static class AKOpenState implements OpenState {
@@ -1257,6 +1392,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "02";	// 			002 Alaska
+		}
+
+		@Override
+		public String getStateName() {
+			return "Alaska";
 		}
 
 	}
@@ -1302,6 +1442,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "21";	// 			021 Kentucky
 		}
+
+		@Override
+		public String getStateName() {
+			return "Kentucky";
+		}
 		
 	}
 
@@ -1343,6 +1488,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "13";	// 			013 Georgia
 		}
+
+		@Override
+		public String getStateName() {
+			return "Georgia";
+		}
 	}
 
 	public static class AROpenState implements OpenState {
@@ -1381,6 +1531,10 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "05";	//			005 Arkansas
 		}
+		@Override
+		public String getStateName() {
+			return "Arkansas";
+		}
 	}
 
 	public static class OKOpenState implements OpenState {
@@ -1417,6 +1571,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "40";	// 			040 Oklahoma
+		}
+		@Override
+		public String getStateName() {
+			return "Oklahoma";
 		}
 	}
 
@@ -1465,6 +1623,10 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "25";	// 			025 Massachusetts
 		}
+		@Override
+		public String getStateName() {
+			return "Massachusetts";
+		}
 	}
 
 	public static class NCOpenState implements OpenState {
@@ -1501,6 +1663,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "37";	// 			037 North Carolina
+		}
+		@Override
+		public String getStateName() {
+			return "North Carolina";
 		}
 	}
 
@@ -1540,6 +1706,10 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "04";	//			004 Arizona
 		}
+		@Override
+		public String getStateName() {
+			return "Arizona";
+		}
 	}
 
 	public static class MNOpenState implements OpenState {
@@ -1570,6 +1740,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "27";	// 			027 Minnesota
+		}
+		@Override
+		public String getStateName() {
+			return "Minnesota";
 		}
 	}
 
@@ -1609,6 +1783,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "15";	//			015 Hawaii
+		}
+		@Override
+		public String getStateName() {
+			return "Hawaii";
 		}
 	}
 
@@ -1650,6 +1828,10 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "22";	// 			022 Louisiana
 		}
+		@Override
+		public String getStateName() {
+			return "Louisiana";
+		}
 	}
 
 	public static class TNOpenState implements OpenState {
@@ -1686,6 +1868,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "47";	// 			047 Tennessee
+		}
+		@Override
+		public String getStateName() {
+			return "Tennessee";
 		}
 	}
 
@@ -1726,6 +1912,10 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "51";	//			051 Virginia
 		}
+		@Override
+		public String getStateName() {
+			return "Virginia";
+		}
 	}
 
 	public static class NJOpenState implements OpenState {
@@ -1761,6 +1951,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "34";	// 			034 New Jersey
+		}
+		@Override
+		public String getStateName() {
+			return "New Jersey";
 		}
 	}
 
@@ -1802,6 +1996,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "42";	// 			042 Pennsylvania
+		}
+
+		@Override
+		public String getStateName() {
+			return "Pennsylvania";
 		}
 	}
 
@@ -1845,6 +2044,11 @@ public class OpenStateClasses {
 		public String getCensusCode() {
 			return "24";	// 			024 Maryland
 		}
+
+		@Override
+		public String getStateName() {
+			return "Maryland";
+		}
 		
 	}
 	public static class MSOpenState implements OpenState {
@@ -1887,6 +2091,11 @@ public class OpenStateClasses {
 			return "28";	//			028 Mississippi
 		}
 
+		@Override
+		public String getStateName() {
+			return "Mississippi";
+		}
+
 	}
 
 	public static class MOOpenState implements OpenState {
@@ -1922,6 +2131,10 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "29";	//  			029 Missouri
+		}
+		@Override
+		public String getStateName() {
+			return "Missouri";
 		}
 	}
 	public static class TXOpenState implements OpenState {
@@ -1964,6 +2177,11 @@ public class OpenStateClasses {
 			return "48";	// 			048 Texas
 		}
 
+		@Override
+		public String getStateName() {
+			return "Texas";
+		}
+
 	}
 	public static class NYOpenState implements OpenState {
 
@@ -2003,6 +2221,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "36";	// 			036 New York
+		}
+
+		@Override
+		public String getStateName() {
+			return "New York";
 		}
 		
 	}
@@ -2048,6 +2271,11 @@ public class OpenStateClasses {
 		@Override
 		public String getCensusCode() {
 			return "06";	 // 			006 California
+		}
+
+		@Override
+		public String getStateName() {
+			return "California";
 		}
 		
 	}

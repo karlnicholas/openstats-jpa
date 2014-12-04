@@ -71,6 +71,7 @@ public class CensusApi {
 		String charSet = "utf-8";
 		try {
 			conn = CensusApi.getConnectionFromAPI(argMap);
+/*			
 			charSet = getCharset(conn);
 		    // better check it first
 			int rcode = conn.getResponseCode();
@@ -80,7 +81,7 @@ public class CensusApi {
 		    	throw new RuntimeException(rcode+":"+msg);
 		    }
 			reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), charSet));
-			
+*/			
         	return readValue( reader);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -97,6 +98,8 @@ public class CensusApi {
 	}
 	
 	private List<List<String>> readValue(BufferedReader reader) throws IOException {
+		return new ArrayList<List<String>>();
+/*		
 		StringWriter writer = new StringWriter();
 		String line;
 		while ((line = reader.readLine())!=null) {
@@ -118,6 +121,7 @@ public class CensusApi {
 		}
 		sReader.close();
 		return results;
+*/		
 	}
 	
 	private static HttpURLConnection getConnectionFromAPI(Map<String, String> argMap) throws Exception {
@@ -148,13 +152,15 @@ public class CensusApi {
 			terms.toString(), 
 			null
 		);
-		logger.fine(uri.toString());
-		
+		logger.info(uri.toString());
+		return null;
+/*		
 		con = (HttpURLConnection) uri.toURL().openConnection();
 	    con.setRequestMethod("GET");
 	    con.setRequestProperty("Content-Type", "application/xml");
 	    con.connect();
 	    return con;
+*/	    
 	}
 	
 	private static String getCharset(HttpURLConnection con) throws IOException {

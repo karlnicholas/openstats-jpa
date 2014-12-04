@@ -5,11 +5,15 @@ import java.util.List;
 
 public class CensusTable {
 	
+	public CensusTable(String tableId, String tableDescr) {
+		this.tableId = tableId;
+		this.tableDescr = tableDescr;
+	}
+
 	public static class StringPair {
 		public String label;
 		public String descr;
 		public StringPair(String label, String descr) {
-			super();
 			this.label = label;
 			this.descr = descr;
 		}		

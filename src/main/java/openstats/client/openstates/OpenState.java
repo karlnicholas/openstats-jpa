@@ -9,6 +9,7 @@ public interface OpenState {
 	public enum BILLACTION {INTRODUCED, OTHERCHAMBER, TOGOVERNOR, ENACTED, OTHER };
 //
 	public String getState();
+	public String getStateName();
 	public String getSession();
 	public BILLTYPE getBillType(org.openstates.data.Bill bill, TreeSet<String> currentTopics);
 	public BILLACTION getBillAction(String chamber, String act, BILLTYPE billType);

@@ -44,7 +44,7 @@ public class CensusAssembly {
 		
 		CensusApi censusApi = new CensusApi();
 		List<List<String>> results = censusApi.query(argMap);
-		buildDistricts(censusTable, districts, results, CHAMBER.UPPER);
+//		buildDistricts(censusTable, districts, results, CHAMBER.UPPER);
 
 		if ( !openState.getState().equals("NE")) {
 			argMap.clear();
@@ -54,7 +54,7 @@ public class CensusAssembly {
 			// skipping descriptions for the moment
 			
 			results = censusApi.query(argMap);
-			buildDistricts(censusTable, districts, results, CHAMBER.LOWER);
+//			buildDistricts(censusTable, districts, results, CHAMBER.LOWER);
 		}
 		return assembly;
 	}
