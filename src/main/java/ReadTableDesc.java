@@ -97,7 +97,7 @@ public class ReadTableDesc {
 
 		List<ProcessStat> processStatList = createProcessStatList();
 		//
-		addCensusCellLabels(processStatList);
+//		addCensusCellLabels(processStatList);
 		// process censusTable here ..
 //		processCensusTable(processStatList);
 	}
@@ -113,7 +113,20 @@ public class ReadTableDesc {
 		for(CSVRecord record: parser) {
 
 			String descr = record.get(7);
-			if ( descr.equals("Universe:  Total population") ) {
+			String recordId = record.get(1);
+			char lastOfRID = recordId.charAt(recordId.length()-1);
+//			if ( Character.isDigit(lastOfRID) && descr.contains("Universe:") ) System.out.println(recordId+":"+descr);
+			if ( 
+				(descr.equals("Universe: Households") 
+				|| descr.equals("Universe:  Total population")
+//				|| descr.equals("Universe:  Families")
+//				|| descr.equals("Universe:  Nonfamily households")
+//				|| descr.equals("Universe:  Housing units")
+				|| descr.equals("Universe:  Total population in the United States")
+				
+				)
+				&& Character.isDigit(lastOfRID) 
+			) {
 				if ( processStat != null ) {
 					// process censusTable here ..
 					processStatList.add(processStat);
@@ -126,7 +139,7 @@ public class ReadTableDesc {
 						cellCount, 
 						new CensusTable(priorRecord.get(1), priorRecord.get(7))
 					);
-//				System.out.print(""+cellCount+":");
+				System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
 //				System.out.println(priorRecord);
 			}
 			priorRecord = record;
@@ -214,9 +227,9 @@ public class ReadTableDesc {
 //			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
 			String cacheDir = "/home/knicholas/censusdata/";
 			String fileName = "g20125" + openState.getState().toLowerCase()+".txt";
-			if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
-				cacheFile(openState, cacheDir, fileName);
-			}
+//			if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
+//				cacheFile(openState, cacheDir, fileName);
+//			}
 			
 			// Alaska/All_Geographies_Not_Tracts_Block_Groups/"
 			
@@ -250,9 +263,9 @@ public class ReadTableDesc {
 				System.out.println();
 	
 				fileName = "20125" + openState.getState().toLowerCase()+processStat.seqNumber+"000.zip";
-				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
-					cacheFile(openState, cacheDir, fileName);
-				}
+//				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
+//					cacheFile(openState, cacheDir, fileName);
+//				}
 				
 				ZipInputStream zipStream = new ZipInputStream(new FileInputStream(cacheDir+fileName));
 				zipStream.getNextEntry();
