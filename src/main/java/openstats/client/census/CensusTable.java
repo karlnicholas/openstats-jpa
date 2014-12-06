@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CensusTable {
-	
-	public CensusTable(String tableId, String tableDescr) {
+	public enum AGGORCOMP { AGG, COMP };
+	public CensusTable(String tableId, String tableDescr, AGGORCOMP aggOrComp) {
 		this.tableId = tableId;
 		this.tableDescr = tableDescr;
+		this.aggOrComp = aggOrComp;
 	}
 
 	public static class StringPair {
@@ -20,6 +21,7 @@ public class CensusTable {
 	}
 	public String tableId;
 	public String tableDescr;
+	public AGGORCOMP aggOrComp;
 	
 	public List<StringPair> cells = new ArrayList<StringPair>();
 	
