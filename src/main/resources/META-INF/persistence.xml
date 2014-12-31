@@ -12,8 +12,10 @@
 		<class>openstats.dbmodel.DBDistricts</class>
 		<class>openstats.dbmodel.DBDistrict</class>
 		<class>openstats.dbmodel.DBLegislator</class>
-		<class>openstats.dbmodel.AggregateValues</class>
-		<class>openstats.dbmodel.ComputationValues</class>
+		<class>openstats.dbmodel.AggregateResults</class>
+		<class>openstats.dbmodel.ComputationResults</class>
+		<class>openstats.dbmodel.AggregateResult</class>
+		<class>openstats.dbmodel.ComputationResult</class>
 		<properties>
 			<!-- Properties for Hibernate -->
 			<property name="hibernate.hbm2ddl.auto" value="validate" />

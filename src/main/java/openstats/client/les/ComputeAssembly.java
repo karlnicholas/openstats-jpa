@@ -8,6 +8,8 @@ import openstats.client.openstates.*;
 import openstats.client.openstates.OpenState.BILLACTION;
 import openstats.client.openstates.OpenState.BILLTYPE;
 import openstats.client.util.Statistics;
+import openstats.dbmodel.AggregateResult;
+import openstats.dbmodel.ComputationResult;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -34,7 +36,7 @@ public class ComputeAssembly {
 		buildcurrentTopics(openState);
 		determineOfficeScores(legislatorStats);
 		ArrayList<org.openstates.data.Bill.Sponsor> sponsors = new ArrayList<org.openstates.data.Bill.Sponsor>();
-		int determineCount = 0;
+//		int determineCount = 0;
 		Collection<org.openstates.data.Bill> bills = org.openstates.model.Bills.values();
 		for ( org.openstates.data.Bill bill:  bills ) {
 	//		System.out.println(bill.bill_id+"---------------------------------------");
@@ -48,7 +50,7 @@ public class ComputeAssembly {
 					if ( legislator != null ) sponsorStats = legislatorStats.get(legislator);
 				}
 				if ( sponsorStats != null ) {
-					determineCount++;
+//					determineCount++;
 					determineBillProgress(bill, sponsorStats, openState);
 				}
 	
@@ -88,31 +90,31 @@ public class ComputeAssembly {
 				continue;
 			}
 			
-			if ( district.getAggregateValues() != null ) {
-				List<Long> valueList = district.getAggregateValues();
-				valueList.set(0, valueList.get(0) + sponsorStats.billData[0][0]);
-				valueList.set(1, valueList.get(1) + sponsorStats.billData[0][3]);
-				valueList.set(2, valueList.get(2) + sponsorStats.billData[1][0]);
-				valueList.set(3, valueList.get(3) + sponsorStats.billData[1][1]);
-				valueList.set(4, valueList.get(4) + sponsorStats.billData[1][2]);
-				valueList.set(5, valueList.get(5) + sponsorStats.billData[1][3]);
-				valueList.set(6, valueList.get(6) + sponsorStats.billData[2][0]);
-				valueList.set(7, valueList.get(7) + sponsorStats.billData[2][1]);
-				valueList.set(8, valueList.get(8) + sponsorStats.billData[2][2]);
-				valueList.set(9, valueList.get(9) + sponsorStats.billData[2][3]);
+			if ( district.getAggregateResults().size() != 0 ) {
+				List<AggregateResult> valueList = district.getAggregateResults();
+				valueList.set(0, new AggregateResult(valueList.get(0).value + sponsorStats.billData[0][0], 0));
+				valueList.set(1, new AggregateResult(valueList.get(1).value + sponsorStats.billData[0][3], 0));
+				valueList.set(2, new AggregateResult(valueList.get(2).value + sponsorStats.billData[1][0], 0));
+				valueList.set(3, new AggregateResult(valueList.get(3).value + sponsorStats.billData[1][1], 0));
+				valueList.set(4, new AggregateResult(valueList.get(4).value + sponsorStats.billData[1][2], 0));
+				valueList.set(5, new AggregateResult(valueList.get(5).value + sponsorStats.billData[1][3], 0));
+				valueList.set(6, new AggregateResult(valueList.get(6).value + sponsorStats.billData[2][0], 0));
+				valueList.set(7, new AggregateResult(valueList.get(7).value + sponsorStats.billData[2][1], 0));
+				valueList.set(8, new AggregateResult(valueList.get(8).value + sponsorStats.billData[2][2], 0));
+				valueList.set(9, new AggregateResult(valueList.get(9).value + sponsorStats.billData[2][3], 0));
 			} else {
-				List<Long> valueList = new ArrayList<Long>();
-				valueList.add(sponsorStats.billData[0][0]);
-				valueList.add(sponsorStats.billData[0][3]);
-				valueList.add(sponsorStats.billData[1][0]);
-				valueList.add(sponsorStats.billData[1][1]);
-				valueList.add(sponsorStats.billData[1][2]);
-				valueList.add(sponsorStats.billData[1][3]);
-				valueList.add(sponsorStats.billData[2][0]);
-				valueList.add(sponsorStats.billData[2][1]);
-				valueList.add(sponsorStats.billData[2][2]);
-				valueList.add(sponsorStats.billData[2][3]);
-				district.setAggregateValues(valueList);
+				List<AggregateResult> valueList = new ArrayList<AggregateResult>();
+				valueList.add(new AggregateResult(sponsorStats.billData[0][0], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[0][3], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[1][0], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[1][1], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[1][2], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[1][3], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[2][0], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[2][1], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[2][2], 0));
+				valueList.add(new AggregateResult(sponsorStats.billData[2][3], 0));
+				district.setAggregateResults(valueList);
 			}
 		}
 		computeLES(districts);
@@ -125,8 +127,8 @@ public class ComputeAssembly {
 		double[] stats = new double[districts.getDistrictList().size()];
 		int idx=0;
 		for ( District district: districts.getDistrictList() ) {
-			List<Double> valueList = district.getComputationValues();
-			stats[idx++] = valueList.get(0);
+			List<ComputationResult> valueList = district.getComputationResults();
+			stats[idx++] = valueList.get(0).value;
 		}
 		Statistics statistics = new Statistics(stats);
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
@@ -134,7 +136,7 @@ public class ComputeAssembly {
 			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
 		assembly.setComputationGroupInfo(new GroupInfo(infoItems));
-		List<Double> valueList = new ArrayList<Double>();
+		List<ComputationResult> valueList = new ArrayList<ComputationResult>();
 
 		double mean = statistics.getMean();
 		double variance = statistics.getVariance();
@@ -148,8 +150,8 @@ public class ComputeAssembly {
 		double skewness = thirdmoment / Math.pow(variance, (3.0/2.0));
 
 //		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
-		valueList.add(skewness); 
-		assembly.setComputationValues(valueList);
+		valueList.add(new ComputationResult(skewness, 0.0)); 
+		assembly.setComputationResults(valueList);
 		return skewness;
 	}
 
@@ -331,23 +333,23 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 		for ( District dist: districts.getDistrictList()) {
 
-			List<Long> valueList = dist.getAggregateValues();
+			List<AggregateResult> valueList = dist.getAggregateResults();
 			if ( valueList != null ) {
 
-				distArray[0][0] = valueList.get(0);
+				distArray[0][0] = valueList.get(0).value;
 				distArray[0][1] = 0.0;
 				distArray[0][2] = 0.0;
-				distArray[0][3] = valueList.get(1); 
+				distArray[0][3] = valueList.get(1).value; 
 				
-				distArray[1][0] = valueList.get(2);
-				distArray[1][1] = valueList.get(3); 
-				distArray[1][2] = valueList.get(4); 
-				distArray[1][3] = valueList.get(5); 
+				distArray[1][0] = valueList.get(2).value;
+				distArray[1][1] = valueList.get(3).value; 
+				distArray[1][2] = valueList.get(4).value; 
+				distArray[1][3] = valueList.get(5).value; 
 	
-				distArray[2][0] = valueList.get(6);
-				distArray[2][1] = valueList.get(7); 
-				distArray[2][2] = valueList.get(8); 
-				distArray[2][3] = valueList.get(9);
+				distArray[2][0] = valueList.get(6).value;
+				distArray[2][1] = valueList.get(7).value; 
+				distArray[2][2] = valueList.get(8).value; 
+				distArray[2][3] = valueList.get(9).value;
 			}
 				
 			// make the array inverse cumulative across rows 
@@ -384,18 +386,18 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			List<Double> comps = new ArrayList<Double>();
-			comps.add(LES);
-			dist.setComputationValues(comps);
+			List<ComputationResult> comps = new ArrayList<ComputationResult>();
+			comps.add(new ComputationResult(LES, 0.0) );
+			dist.setComputationResults(comps);
 		}
 	}
 	
 	private double totalFrom(Districts districts, int index) {
 		double ret = 0.0;
 		for ( District dist: districts.getDistrictList()) {
-			List<Long> values = dist.getAggregateValues();
+			List<AggregateResult> values = dist.getAggregateResults();
 			if ( values != null ) {
-				Long iVal = values.get(index);
+				Long iVal = values.get(index).value;
 				ret = ret + iVal;
 			}
 		}

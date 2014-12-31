@@ -1,4 +1,4 @@
-
+package openstats.client.census;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,18 +14,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.ZipInputStream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import openstats.client.census.CensusTable;
 import openstats.client.census.CensusTable.AGGORCOMP;
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
+import openstats.client.rest.RESTClient;
 import openstats.dbmodel.AggregateResult;
 import openstats.dbmodel.ComputationResult;
-import openstats.dbmodel.DBAssemblyHandler;
 import openstats.model.Assembly;
 import openstats.model.District;
 import openstats.model.Districts;
@@ -44,22 +37,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.codehaus.jackson.map.ObjectMapper;
 
 
-public class ReadTableDesc {
+public class ProcessCensusData {
+
+	RESTClient restClient;
 	
-	private EntityManagerFactory emf;
-	private EntityManager em;
-
-	private void initJpa() throws Exception {
-		emf = Persistence.createEntityManagerFactory("openstats");
-		em = emf.createEntityManager();
-	}
-	
-
 	public static void main(String... args) throws Exception {
-		new ReadTableDesc().run();
+		new ProcessCensusData().run();
 	}
 	
 	private class ProcessStat {
@@ -96,17 +81,15 @@ public class ReadTableDesc {
 	}
 	
 	public void run() throws Exception {
-		try {
-			initJpa();
-	
-			List<ProcessStat> processStatList = createProcessStatList();
-			//
-			addCensusCellLabels(processStatList);
+		restClient = new RESTClient();
+		List<ProcessStat> processStatList = createProcessStatList();
+		//
+		addCensusCellLabels(processStatList);
 
 //			List<Assembly> assemblies = new ArrayList<Assembly>();
-			OpenState openState = new OpenStateClasses.GAOpenState();
-			
-			// process censusTable here ..
+		OpenState openState = new OpenStateClasses.GAOpenState();
+		
+		// process censusTable here ..
 //			List<Assembly> assemblies = processCensusTable(processStatList);
 //			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
 //			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
@@ -116,14 +99,12 @@ public class ReadTableDesc {
 //			assemblyFacade.writeAssembly(assembly);
 //			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
 
-			List<Assembly> assemblies = processCensusTable(openState, processStatList);
-			
-			 ObjectMapper mapper = new ObjectMapper();
-			 mapper.writerWithDefaultPrettyPrinter().writeValue(Files.newBufferedWriter(Paths.get("/home/knicholas/workspace/openstats-jpa/assemblies.json"), Charset.forName("utf-8")), assemblies);
-			
-		} finally {
-			emf.close();
-		}
+		processCensusTable(openState, processStatList);
+		
+		restClient.close();
+		
+//		ObjectMapper mapper = new ObjectMapper();
+//		mapper.writerWithDefaultPrettyPrinter().writeValue(Files.newBufferedWriter(Paths.get("/home/knicholas/workspace/openstats-jpa/assemblies.json"), Charset.forName("utf-8")), assemblies);
 		
 	}
 	
@@ -169,7 +150,7 @@ public class ReadTableDesc {
 						cellCount, 
 						new CensusTable(priorRecord.get(1), tableDescr, aggOrComp)
 					);
-				System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
+//				System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
 //				System.out.println(priorRecord);
 			}
 			priorRecord = record;
@@ -201,7 +182,7 @@ public class ReadTableDesc {
         	if ( aCell != null && tables.containsKey(aCell.toString()) ) {
         		ProcessStat processStat = tables.get(aCell.toString());
         		if ( !processStat.censusTable.tableId.equals(currentTable) ) {
-        			System.out.println();
+//        			System.out.println();
         			currentTable = processStat.censusTable.tableId;
         		}
 /*
@@ -224,14 +205,14 @@ public class ReadTableDesc {
         				currentLabels.add(cell.toString());
         			}
         			processStat.censusTable.cells.add(new StringPair(row.getCell(2).toString(), labelsToString(currentLabels)));
-        			System.out.println(processStat.censusTable.tableId+" "+row.getCell(2).toString()+" "+labelsToString(currentLabels));
+//        			System.out.println(processStat.censusTable.tableId+" "+row.getCell(2).toString()+" "+labelsToString(currentLabels));
         		}
         	}
         }
 
         // once all the events are processed close our file input stream
         fin.close();
-        System.out.println("done.");
+//        System.out.println("done.");
 		
 		
 	}
@@ -245,9 +226,9 @@ public class ReadTableDesc {
 		return sb.toString();
 	}
 	
-	private List<Assembly> processCensusTable(OpenState openState, List<ProcessStat> processStatList) throws Exception {
+	private void processCensusTable(OpenState openState, List<ProcessStat> processStatList) throws Exception {
 //		CensusAssembly censusAssembly = new CensusAssembly();
-		List<Assembly> assemblies = new ArrayList<Assembly>();
+//		List<Assembly> assemblies = new ArrayList<Assembly>();
 		String cacheDir = "/home/knicholas/censusdata/";
 		String fileName = "g20125" + openState.getState().toLowerCase()+".txt";
 //			if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -276,24 +257,27 @@ public class ReadTableDesc {
 	
 		Collections.sort(censusRecordNos);
 	
-		System.out.println("Min:" + recordNoMin +":Max:" + recordNoMax);
-		Assembly templateAssembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
+//		System.out.println("Min:" + recordNoMin +":Max:" + recordNoMax);
+		
+		Assembly templateAssembly = restClient.getTemplateAssembly(openState.getState(), openState.getSession());
+
 		for ( ProcessStat processStat: processStatList ) {
 	//			ProcessStat processStat  = processStatList.get(1);
+			// deep copy
 			Assembly assembly = new Assembly(templateAssembly);
-			assemblies.add(assembly);
+//			assemblies.add(assembly);
 	
 			Group group = new Group(processStat.censusTable.tableId, processStat.censusTable.tableDescr);
 			assembly.setGroup(group);
 			Districts districts = assembly.getDistricts();
 			List<InfoItem> infoItems = new ArrayList<InfoItem>();
-			System.out.println(processStat.censusTable.tableId+":"+processStat.censusTable.tableDescr);
-			System.out.print("RecordNo,");
+//			System.out.println(processStat.censusTable.tableId+":"+processStat.censusTable.tableDescr);
+//			System.out.print("RecordNo,");
 			for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
-				System.out.print(processStat.censusTable.cells.get(i).label+",");
+//				System.out.print(processStat.censusTable.cells.get(i).label+",");
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
-			System.out.println();
+//			System.out.println();
 	
 			GroupInfo groupInfo = new GroupInfo(infoItems);
 			if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) 
@@ -368,9 +352,11 @@ public class ReadTableDesc {
 			}
 */			
 			reader.close();
+			// done with an assembly, upload it
+			restClient.updateAssembly(assembly);
 		}
 			
-		return assemblies;
+//		return assemblies;
 		
 	}
 /*	

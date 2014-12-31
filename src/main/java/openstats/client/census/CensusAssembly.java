@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
+import openstats.dbmodel.AggregateResult;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -43,7 +44,7 @@ public class CensusAssembly {
 		// skipping descriptions for the moment
 		
 		CensusApi censusApi = new CensusApi();
-		List<List<String>> results = censusApi.query(argMap);
+		List<List<String>> values = censusApi.query(argMap);
 //		buildDistricts(censusTable, districts, results, CHAMBER.UPPER);
 
 		if ( !openState.getState().equals("NE")) {
@@ -53,15 +54,15 @@ public class CensusAssembly {
 			argMap.put("in", "state:" + openState.getCensusCode());
 			// skipping descriptions for the moment
 			
-			results = censusApi.query(argMap);
+			values = censusApi.query(argMap);
 //			buildDistricts(censusTable, districts, results, CHAMBER.LOWER);
 		}
 		return assembly;
 	}
 	
-	private void buildDistricts(CensusTable censusTable, Districts districts, List<List<String>> results, CHAMBER chamber) {
-		results.remove(0);
-		for(List<String> row: results) {
+	private void buildDistricts(CensusTable censusTable, Districts districts, List<List<String>> values, CHAMBER chamber) {
+		values.remove(0);
+		for(List<String> row: values) {
 			District district = districts.findDistrict(chamber, row.get(21));
 			if ( district == null ) {
 				logger.warning("District not found for state " + row.get(20)+":"+chamber+":"+row.get(21));
@@ -69,7 +70,7 @@ public class CensusAssembly {
 			}
 //			if ( district == null ) throw new RuntimeException("District not found:"+row.get(21));
 			
-			List<Long> valueList = new ArrayList<Long>();
+			List<AggregateResult> results = new ArrayList<AggregateResult>();
 			for( int idx = 0, idxE = censusTable.cells.size(); idx<idxE; ++idx ) {
 				long value;
 				try {
@@ -77,10 +78,10 @@ public class CensusAssembly {
 				} catch (NumberFormatException ignored) {
 					value = -1;
 				}
-				valueList.add(value);
+				results.add(new AggregateResult(value, 0) );
 				
 			}
-			district.setAggregateValues(valueList);
+			district.setAggregateResults(results);
 		}
 		
 	}

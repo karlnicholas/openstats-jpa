@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import openstats.data.AssemblyRepository;
 import openstats.dbmodel.*;
-import openstats.facades.AssemblyFacade;
 import openstats.model.Assembly;
 import openstats.util.AssemblyCsvHandler;
 
@@ -15,7 +15,7 @@ public class JpaReadAssembly {
 
 	EntityManagerFactory emf;
 	EntityManager em;
-	AssemblyFacade assemblyFacade;
+	AssemblyRepository assemblyRepo;
 
 	public static void main(String[] args) throws Exception {
 		/*		
@@ -36,7 +36,7 @@ public class JpaReadAssembly {
 		dbGroups.add( DBGroupHandler.getDBGroup("B19301", em));
 		dbGroups.add( DBGroupHandler.getDBGroup("BILLPROGRESS", em));
 //		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		Assembly Assembly = assemblyFacade.buildAssembly2(dbGroups, "GA", "2013");
+		Assembly Assembly = assemblyRepo.buildAssemblyFromGroups(dbGroups, "GA", "2013");
 		Writer writer = new OutputStreamWriter(System.out);
 		
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
@@ -51,7 +51,7 @@ public class JpaReadAssembly {
 	private void initJpa() throws Exception {
 		emf = Persistence.createEntityManagerFactory("openstats");
 		em = emf.createEntityManager();
-		assemblyFacade = new AssemblyFacade(em);
+		assemblyRepo = new AssemblyRepository(em);
 	}
 
 }
