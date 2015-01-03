@@ -5,6 +5,12 @@ import java.util.List;
 
 public class CensusTable {
 	public enum AGGORCOMP { AGG, COMP };
+	public String tableId;
+	public String tableDescr;
+	public AGGORCOMP aggOrComp;
+	
+	public List<StringPair> cells = new ArrayList<StringPair>();
+	
 	public CensusTable(String tableId, String tableDescr, AGGORCOMP aggOrComp) {
 		this.tableId = tableId;
 		this.tableDescr = tableDescr;
@@ -19,11 +25,5 @@ public class CensusTable {
 			this.descr = descr;
 		}		
 	}
-	public String tableId;
-	public String tableDescr;
-	public AGGORCOMP aggOrComp;
-	
-	public List<StringPair> cells = new ArrayList<StringPair>();
-	
 
 }

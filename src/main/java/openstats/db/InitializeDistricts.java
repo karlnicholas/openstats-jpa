@@ -42,7 +42,7 @@ public class InitializeDistricts {
 			et.begin();
 			
 			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-				FileInputStream file = new FileInputStream(new File("/home/knicholas/censusdata/"+openState.getState().toLowerCase()+".xls"));
+				FileInputStream file = new FileInputStream(new File("c:/users/karl/censusdata/"+openState.getState().toLowerCase()+".xls"));
 		        		     
 			    //Get the workbook instance for XLS file
 			    HSSFWorkbook workbook = new HSSFWorkbook(file);

@@ -100,16 +100,16 @@ public class ProcessCensusData {
 //			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
 
 		processCensusTable(openState, processStatList);
-		
+
 		restClient.close();
 		
 //		ObjectMapper mapper = new ObjectMapper();
-//		mapper.writerWithDefaultPrettyPrinter().writeValue(Files.newBufferedWriter(Paths.get("/home/knicholas/workspace/openstats-jpa/assemblies.json"), Charset.forName("utf-8")), assemblies);
+//		mapper.writerWithDefaultPrettyPrinter().writeValue(Files.newBufferedWriter(Paths.get("c:/users/karl/workspace/openstats-jpa/assemblies.json"), Charset.forName("utf-8")), assemblies);
 		
 	}
 	
 	private List<ProcessStat> createProcessStatList() throws IOException {
-		CSVParser parser = CSVParser.parse(new File("/home/knicholas/Downloads/Sequence_Number_and_Table_Number_Lookup.txt"), Charset.forName("UTF-8"), CSVFormat.DEFAULT);
+		CSVParser parser = CSVParser.parse(new File("c:/users/karl/censusdata/Sequence_Number_and_Table_Number_Lookup.txt"), Charset.forName("UTF-8"), CSVFormat.DEFAULT);
 		CSVRecord priorRecord = null;
 		int cellCount = 0;
 		ProcessStat processStat = null;
@@ -117,7 +117,6 @@ public class ProcessCensusData {
 
 //		String prefix = null;
 		for(CSVRecord record: parser) {
-
 			String descr = record.get(7);
 			String recordId = record.get(1);
 			char lastOfRID = recordId.charAt(recordId.length()-1);
@@ -129,20 +128,22 @@ public class ProcessCensusData {
 //				|| descr.equals("Universe:  Nonfamily households")
 //				|| descr.equals("Universe:  Housing units")
 //				|| descr.equals("Universe:  Total population in the United States")
-				
 //				)
 				&& Character.isDigit(lastOfRID) 
 			) {
+				String tableDescr = priorRecord.get(7);
+				if ( 
+					tableDescr.contains(" BY ")
+					|| tableDescr.contains("ANCESTRY")
+					|| tableDescr.contains("DETAILED")
+				) continue;
 				if ( processStat != null ) {
 					// process censusTable here ..
 					processStatList.add(processStat);
 				}
 				// start a new one
-				String tableDescr = priorRecord.get(7);
 				AGGORCOMP aggOrComp = AGGORCOMP.AGG;
-				if ( 
-					tableDescr.contains("MEDIAN")
-				) aggOrComp = AGGORCOMP.COMP;
+				if ( tableDescr.contains("MEDIAN") ) aggOrComp = AGGORCOMP.COMP;
 				cellCount = Integer.parseInt( priorRecord.get(5).trim().split(" ")[0] );
 				processStat = new ProcessStat(
 						priorRecord.get(2),
@@ -150,11 +151,11 @@ public class ProcessCensusData {
 						cellCount, 
 						new CensusTable(priorRecord.get(1), tableDescr, aggOrComp)
 					);
-//				System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
-//				System.out.println(priorRecord);
+//					System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
+//					System.out.println(priorRecord);
+				System.out.println(processStat.censusTable.tableDescr+processStat);
 			}
 			priorRecord = record;
-			
 		}
 		processStatList.add(processStat);
 
@@ -168,7 +169,7 @@ public class ProcessCensusData {
 			tables.put(processStat.censusTable.tableId, processStat);
 		}
 		
-        FileInputStream fin = new FileInputStream("/home/knicholas/Downloads/ACS2012_5-Year_TableShells.xls");
+        FileInputStream fin = new FileInputStream("c:/users/karl/censusdata/ACS2012_5-Year_TableShells.xls");
         // create a new org.apache.poi.poifs.filesystem.Filesystem
         POIFSFileSystem poifs = new POIFSFileSystem(fin);
         HSSFWorkbook workbook = new HSSFWorkbook(poifs);
@@ -229,7 +230,7 @@ public class ProcessCensusData {
 	private void processCensusTable(OpenState openState, List<ProcessStat> processStatList) throws Exception {
 //		CensusAssembly censusAssembly = new CensusAssembly();
 //		List<Assembly> assemblies = new ArrayList<Assembly>();
-		String cacheDir = "/home/knicholas/censusdata/";
+		String cacheDir = "c:/users/karl/censusdata/";
 		String fileName = "g20125" + openState.getState().toLowerCase()+".txt";
 //			if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
 //				cacheFile(openState, cacheDir, fileName);
@@ -285,7 +286,7 @@ public class ProcessCensusData {
 			else 
 				districts.setComputationGroupInfo(groupInfo);
 	
-			fileName = "20125" + openState.getState().toLowerCase()+processStat.seqNumber+"000.zip";
+			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
 //					cacheFile(openState, cacheDir, fileName);
 //				}
