@@ -35,7 +35,7 @@ public class CensusAssembly {
 			infoItems.add( new InfoItem( pair.label, pair.descr) );
 		}
 
-		districts.setAggregateGroupInfo(new GroupInfo(infoItems));
+		districts.setAggregateInfoItems(infoItems);
 
 		sb.deleteCharAt(sb.length()-1);
 		argMap.put("get", sb.toString());

@@ -27,8 +27,8 @@ public class RestReadAssembly {
 	
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			try {
-				Assembly osAssembly = builder.get(Assembly.class);
-				System.out.println(osAssembly.getState()+"-"+osAssembly.getSession()+" " + osAssembly.getComputationResults().get(0));
+				Assembly assembly = builder.get(Assembly.class);
+				System.out.println(assembly.getState()+"-"+assembly.getSession()+" " + assembly.getComputeResults().get(0));
 			} catch ( BadRequestException e ) {
 				System.out.print("BadRequest : " + e.getMessage()+":");
 				System.out.println(builder.head().getHeaderString("error"));
@@ -54,14 +54,14 @@ public class RestReadAssembly {
 				.resolveTemplate("session", openState.getSession());
 
 		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		OSAssembly osAssembly = builder.get(OSAssembly.class);
+		OSAssembly assembly = builder.get(OSAssembly.class);
 		Response response = builder.head();
 		
 		if (builder.head().getStatus() != Status.OK.getStatusCode() ) {
 			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
 	 
-		System.out.println(osAssembly.toString());
+		System.out.println(assembly.toString());
 		response.getLocation();
 		
  		OpenState testAction = new GAOpenState();

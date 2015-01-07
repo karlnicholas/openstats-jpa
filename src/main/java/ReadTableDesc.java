@@ -26,14 +26,13 @@ import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
 import openstats.dbmodel.AggregateResult;
-import openstats.dbmodel.ComputationResult;
+import openstats.dbmodel.ComputeResult;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.model.Assembly;
 import openstats.model.District;
 import openstats.model.Districts;
 import openstats.model.Group;
 import openstats.model.District.CHAMBER;
-import openstats.model.GroupInfo;
 import openstats.model.InfoItem;
 
 import org.apache.commons.csv.CSVFormat;
@@ -295,11 +294,10 @@ public class ReadTableDesc {
 			}
 			System.out.println();
 	
-			GroupInfo groupInfo = new GroupInfo(infoItems);
 			if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) 
-				districts.setAggregateGroupInfo(groupInfo);
+				districts.setAggregateInfoItems(infoItems);
 			else 
-				districts.setComputationGroupInfo(groupInfo);
+				districts.setComputeInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+processStat.seqNumber+"000.zip";
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -332,15 +330,15 @@ public class ReadTableDesc {
 						}
 						district.setAggregateResults(results);
 					} else {
-						List<ComputationResult> results = new ArrayList<ComputationResult>();
+						List<ComputeResult> results = new ArrayList<ComputeResult>();
 //						System.out.print(""+recordNo+",");
 						for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
 							String value = split[processStat.cellStartPos+i-1];
 //							System.out.print(value +",");
 							currRecordNo.values.add(new String(value));
-							results.add(new ComputationResult(Double.parseDouble(value), 0.0) );
+							results.add(new ComputeResult(Double.parseDouble(value), 0.0) );
 						}
-						district.setComputationResults(results);
+						district.setComputeResults(results);
 					}
 //						System.out.println();
 				}

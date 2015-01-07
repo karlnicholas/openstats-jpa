@@ -9,7 +9,7 @@ import openstats.client.openstates.OpenState.BILLACTION;
 import openstats.client.openstates.OpenState.BILLTYPE;
 import openstats.client.util.Statistics;
 import openstats.dbmodel.AggregateResult;
-import openstats.dbmodel.ComputationResult;
+import openstats.dbmodel.ComputeResult;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -66,7 +66,7 @@ public class ComputeAssembly {
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		districts.setAggregateGroupInfo(new GroupInfo(infoItems));
+		districts.setAggregateInfoItems(infoItems);
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -127,7 +127,7 @@ public class ComputeAssembly {
 		double[] stats = new double[districts.getDistrictList().size()];
 		int idx=0;
 		for ( District district: districts.getDistrictList() ) {
-			List<ComputationResult> valueList = district.getComputationResults();
+			List<ComputeResult> valueList = district.getComputeResults();
 			stats[idx++] = valueList.get(0).value;
 		}
 		Statistics statistics = new Statistics(stats);
@@ -135,8 +135,8 @@ public class ComputeAssembly {
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
-		assembly.setComputationGroupInfo(new GroupInfo(infoItems));
-		List<ComputationResult> valueList = new ArrayList<ComputationResult>();
+		assembly.setComputeInfoItems(infoItems);
+		List<ComputeResult> valueList = new ArrayList<ComputeResult>();
 
 		double mean = statistics.getMean();
 		double variance = statistics.getVariance();
@@ -150,8 +150,8 @@ public class ComputeAssembly {
 		double skewness = thirdmoment / Math.pow(variance, (3.0/2.0));
 
 //		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
-		valueList.add(new ComputationResult(skewness, 0.0)); 
-		assembly.setComputationResults(valueList);
+		valueList.add(new ComputeResult(skewness, 0.0)); 
+		assembly.setComputeResults(valueList);
 		return skewness;
 	}
 
@@ -276,7 +276,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		districts.setComputationGroupInfo(new GroupInfo(infoItems));
+		districts.setComputeInfoItems(infoItems);
 	
 		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
@@ -386,9 +386,9 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			List<ComputationResult> comps = new ArrayList<ComputationResult>();
-			comps.add(new ComputationResult(LES, 0.0) );
-			dist.setComputationResults(comps);
+			List<ComputeResult> comps = new ArrayList<ComputeResult>();
+			comps.add(new ComputeResult(LES, 0.0) );
+			dist.setComputeResults(comps);
 		}
 	}
 	

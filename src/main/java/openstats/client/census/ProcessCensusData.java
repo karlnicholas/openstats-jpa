@@ -20,14 +20,9 @@ import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
 import openstats.client.rest.RESTClient;
 import openstats.dbmodel.AggregateResult;
-import openstats.dbmodel.ComputationResult;
-import openstats.model.Assembly;
-import openstats.model.District;
-import openstats.model.Districts;
-import openstats.model.Group;
+import openstats.dbmodel.ComputeResult;
+import openstats.model.*;
 import openstats.model.District.CHAMBER;
-import openstats.model.GroupInfo;
-import openstats.model.InfoItem;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -40,7 +35,16 @@ import org.apache.poi.ss.usermodel.Row;
 
 
 public class ProcessCensusData {
-
+/*
+	private EntityManagerFactory emf;
+	private EntityManager em;
+	private AssemblyFacade assemblyFacade;
+	
+	private void initJpa() throws Exception {
+		emf = Persistence.createEntityManagerFactory("openstats");
+		em = emf.createEntityManager();
+	}
+*/
 	RESTClient restClient;
 	
 	public static void main(String... args) throws Exception {
@@ -82,6 +86,10 @@ public class ProcessCensusData {
 	
 	public void run() throws Exception {
 		restClient = new RESTClient();
+//		initJpa();
+//		assemblyFacade = new AssemblyFacade(em);
+		
+		
 		List<ProcessStat> processStatList = createProcessStatList();
 		//
 		addCensusCellLabels(processStatList);
@@ -279,12 +287,11 @@ public class ProcessCensusData {
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
 //			System.out.println();
-	
-			GroupInfo groupInfo = new GroupInfo(infoItems);
-			if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) 
-				districts.setAggregateGroupInfo(groupInfo);
-			else 
-				districts.setComputationGroupInfo(groupInfo);
+			if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) { 
+				districts.setAggregateInfoItems(infoItems);
+			} else { 
+				districts.setComputeInfoItems(infoItems);
+			}
 	
 			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -317,15 +324,15 @@ public class ProcessCensusData {
 						}
 						district.setAggregateResults(results);
 					} else {
-						List<ComputationResult> results = new ArrayList<ComputationResult>();
+						List<ComputeResult> results = new ArrayList<ComputeResult>();
 //						System.out.print(""+recordNo+",");
 						for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
 							String value = split[processStat.cellStartPos+i-1];
 //							System.out.print(value +",");
 							currRecordNo.values.add(new String(value));
-							results.add(new ComputationResult(Double.parseDouble(value), 0.0) );
+							results.add(new ComputeResult(Double.parseDouble(value), 0.0) );
 						}
-						district.setComputationResults(results);
+						district.setComputeResults(results);
 					}
 //						System.out.println();
 				}
@@ -355,6 +362,12 @@ public class ProcessCensusData {
 			reader.close();
 			// done with an assembly, upload it
 			restClient.updateAssembly(assembly);
+/*			
+			EntityTransaction tx = em.getTransaction();
+			tx.begin();
+        	assemblyFacade.writeAssembly(assembly);
+        	tx.commit();
+*/
 		}
 			
 //		return assemblies;

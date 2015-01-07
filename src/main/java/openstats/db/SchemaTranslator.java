@@ -75,12 +75,11 @@ public class SchemaTranslator {
 				DBDistrict.class, 
 				DBLegislator.class, 
 				DBGroupInfo.class,
+				DBGroupResults.class,
 				DBInfoItem.class,
 				DBGroup.class, 
-				AggregateResults.class, 
-				ComputationResults.class, 
 				AggregateResult.class, 
-				ComputationResult.class, 
+				ComputeResult.class, 
 			};
 
 //		translator.setDialect("org.hibernate.dialect.HSQLDialect")
