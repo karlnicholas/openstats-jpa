@@ -28,7 +28,7 @@ public class RestReadAssembly {
 			Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
 			try {
 				Assembly assembly = builder.get(Assembly.class);
-				System.out.println(assembly.getState()+"-"+assembly.getSession()+" " + assembly.getComputeResults().get(0));
+				System.out.println(assembly.getState()+"-"+assembly.getSession()+" " + assembly.getResults().get(0));
 			} catch ( BadRequestException e ) {
 				System.out.print("BadRequest : " + e.getMessage()+":");
 				System.out.println(builder.head().getHeaderString("error"));

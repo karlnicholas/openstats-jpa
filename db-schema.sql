@@ -33,18 +33,12 @@
         drop constraint FK_g1glympswmkh77fkalbpi5hj3;
     alter table DBDistricts_groupInfoMap 
         drop constraint FK_pioqet7669dpyn3w3nfggxmc2;
-    alter table DBGroupInfo_aggregateGroupItems 
-        drop constraint FK_52rpoabt3vj6s6tjkxlwwkoxb;
-    alter table DBGroupInfo_aggregateGroupItems 
-        drop constraint FK_ehd5nola9xk5vb157lep2usrn;
-    alter table DBGroupInfo_computeGroupItems 
-        drop constraint FK_42jfc2oocu9tqd0ke27nnns9g;
-    alter table DBGroupInfo_computeGroupItems 
-        drop constraint FK_8w7kdrfp0ky79kd7dvrbkrgf1;
-    alter table DBGroupResults_aggregateResults 
-        drop constraint FK_qatqy30c9w8iwpll7v5pq77yl;
-    alter table DBGroupResults_computeResults 
-        drop constraint FK_si44sqw6bc8rj4cu4oc0d39qt;
+    alter table DBGroupInfo_GroupItems 
+        drop constraint FK_gf185iy4kvsjano69glgvg4ee;
+    alter table DBGroupInfo_GroupItems 
+        drop constraint FK_35kadui3bt9aqqgxhcwcmsbtb;
+    alter table DBGroupResults_Results 
+        drop constraint FK_aevegygxfhmq39x0f9rey4ldj;
     drop table if exists DBAssembly cascade;
     drop table if exists DBAssembly_groupInfoMap cascade;
     drop table if exists DBAssembly_groupResultsMap cascade;
@@ -56,11 +50,9 @@
     drop table if exists DBDistricts_groupInfoMap cascade;
     drop table if exists DBGroup cascade;
     drop table if exists DBGroupInfo cascade;
-    drop table if exists DBGroupInfo_aggregateGroupItems cascade;
-    drop table if exists DBGroupInfo_computeGroupItems cascade;
+    drop table if exists DBGroupInfo_GroupItems cascade;
     drop table if exists DBGroupResults cascade;
-    drop table if exists DBGroupResults_aggregateResults cascade;
-    drop table if exists DBGroupResults_computeResults cascade;
+    drop table if exists DBGroupResults_Results cascade;
     drop table if exists DBInfoItem cascade;
     drop table if exists DBLegislator cascade;
     drop sequence hibernate_sequence;
@@ -124,35 +116,22 @@
         id int8 not null,
         primary key (id)
     );
-    create table DBGroupInfo_aggregateGroupItems (
+    create table DBGroupInfo_GroupItems (
         DBGroupInfo_id int8 not null,
-        aggregateGroupItems_id int8 not null,
-        aggregateGroupItems_ORDER int4 not null,
-        primary key (DBGroupInfo_id, aggregateGroupItems_ORDER)
-    );
-    create table DBGroupInfo_computeGroupItems (
-        DBGroupInfo_id int8 not null,
-        computeGroupItems_id int8 not null,
-        computeGroupItems_ORDER int4 not null,
-        primary key (DBGroupInfo_id, computeGroupItems_ORDER)
+        GroupItems_id int8 not null,
+        GroupItems_ORDER int4 not null,
+        primary key (DBGroupInfo_id, GroupItems_ORDER)
     );
     create table DBGroupResults (
         id int8 not null,
         primary key (id)
     );
-    create table DBGroupResults_aggregateResults (
+    create table DBGroupResults_Results (
         DBGroupResults_id int8 not null,
-        error int8 not null,
-        value int8 not null,
-        aggregateResults_ORDER int4 not null,
-        primary key (DBGroupResults_id, aggregateResults_ORDER)
-    );
-    create table DBGroupResults_computeResults (
-        DBGroupResults_id int8 not null,
-        error float8 not null,
-        value float8 not null,
-        computeResults_ORDER int4 not null,
-        primary key (DBGroupResults_id, computeResults_ORDER)
+        error numeric(19, 2),
+        value numeric(19, 2),
+        Results_ORDER int4 not null,
+        primary key (DBGroupResults_id, Results_ORDER)
     );
     create table DBInfoItem (
         id int8 not null,
@@ -180,10 +159,8 @@
         add constraint UK_numbavcdpkvvdbiwli3tjxe6p  unique (DBGroupInfo);
     alter table DBGroup 
         add constraint UK_fnj4ivbsm7v9e9b4q29g7k9vk  unique (groupName);
-    alter table DBGroupInfo_aggregateGroupItems 
-        add constraint UK_52rpoabt3vj6s6tjkxlwwkoxb  unique (aggregateGroupItems_id);
-    alter table DBGroupInfo_computeGroupItems 
-        add constraint UK_42jfc2oocu9tqd0ke27nnns9g  unique (computeGroupItems_id);
+    alter table DBGroupInfo_GroupItems 
+        add constraint UK_gf185iy4kvsjano69glgvg4ee  unique (GroupItems_id);
     alter table DBAssembly 
         add constraint FK_d831tqk4156qmn972x3awocod 
         foreign key (districts_id) 
@@ -252,28 +229,16 @@
         add constraint FK_pioqet7669dpyn3w3nfggxmc2 
         foreign key (DBDistricts) 
         references DBDistricts;
-    alter table DBGroupInfo_aggregateGroupItems 
-        add constraint FK_52rpoabt3vj6s6tjkxlwwkoxb 
-        foreign key (aggregateGroupItems_id) 
+    alter table DBGroupInfo_GroupItems 
+        add constraint FK_gf185iy4kvsjano69glgvg4ee 
+        foreign key (GroupItems_id) 
         references DBInfoItem;
-    alter table DBGroupInfo_aggregateGroupItems 
-        add constraint FK_ehd5nola9xk5vb157lep2usrn 
+    alter table DBGroupInfo_GroupItems 
+        add constraint FK_35kadui3bt9aqqgxhcwcmsbtb 
         foreign key (DBGroupInfo_id) 
         references DBGroupInfo;
-    alter table DBGroupInfo_computeGroupItems 
-        add constraint FK_42jfc2oocu9tqd0ke27nnns9g 
-        foreign key (computeGroupItems_id) 
-        references DBInfoItem;
-    alter table DBGroupInfo_computeGroupItems 
-        add constraint FK_8w7kdrfp0ky79kd7dvrbkrgf1 
-        foreign key (DBGroupInfo_id) 
-        references DBGroupInfo;
-    alter table DBGroupResults_aggregateResults 
-        add constraint FK_qatqy30c9w8iwpll7v5pq77yl 
-        foreign key (DBGroupResults_id) 
-        references DBGroupResults;
-    alter table DBGroupResults_computeResults 
-        add constraint FK_si44sqw6bc8rj4cu4oc0d39qt 
+    alter table DBGroupResults_Results 
+        add constraint FK_aevegygxfhmq39x0f9rey4ldj 
         foreign key (DBGroupResults_id) 
         references DBGroupResults;
     create sequence hibernate_sequence;

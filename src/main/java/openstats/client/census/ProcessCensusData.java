@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,13 +15,11 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.ZipInputStream;
 
-import openstats.client.census.CensusTable.AGGORCOMP;
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
 import openstats.client.rest.RESTClient;
-import openstats.dbmodel.AggregateResult;
-import openstats.dbmodel.ComputeResult;
+import openstats.dbmodel.Result;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -150,14 +149,12 @@ public class ProcessCensusData {
 					processStatList.add(processStat);
 				}
 				// start a new one
-				AGGORCOMP aggOrComp = AGGORCOMP.AGG;
-				if ( tableDescr.contains("MEDIAN") ) aggOrComp = AGGORCOMP.COMP;
 				cellCount = Integer.parseInt( priorRecord.get(5).trim().split(" ")[0] );
 				processStat = new ProcessStat(
 						priorRecord.get(2),
 						Integer.parseInt( priorRecord.get(4).trim()),
 						cellCount, 
-						new CensusTable(priorRecord.get(1), tableDescr, aggOrComp)
+						new CensusTable(priorRecord.get(1), tableDescr)
 					);
 //					System.out.println(""+priorRecord.get(1)+":"+priorRecord.get(7));
 //					System.out.println(priorRecord);
@@ -287,11 +284,7 @@ public class ProcessCensusData {
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
 //			System.out.println();
-			if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) { 
-				districts.setAggregateInfoItems(infoItems);
-			} else { 
-				districts.setComputeInfoItems(infoItems);
-			}
+			districts.setInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -313,27 +306,15 @@ public class ProcessCensusData {
 					if ( currRecordNo.geoid.startsWith("61000")) chamber = CHAMBER.UPPER;
 					else chamber = CHAMBER.LOWER;
 					District district = districts.findDistrict(chamber, districtLabel);
-					if ( processStat.censusTable.aggOrComp == AGGORCOMP.AGG ) {
-						List<AggregateResult> results = new ArrayList<AggregateResult>();
+					List<Result> results = new ArrayList<Result>();
 //						System.out.print(""+recordNo+",");
-						for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
-							String value = split[processStat.cellStartPos+i-1];
+					for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
+						String value = split[processStat.cellStartPos+i-1];
 //							System.out.print(value +",");
-							currRecordNo.values.add(new String(value));
-							results.add(new AggregateResult(Long.parseLong(value), 0) );
-						}
-						district.setAggregateResults(results);
-					} else {
-						List<ComputeResult> results = new ArrayList<ComputeResult>();
-//						System.out.print(""+recordNo+",");
-						for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
-							String value = split[processStat.cellStartPos+i-1];
-//							System.out.print(value +",");
-							currRecordNo.values.add(new String(value));
-							results.add(new ComputeResult(Double.parseDouble(value), 0.0) );
-						}
-						district.setComputeResults(results);
+						currRecordNo.values.add(new String(value));
+						results.add(new Result(new BigDecimal(value), new BigDecimal(0)) );
 					}
+					district.setResults(results);
 //						System.out.println();
 				}
 			}

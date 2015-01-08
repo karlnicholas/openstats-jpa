@@ -33,7 +33,7 @@ public class JpaWriteCensus {
 		CensusAssembly censusAssembly = new CensusAssembly();
 		AssemblyFacade assemblyFacade = new AssemblyFacade(em);
 		
-		CensusTable censusTable = new CensusTable("B19301", "PER CAPITA INCOME IN THE PAST 12 MONTHS (IN 2012 INFLATION-ADJUSTED DOLLARS)", CensusTable.AGGORCOMP.AGG);
+		CensusTable censusTable = new CensusTable("B19301", "PER CAPITA INCOME IN THE PAST 12 MONTHS (IN 2012 INFLATION-ADJUSTED DOLLARS)");
 		List<StringPair> cells = new ArrayList<StringPair>();
 		cells.add(new StringPair("B19301_001E", "Estimate: Total population"));
 		cells.add(new StringPair("B19301_001M", "Margin of Error: Total population"));

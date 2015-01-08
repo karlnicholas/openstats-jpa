@@ -12,8 +12,7 @@
 		<class>openstats.dbmodel.DBDistricts</class>
 		<class>openstats.dbmodel.DBDistrict</class>
 		<class>openstats.dbmodel.DBLegislator</class>
-		<class>openstats.dbmodel.AggregateResult</class>
-		<class>openstats.dbmodel.ComputeResult</class>
+		<class>openstats.dbmodel.Result</class>
 		<class>openstats.dbmodel.DBGroupResults</class>
 		<properties>
 			<!-- Properties for Hibernate -->

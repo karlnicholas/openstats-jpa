@@ -1,5 +1,6 @@
 package openstats.client.census;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.logging.Logger;
 
 import openstats.client.census.CensusTable.StringPair;
 import openstats.client.openstates.OpenState;
-import openstats.dbmodel.AggregateResult;
+import openstats.dbmodel.Result;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -35,7 +36,7 @@ public class CensusAssembly {
 			infoItems.add( new InfoItem( pair.label, pair.descr) );
 		}
 
-		districts.setAggregateInfoItems(infoItems);
+		districts.setInfoItems(infoItems);
 
 		sb.deleteCharAt(sb.length()-1);
 		argMap.put("get", sb.toString());
@@ -70,7 +71,7 @@ public class CensusAssembly {
 			}
 //			if ( district == null ) throw new RuntimeException("District not found:"+row.get(21));
 			
-			List<AggregateResult> results = new ArrayList<AggregateResult>();
+			List<Result> results = new ArrayList<Result>();
 			for( int idx = 0, idxE = censusTable.cells.size(); idx<idxE; ++idx ) {
 				long value;
 				try {
@@ -78,10 +79,10 @@ public class CensusAssembly {
 				} catch (NumberFormatException ignored) {
 					value = -1;
 				}
-				results.add(new AggregateResult(value, 0) );
+				results.add(new Result(BigDecimal.valueOf(value), BigDecimal.valueOf(0)) );
 				
 			}
-			district.setAggregateResults(results);
+			district.setResults(results);
 		}
 		
 	}

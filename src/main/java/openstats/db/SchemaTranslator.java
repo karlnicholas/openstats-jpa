@@ -78,8 +78,7 @@ public class SchemaTranslator {
 				DBGroupResults.class,
 				DBInfoItem.class,
 				DBGroup.class, 
-				AggregateResult.class, 
-				ComputeResult.class, 
+				Result.class, 
 			};
 
 //		translator.setDialect("org.hibernate.dialect.HSQLDialect")

@@ -1,6 +1,7 @@
 package openstats.client.les;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -8,8 +9,7 @@ import openstats.client.openstates.*;
 import openstats.client.openstates.OpenState.BILLACTION;
 import openstats.client.openstates.OpenState.BILLTYPE;
 import openstats.client.util.Statistics;
-import openstats.dbmodel.AggregateResult;
-import openstats.dbmodel.ComputeResult;
+import openstats.dbmodel.Result;
 import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
@@ -66,7 +66,7 @@ public class ComputeAssembly {
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		districts.setAggregateInfoItems(infoItems);
+		districts.setInfoItems(infoItems);
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -90,31 +90,31 @@ public class ComputeAssembly {
 				continue;
 			}
 			
-			if ( district.getAggregateResults().size() != 0 ) {
-				List<AggregateResult> valueList = district.getAggregateResults();
-				valueList.set(0, new AggregateResult(valueList.get(0).value + sponsorStats.billData[0][0], 0));
-				valueList.set(1, new AggregateResult(valueList.get(1).value + sponsorStats.billData[0][3], 0));
-				valueList.set(2, new AggregateResult(valueList.get(2).value + sponsorStats.billData[1][0], 0));
-				valueList.set(3, new AggregateResult(valueList.get(3).value + sponsorStats.billData[1][1], 0));
-				valueList.set(4, new AggregateResult(valueList.get(4).value + sponsorStats.billData[1][2], 0));
-				valueList.set(5, new AggregateResult(valueList.get(5).value + sponsorStats.billData[1][3], 0));
-				valueList.set(6, new AggregateResult(valueList.get(6).value + sponsorStats.billData[2][0], 0));
-				valueList.set(7, new AggregateResult(valueList.get(7).value + sponsorStats.billData[2][1], 0));
-				valueList.set(8, new AggregateResult(valueList.get(8).value + sponsorStats.billData[2][2], 0));
-				valueList.set(9, new AggregateResult(valueList.get(9).value + sponsorStats.billData[2][3], 0));
+			if ( district.getResults().size() != 0 ) {
+				List<Result> valueList = district.getResults();
+				valueList.set(0, new Result(BigDecimal.valueOf(valueList.get(0).value.longValue() + sponsorStats.billData[0][0]), BigDecimal.valueOf(0)));
+				valueList.set(1, new Result(BigDecimal.valueOf(valueList.get(1).value.longValue() + sponsorStats.billData[0][3]), BigDecimal.valueOf(0)));
+				valueList.set(2, new Result(BigDecimal.valueOf(valueList.get(2).value.longValue() + sponsorStats.billData[1][0]), BigDecimal.valueOf(0)));
+				valueList.set(3, new Result(BigDecimal.valueOf(valueList.get(3).value.longValue() + sponsorStats.billData[1][1]), BigDecimal.valueOf(0)));
+				valueList.set(4, new Result(BigDecimal.valueOf(valueList.get(4).value.longValue() + sponsorStats.billData[1][2]), BigDecimal.valueOf(0)));
+				valueList.set(5, new Result(BigDecimal.valueOf(valueList.get(5).value.longValue() + sponsorStats.billData[1][3]), BigDecimal.valueOf(0)));
+				valueList.set(6, new Result(BigDecimal.valueOf(valueList.get(6).value.longValue() + sponsorStats.billData[2][0]), BigDecimal.valueOf(0)));
+				valueList.set(7, new Result(BigDecimal.valueOf(valueList.get(7).value.longValue() + sponsorStats.billData[2][1]), BigDecimal.valueOf(0)));
+				valueList.set(8, new Result(BigDecimal.valueOf(valueList.get(8).value.longValue() + sponsorStats.billData[2][2]), BigDecimal.valueOf(0)));
+				valueList.set(9, new Result(BigDecimal.valueOf(valueList.get(9).value.longValue() + sponsorStats.billData[2][3]), BigDecimal.valueOf(0)));
 			} else {
-				List<AggregateResult> valueList = new ArrayList<AggregateResult>();
-				valueList.add(new AggregateResult(sponsorStats.billData[0][0], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[0][3], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[1][0], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[1][1], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[1][2], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[1][3], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[2][0], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[2][1], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[2][2], 0));
-				valueList.add(new AggregateResult(sponsorStats.billData[2][3], 0));
-				district.setAggregateResults(valueList);
+				List<Result> valueList = new ArrayList<Result>();
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[0][0]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[0][3]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][0]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][1]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][2]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][3]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][0]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][1]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][2]), BigDecimal.valueOf(0)));
+				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][3]), BigDecimal.valueOf(0)));
+				district.setResults(valueList);
 			}
 		}
 		computeLES(districts);
@@ -127,16 +127,16 @@ public class ComputeAssembly {
 		double[] stats = new double[districts.getDistrictList().size()];
 		int idx=0;
 		for ( District district: districts.getDistrictList() ) {
-			List<ComputeResult> valueList = district.getComputeResults();
-			stats[idx++] = valueList.get(0).value;
+			List<Result> valueList = district.getResults();
+			stats[idx++] = valueList.get(0).value.doubleValue();
 		}
 		Statistics statistics = new Statistics(stats);
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
-		assembly.setComputeInfoItems(infoItems);
-		List<ComputeResult> valueList = new ArrayList<ComputeResult>();
+		assembly.setInfoItems(infoItems);
+		List<Result> valueList = new ArrayList<Result>();
 
 		double mean = statistics.getMean();
 		double variance = statistics.getVariance();
@@ -150,8 +150,8 @@ public class ComputeAssembly {
 		double skewness = thirdmoment / Math.pow(variance, (3.0/2.0));
 
 //		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
-		valueList.add(new ComputeResult(skewness, 0.0)); 
-		assembly.setComputeResults(valueList);
+		valueList.add(new Result(new BigDecimal(skewness), new BigDecimal(0.0))); 
+		assembly.setResults(valueList);
 		return skewness;
 	}
 
@@ -276,7 +276,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		districts.setComputeInfoItems(infoItems);
+		districts.setInfoItems(infoItems);
 	
 		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
@@ -333,23 +333,23 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 		for ( District dist: districts.getDistrictList()) {
 
-			List<AggregateResult> valueList = dist.getAggregateResults();
+			List<Result> valueList = dist.getResults();
 			if ( valueList != null ) {
 
-				distArray[0][0] = valueList.get(0).value;
+				distArray[0][0] = valueList.get(0).value.doubleValue();
 				distArray[0][1] = 0.0;
 				distArray[0][2] = 0.0;
-				distArray[0][3] = valueList.get(1).value; 
+				distArray[0][3] = valueList.get(1).value.doubleValue(); 
 				
-				distArray[1][0] = valueList.get(2).value;
-				distArray[1][1] = valueList.get(3).value; 
-				distArray[1][2] = valueList.get(4).value; 
-				distArray[1][3] = valueList.get(5).value; 
+				distArray[1][0] = valueList.get(2).value.doubleValue();
+				distArray[1][1] = valueList.get(3).value.doubleValue(); 
+				distArray[1][2] = valueList.get(4).value.doubleValue(); 
+				distArray[1][3] = valueList.get(5).value.doubleValue(); 
 	
-				distArray[2][0] = valueList.get(6).value;
-				distArray[2][1] = valueList.get(7).value; 
-				distArray[2][2] = valueList.get(8).value; 
-				distArray[2][3] = valueList.get(9).value;
+				distArray[2][0] = valueList.get(6).value.doubleValue();
+				distArray[2][1] = valueList.get(7).value.doubleValue(); 
+				distArray[2][2] = valueList.get(8).value.doubleValue(); 
+				distArray[2][3] = valueList.get(9).value.doubleValue();
 			}
 				
 			// make the array inverse cumulative across rows 
@@ -386,18 +386,18 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			List<ComputeResult> comps = new ArrayList<ComputeResult>();
-			comps.add(new ComputeResult(LES, 0.0) );
-			dist.setComputeResults(comps);
+			List<Result> comps = new ArrayList<Result>();
+			comps.add(new Result(new BigDecimal(LES), new BigDecimal(0.0)) );
+			dist.setResults(comps);
 		}
 	}
 	
 	private double totalFrom(Districts districts, int index) {
 		double ret = 0.0;
 		for ( District dist: districts.getDistrictList()) {
-			List<AggregateResult> values = dist.getAggregateResults();
+			List<Result> values = dist.getResults();
 			if ( values != null ) {
-				Long iVal = values.get(index).value;
+				Long iVal = values.get(index).value.longValue();
 				ret = ret + iVal;
 			}
 		}
