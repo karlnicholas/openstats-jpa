@@ -122,12 +122,13 @@ public class ComputeAssembly {
 	}	
 
 	
-	public double computeSkewness(Assembly assembly) {
+	public BigDecimal computeSkewness(Assembly assembly) {
 		Districts districts = assembly.getDistricts();
 		double[] stats = new double[districts.getDistrictList().size()];
 		int idx=0;
 		for ( District district: districts.getDistrictList() ) {
 			List<Result> valueList = district.getResults();
+			if ( valueList.size() == 0 ) continue;
 			stats[idx++] = valueList.get(0).value.doubleValue();
 		}
 		Statistics statistics = new Statistics(stats);
@@ -150,9 +151,11 @@ public class ComputeAssembly {
 		double skewness = thirdmoment / Math.pow(variance, (3.0/2.0));
 
 //		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
-		valueList.add(new Result(new BigDecimal(skewness), new BigDecimal(0.0))); 
+		if ( Double.isNaN(skewness)) return new BigDecimal(-1);
+		BigDecimal bdSkewness = new BigDecimal(String.format("%.5f", skewness));
+		valueList.add(new Result(bdSkewness, new BigDecimal(0.0))); 
 		assembly.setResults(valueList);
-		return skewness;
+		return bdSkewness;
 	}
 
 
@@ -334,7 +337,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( District dist: districts.getDistrictList()) {
 
 			List<Result> valueList = dist.getResults();
-			if ( valueList != null ) {
+			if ( valueList.size() != 0 ) {
 
 				distArray[0][0] = valueList.get(0).value.doubleValue();
 				distArray[0][1] = 0.0;
@@ -387,8 +390,10 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
 			List<Result> comps = new ArrayList<Result>();
-			comps.add(new Result(new BigDecimal(LES), new BigDecimal(0.0)) );
-			dist.setResults(comps);
+			if ( !Double.isNaN(LES) ) {
+				comps.add(new Result(new BigDecimal(String.format("%.5f", LES)), new BigDecimal(0.0)) );
+				dist.setResults(comps);
+			}
 		}
 	}
 	
@@ -396,7 +401,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		double ret = 0.0;
 		for ( District dist: districts.getDistrictList()) {
 			List<Result> values = dist.getResults();
-			if ( values != null ) {
+			if ( values.size() != 0 ) {
 				Long iVal = values.get(index).value.longValue();
 				ret = ret + iVal;
 			}

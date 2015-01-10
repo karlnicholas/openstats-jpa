@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
-import openstats.client.openstates.OpenStateClasses.GAOpenState;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
 import openstats.model.*;

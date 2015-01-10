@@ -1,8 +1,12 @@
 
 
+import java.io.*;
+
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.*;
+import openstats.client.rest.RESTClient;
 import openstats.model.Assembly;
+import openstats.util.AssemblyCsvHandler;
 
 public class ComputeTest {
 	
@@ -13,15 +17,20 @@ public class ComputeTest {
 		ComputeAssembly computeAssembly = new ComputeAssembly();
 //		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 //		Writer writer = new OutputStreamWriter(System.out);
-		for( OpenState testAction: OpenStateClasses.getOpenStates() ) {
-			Assembly assembly = new Assembly();
-			computeAssembly.computeAssemblyLES(testAction, assembly);
+		RESTClient restClient = new RESTClient();
+//		Assembly assembly = new Assembly();
+		
+		for( OpenState openState: OpenStateClasses.getOpenStates() ) {
+//			OpenState openState = new OpenStateClasses.MAOpenState();
+			Assembly templateAssembly = restClient.getTemplateAssembly(openState.getState(), openState.getSession());
+			Assembly assembly = new Assembly(templateAssembly);
+			computeAssembly.computeAssemblyLES(openState, assembly);
+			restClient.updateAssembly(assembly);
 //			csvHandler.writeCsv(writer, assembly);
 //			writer.flush();
 		}
 
-
-/*
+			/*
 		ComputeAssembly computeAssembly = new ComputeAssembly();
 		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
 		OSAssembly assembly = computeAssembly.computeAssemblyLES(new OpenStateClasses.MAOpenState());
