@@ -21,7 +21,7 @@ public class ComputeTest {
 //		Assembly assembly = new Assembly();
 		
 		for( OpenState openState: OpenStateClasses.getOpenStates() ) {
-//			OpenState openState = new OpenStateClasses.MAOpenState();
+//			OpenState openState = new OpenStateClasses.GAOpenState();
 			Assembly templateAssembly = restClient.getTemplateAssembly(openState.getState(), openState.getSession());
 			Assembly assembly = new Assembly(templateAssembly);
 			computeAssembly.computeAssemblyLES(openState, assembly);

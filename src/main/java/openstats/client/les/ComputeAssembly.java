@@ -66,7 +66,7 @@ public class ComputeAssembly {
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		districts.setInfoItems(infoItems);
+		districts.addInfoItems(infoItems);
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -114,7 +114,7 @@ public class ComputeAssembly {
 				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][1]), BigDecimal.valueOf(0)));
 				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][2]), BigDecimal.valueOf(0)));
 				valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][3]), BigDecimal.valueOf(0)));
-				district.setResults(valueList);
+				district.addResults(valueList);
 			}
 		}
 		computeLES(districts);
@@ -136,7 +136,7 @@ public class ComputeAssembly {
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
-		assembly.setInfoItems(infoItems);
+		assembly.addInfoItems(infoItems);
 		List<Result> valueList = new ArrayList<Result>();
 
 		double mean = statistics.getMean();
@@ -154,7 +154,7 @@ public class ComputeAssembly {
 		if ( Double.isNaN(skewness)) return new BigDecimal(-1);
 		BigDecimal bdSkewness = new BigDecimal(String.format("%.5f", skewness));
 		valueList.add(new Result(bdSkewness, new BigDecimal(0.0))); 
-		assembly.setResults(valueList);
+		assembly.addResults(valueList);
 		return bdSkewness;
 	}
 
@@ -279,7 +279,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		districts.setInfoItems(infoItems);
+		districts.addInfoItems(infoItems);
 	
 		double LESMult = new Double(districts.getDistrictList().size()/4.0);
 
@@ -392,7 +392,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			List<Result> comps = new ArrayList<Result>();
 			if ( !Double.isNaN(LES) ) {
 				comps.add(new Result(new BigDecimal(String.format("%.5f", LES)), new BigDecimal(0.0)) );
-				dist.setResults(comps);
+				dist.addResults(comps);
 			}
 		}
 	}

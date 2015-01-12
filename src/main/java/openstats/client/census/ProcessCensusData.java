@@ -284,7 +284,7 @@ public class ProcessCensusData {
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
 //			System.out.println();
-			districts.setInfoItems(infoItems);
+			districts.addInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -314,7 +314,7 @@ public class ProcessCensusData {
 						currRecordNo.values.add(new String(value));
 						results.add(new Result(new BigDecimal(value), new BigDecimal(0)) );
 					}
-					district.setResults(results);
+					district.addResults(results);
 //						System.out.println();
 				}
 			}
