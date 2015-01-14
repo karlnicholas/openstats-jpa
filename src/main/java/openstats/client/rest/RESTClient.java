@@ -42,14 +42,10 @@ public class RESTClient {
 		Response response=null;
 		try {
 			response = builder.put(Entity.json(assembly));
-			System.out.println("OK = " + Status.OK.getStatusCode());
 			if ( response.getStatus() != Status.OK.getStatusCode() ) {
-				System.out.println(response.getHeaderString("error"));
 				throw new RuntimeException(response.getHeaderString("error"));
 			}
 		} catch ( BadRequestException e ) {
-			System.out.print("BadRequest : " + e.getMessage()+":");
-			System.out.println(builder.head().getHeaderString("error"));
 			throw new RuntimeException(e);
 		} finally {
 			if ( response != null ) response.close();

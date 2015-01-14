@@ -94,11 +94,11 @@ public class ProcessCensusData {
 		addCensusCellLabels(processStatList);
 
 //			List<Assembly> assemblies = new ArrayList<Assembly>();
-		OpenState openState = new OpenStateClasses.GAOpenState();
+//		OpenState openState = new OpenStateClasses.GAOpenState();
 		
 		// process censusTable here ..
 //			List<Assembly> assemblies = processCensusTable(processStatList);
-//			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
 //			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 //			Assembly assembly = new Assembly(openState.getState(), openState.getSession());;
 //			censusAssembly.censusAssembly(openState, censusTable, assembly);
@@ -106,7 +106,8 @@ public class ProcessCensusData {
 //			assemblyFacade.writeAssembly(assembly);
 //			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
 
-		processCensusTable(openState, processStatList);
+			processCensusTable(openState, processStatList);
+		}
 
 		restClient.close();
 		
@@ -251,9 +252,9 @@ public class ProcessCensusData {
 		String line;
 		while ( (line = reader.readLine()) != null ) {
 			if ( line.contains("61000US") || line.contains("62000US")) {
-				String[] split = line.split("\\b");
+				String[] split = line.split("\\s+");
 	//					System.out.println(split[3]+":"+split[5]+":"+split[7]+":"+split[9]);
-				CensusRecordNo censusRecordNo = new CensusRecordNo(Integer.parseInt(split[3].substring(8)), split[9]);
+				CensusRecordNo censusRecordNo = new CensusRecordNo(Integer.parseInt(split[1].substring(8)), split[4]);
 				if ( censusRecordNo.recordNo < recordNoMin ) recordNoMin = censusRecordNo.recordNo;
 				if ( censusRecordNo.recordNo > recordNoMax ) recordNoMax = censusRecordNo.recordNo;
 				censusRecordNos.add(censusRecordNo);
@@ -287,6 +288,7 @@ public class ProcessCensusData {
 			districts.addInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
+//			System.out.println(fileName);
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
 //					cacheFile(openState, cacheDir, fileName);
 //				}
@@ -342,6 +344,7 @@ public class ProcessCensusData {
 */			
 			reader.close();
 			// done with an assembly, upload it
+			System.out.println(assembly.getState() + ":" + assembly.getDistricts().getInfoItems().get(0).getLabel());
 			restClient.updateAssembly(assembly);
 /*			
 			EntityTransaction tx = em.getTransaction();
