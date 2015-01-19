@@ -17,8 +17,7 @@ import org.apache.poi.ss.usermodel.Row;
 import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
 import openstats.dbmodel.DBAssemblyHandler;
-import openstats.model.Assembly;
-import openstats.model.District;
+import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
 public class InitializeDistricts {
@@ -77,6 +76,7 @@ public class InitializeDistricts {
 		
 			    }
 			    file.close();
+//			    setLegislators(openState, assembly);
 				DBAssemblyHandler.createAssembly(assembly, em);
 			}
 			et.commit();
@@ -86,4 +86,33 @@ public class InitializeDistricts {
 		     
 	}
 	
+	public void setLegislators(OpenState openState, Assembly assembly) throws Exception { 
+		openState.loadBulkData();
+		Districts districts = assembly.getDistricts();
+
+		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
+
+			CHAMBER chamber;
+			if ( legislator.chamber.equals("upper") ) chamber = CHAMBER.UPPER;
+			else if ( legislator.chamber.equals("lower") ) chamber = CHAMBER.LOWER;
+			else throw new RuntimeException("Chamber not found:" + legislator.chamber);
+			String dNum = legislator.district;
+			if ( dNum.length() != 3 ) {
+				try {
+					dNum = String.format("%03d", Integer.parseInt(dNum));
+				} catch (Exception ignored ) {
+					dNum = String.format("%3s", dNum);
+				}
+			}
+			District district = districts.findDistrict(chamber, dNum);
+			if (district == null ) {
+				continue;
+			}
+			Legislator aLegislator = new Legislator();
+			aLegislator.setName(legislator.full_name);
+			aLegislator.setParty(legislator.party);
+			aLegislator.setTerm(legislator.roles.get(0).term);
+			district.getLegislators().add(aLegislator);
+		}
+	}	
 }

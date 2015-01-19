@@ -7,10 +7,14 @@
         drop constraint FK_m14kccfdk6ekucm591i0kmgj3;
     alter table DBAssembly_groupInfoMap 
         drop constraint FK_e3x7ct2iyegt9w08j0vq8mlte;
+    alter table DBAssembly_groupInfoMap 
+        drop constraint FK_e3x7ct2iyegt9w08j0vq8mlte;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_mu3dc10vl8i6g62eokcmufkds;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_cm2r0250hys0nelwneck4d4fx;
+    alter table DBAssembly_groupResultsMap 
+        drop constraint FK_q03btcrppy8am0oh1thm5tq71;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_q03btcrppy8am0oh1thm5tq71;
     alter table DBDistrict_DBLegislator 
@@ -141,8 +145,11 @@
     );
     create table DBLegislator (
         id int8 not null,
+        endDate date,
         name varchar(255),
         party varchar(255),
+        startDate date,
+        term varchar(255),
         primary key (id)
     );
     alter table DBAssembly_groupInfoMap 
@@ -176,6 +183,10 @@
     alter table DBAssembly_groupInfoMap 
         add constraint FK_e3x7ct2iyegt9w08j0vq8mlte 
         foreign key (DBAssembly) 
+        references DBLegislator;
+    alter table DBAssembly_groupInfoMap 
+        add constraint FK_e3x7ct2iyegt9w08j0vq8mlte 
+        foreign key (DBAssembly) 
         references DBAssembly;
     alter table DBAssembly_groupResultsMap 
         add constraint FK_mu3dc10vl8i6g62eokcmufkds 
@@ -185,6 +196,10 @@
         add constraint FK_cm2r0250hys0nelwneck4d4fx 
         foreign key (DBGroup) 
         references DBGroup;
+    alter table DBAssembly_groupResultsMap 
+        add constraint FK_q03btcrppy8am0oh1thm5tq71 
+        foreign key (DBAssembly) 
+        references DBLegislator;
     alter table DBAssembly_groupResultsMap 
         add constraint FK_q03btcrppy8am0oh1thm5tq71 
         foreign key (DBAssembly) 
