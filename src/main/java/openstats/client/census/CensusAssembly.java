@@ -26,7 +26,6 @@ public class CensusAssembly {
 		//&in=state:02
 		Map<String, String> argMap = new TreeMap<String, String>();
 
-		Districts districts = assembly.getDistricts();
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 
 		StringBuilder sb = new StringBuilder();
@@ -36,7 +35,7 @@ public class CensusAssembly {
 			infoItems.add( new InfoItem( pair.label, pair.descr) );
 		}
 
-		districts.setInfoItems(infoItems);
+		assembly.setInfoItems(infoItems);
 
 		sb.deleteCharAt(sb.length()-1);
 		argMap.put("get", sb.toString());
@@ -61,10 +60,10 @@ public class CensusAssembly {
 		return assembly;
 	}
 	
-	private void buildDistricts(CensusTable censusTable, Districts districts, List<List<String>> values, CHAMBER chamber) {
+	private void buildDistricts(CensusTable censusTable, Assembly assembly, List<List<String>> values, CHAMBER chamber) {
 		values.remove(0);
 		for(List<String> row: values) {
-			District district = districts.findDistrict(chamber, row.get(21));
+			District district = assembly.findDistrict(chamber, row.get(21));
 			if ( district == null ) {
 				logger.warning("District not found for state " + row.get(20)+":"+chamber+":"+row.get(21));
 				continue;

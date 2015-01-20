@@ -32,7 +32,6 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-
 public class ProcessCensusData {
 /*
 	private EntityManagerFactory emf;
@@ -276,7 +275,6 @@ public class ProcessCensusData {
 	
 			Group group = new Group(processStat.censusTable.tableId, processStat.censusTable.tableDescr);
 			assembly.setGroup(group);
-			Districts districts = assembly.getDistricts();
 			List<InfoItem> infoItems = new ArrayList<InfoItem>();
 //			System.out.println(processStat.censusTable.tableId+":"+processStat.censusTable.tableDescr);
 //			System.out.print("RecordNo,");
@@ -285,7 +283,7 @@ public class ProcessCensusData {
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
 //			System.out.println();
-			districts.addInfoItems(infoItems);
+			assembly.addInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+String.format("%04d000.zip",Integer.parseInt(processStat.seqNumber));
 //			System.out.println(fileName);
@@ -307,7 +305,7 @@ public class ProcessCensusData {
 					CHAMBER chamber;
 					if ( currRecordNo.geoid.startsWith("61000")) chamber = CHAMBER.UPPER;
 					else chamber = CHAMBER.LOWER;
-					District district = districts.findDistrict(chamber, districtLabel);
+					District district = assembly.findDistrict(chamber, districtLabel);
 					List<Result> results = new ArrayList<Result>();
 //						System.out.print(""+recordNo+",");
 					for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
@@ -344,7 +342,7 @@ public class ProcessCensusData {
 */			
 			reader.close();
 			// done with an assembly, upload it
-			System.out.println(assembly.getState() + ":" + assembly.getDistricts().getInfoItems().get(0).getLabel());
+			System.out.println(assembly.getState() + ":" + assembly.getInfoItems().get(0).getLabel());
 			restClient.updateAssembly(assembly);
 /*			
 			EntityTransaction tx = em.getTransaction();

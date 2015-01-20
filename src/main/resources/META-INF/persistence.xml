@@ -9,7 +9,6 @@
 		<class>openstats.dbmodel.DBGroupInfo</class>
 		<class>openstats.dbmodel.DBInfoItem</class>
 		<class>openstats.dbmodel.DBAssembly</class>
-		<class>openstats.dbmodel.DBDistricts</class>
 		<class>openstats.dbmodel.DBDistrict</class>
 		<class>openstats.dbmodel.DBLegislator</class>
 		<class>openstats.dbmodel.Result</class>

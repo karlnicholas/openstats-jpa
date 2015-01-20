@@ -1,20 +1,18 @@
 
-    alter table DBAssembly 
-        drop constraint FK_d831tqk4156qmn972x3awocod;
+    alter table DBAssembly_DBDistrict 
+        drop constraint FK_ey9f1bmvegmm461v9h3w2t9wj;
+    alter table DBAssembly_DBDistrict 
+        drop constraint FK_fcbb20dk2hvm12m8mqmrq6gdy;
     alter table DBAssembly_groupInfoMap 
         drop constraint FK_aga9de8numrkiljshgnixjvqx;
     alter table DBAssembly_groupInfoMap 
         drop constraint FK_m14kccfdk6ekucm591i0kmgj3;
     alter table DBAssembly_groupInfoMap 
         drop constraint FK_e3x7ct2iyegt9w08j0vq8mlte;
-    alter table DBAssembly_groupInfoMap 
-        drop constraint FK_e3x7ct2iyegt9w08j0vq8mlte;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_mu3dc10vl8i6g62eokcmufkds;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_cm2r0250hys0nelwneck4d4fx;
-    alter table DBAssembly_groupResultsMap 
-        drop constraint FK_q03btcrppy8am0oh1thm5tq71;
     alter table DBAssembly_groupResultsMap 
         drop constraint FK_q03btcrppy8am0oh1thm5tq71;
     alter table DBDistrict_DBLegislator 
@@ -27,31 +25,25 @@
         drop constraint FK_qpk1m5o4rqjeevamrfhmw3vtr;
     alter table DBDistrict_groupResultsMap 
         drop constraint FK_2sow4ye0m6t3llx3h1fh1pu5l;
-    alter table DBDistricts_DBDistrict 
-        drop constraint FK_2uiahvgobqsuby3loxlaaw7yb;
-    alter table DBDistricts_DBDistrict 
-        drop constraint FK_r81r07dube1quemr7r7nrgs7o;
-    alter table DBDistricts_groupInfoMap 
-        drop constraint FK_numbavcdpkvvdbiwli3tjxe6p;
-    alter table DBDistricts_groupInfoMap 
-        drop constraint FK_g1glympswmkh77fkalbpi5hj3;
-    alter table DBDistricts_groupInfoMap 
-        drop constraint FK_pioqet7669dpyn3w3nfggxmc2;
     alter table DBGroupInfo_GroupItems 
         drop constraint FK_gf185iy4kvsjano69glgvg4ee;
     alter table DBGroupInfo_GroupItems 
         drop constraint FK_35kadui3bt9aqqgxhcwcmsbtb;
     alter table DBGroupResults_Results 
         drop constraint FK_aevegygxfhmq39x0f9rey4ldj;
+    alter table DBLegislator_groupResultsMap 
+        drop constraint FK_7nk0q9fot3ahn8g2hnny6gmvm;
+    alter table DBLegislator_groupResultsMap 
+        drop constraint FK_60gos6gbbj9lleb9152p5c07q;
+    alter table DBLegislator_groupResultsMap 
+        drop constraint FK_9vlkjla0bq7iv3j87acqaqxl6;
     drop table if exists DBAssembly cascade;
+    drop table if exists DBAssembly_DBDistrict cascade;
     drop table if exists DBAssembly_groupInfoMap cascade;
     drop table if exists DBAssembly_groupResultsMap cascade;
     drop table if exists DBDistrict cascade;
     drop table if exists DBDistrict_DBLegislator cascade;
     drop table if exists DBDistrict_groupResultsMap cascade;
-    drop table if exists DBDistricts cascade;
-    drop table if exists DBDistricts_DBDistrict cascade;
-    drop table if exists DBDistricts_groupInfoMap cascade;
     drop table if exists DBGroup cascade;
     drop table if exists DBGroupInfo cascade;
     drop table if exists DBGroupInfo_GroupItems cascade;
@@ -59,13 +51,17 @@
     drop table if exists DBGroupResults_Results cascade;
     drop table if exists DBInfoItem cascade;
     drop table if exists DBLegislator cascade;
+    drop table if exists DBLegislator_groupResultsMap cascade;
     drop sequence hibernate_sequence;
     create table DBAssembly (
         id int8 not null,
         session varchar(255),
         state varchar(255),
-        districts_id int8,
         primary key (id)
+    );
+    create table DBAssembly_DBDistrict (
+        DBAssembly_id int8 not null,
+        districtList_id int8 not null
     );
     create table DBAssembly_groupInfoMap (
         DBAssembly int8 not null,
@@ -95,20 +91,6 @@
         DBGroupResults int8 not null,
         DBGroup int8 not null,
         primary key (DBDistrict, DBGroup)
-    );
-    create table DBDistricts (
-        id int8 not null,
-        primary key (id)
-    );
-    create table DBDistricts_DBDistrict (
-        DBDistricts_id int8 not null,
-        districtList_id int8 not null
-    );
-    create table DBDistricts_groupInfoMap (
-        DBDistricts int8 not null,
-        DBGroupInfo int8 not null,
-        DBGroup int8 not null,
-        primary key (DBDistricts, DBGroup)
     );
     create table DBGroup (
         id int8 not null,
@@ -152,6 +134,14 @@
         term varchar(255),
         primary key (id)
     );
+    create table DBLegislator_groupResultsMap (
+        DBLegislator int8 not null,
+        DBGroupResults int8 not null,
+        DBGroup int8 not null,
+        primary key (DBLegislator, DBGroup)
+    );
+    alter table DBAssembly_DBDistrict 
+        add constraint UK_ey9f1bmvegmm461v9h3w2t9wj  unique (districtList_id);
     alter table DBAssembly_groupInfoMap 
         add constraint UK_aga9de8numrkiljshgnixjvqx  unique (DBGroupInfo);
     alter table DBAssembly_groupResultsMap 
@@ -160,18 +150,20 @@
         add constraint UK_neyks3k879m3g9wuqutimjdce  unique (legislators_id);
     alter table DBDistrict_groupResultsMap 
         add constraint UK_7yjdg1ekllqcem1msm68wygam  unique (DBGroupResults);
-    alter table DBDistricts_DBDistrict 
-        add constraint UK_2uiahvgobqsuby3loxlaaw7yb  unique (districtList_id);
-    alter table DBDistricts_groupInfoMap 
-        add constraint UK_numbavcdpkvvdbiwli3tjxe6p  unique (DBGroupInfo);
     alter table DBGroup 
         add constraint UK_fnj4ivbsm7v9e9b4q29g7k9vk  unique (groupName);
     alter table DBGroupInfo_GroupItems 
         add constraint UK_gf185iy4kvsjano69glgvg4ee  unique (GroupItems_id);
-    alter table DBAssembly 
-        add constraint FK_d831tqk4156qmn972x3awocod 
-        foreign key (districts_id) 
-        references DBDistricts;
+    alter table DBLegislator_groupResultsMap 
+        add constraint UK_7nk0q9fot3ahn8g2hnny6gmvm  unique (DBGroupResults);
+    alter table DBAssembly_DBDistrict 
+        add constraint FK_ey9f1bmvegmm461v9h3w2t9wj 
+        foreign key (districtList_id) 
+        references DBDistrict;
+    alter table DBAssembly_DBDistrict 
+        add constraint FK_fcbb20dk2hvm12m8mqmrq6gdy 
+        foreign key (DBAssembly_id) 
+        references DBAssembly;
     alter table DBAssembly_groupInfoMap 
         add constraint FK_aga9de8numrkiljshgnixjvqx 
         foreign key (DBGroupInfo) 
@@ -180,10 +172,6 @@
         add constraint FK_m14kccfdk6ekucm591i0kmgj3 
         foreign key (DBGroup) 
         references DBGroup;
-    alter table DBAssembly_groupInfoMap 
-        add constraint FK_e3x7ct2iyegt9w08j0vq8mlte 
-        foreign key (DBAssembly) 
-        references DBLegislator;
     alter table DBAssembly_groupInfoMap 
         add constraint FK_e3x7ct2iyegt9w08j0vq8mlte 
         foreign key (DBAssembly) 
@@ -196,10 +184,6 @@
         add constraint FK_cm2r0250hys0nelwneck4d4fx 
         foreign key (DBGroup) 
         references DBGroup;
-    alter table DBAssembly_groupResultsMap 
-        add constraint FK_q03btcrppy8am0oh1thm5tq71 
-        foreign key (DBAssembly) 
-        references DBLegislator;
     alter table DBAssembly_groupResultsMap 
         add constraint FK_q03btcrppy8am0oh1thm5tq71 
         foreign key (DBAssembly) 
@@ -224,26 +208,6 @@
         add constraint FK_2sow4ye0m6t3llx3h1fh1pu5l 
         foreign key (DBDistrict) 
         references DBDistrict;
-    alter table DBDistricts_DBDistrict 
-        add constraint FK_2uiahvgobqsuby3loxlaaw7yb 
-        foreign key (districtList_id) 
-        references DBDistrict;
-    alter table DBDistricts_DBDistrict 
-        add constraint FK_r81r07dube1quemr7r7nrgs7o 
-        foreign key (DBDistricts_id) 
-        references DBDistricts;
-    alter table DBDistricts_groupInfoMap 
-        add constraint FK_numbavcdpkvvdbiwli3tjxe6p 
-        foreign key (DBGroupInfo) 
-        references DBGroupInfo;
-    alter table DBDistricts_groupInfoMap 
-        add constraint FK_g1glympswmkh77fkalbpi5hj3 
-        foreign key (DBGroup) 
-        references DBGroup;
-    alter table DBDistricts_groupInfoMap 
-        add constraint FK_pioqet7669dpyn3w3nfggxmc2 
-        foreign key (DBDistricts) 
-        references DBDistricts;
     alter table DBGroupInfo_GroupItems 
         add constraint FK_gf185iy4kvsjano69glgvg4ee 
         foreign key (GroupItems_id) 
@@ -256,4 +220,16 @@
         add constraint FK_aevegygxfhmq39x0f9rey4ldj 
         foreign key (DBGroupResults_id) 
         references DBGroupResults;
+    alter table DBLegislator_groupResultsMap 
+        add constraint FK_7nk0q9fot3ahn8g2hnny6gmvm 
+        foreign key (DBGroupResults) 
+        references DBGroupResults;
+    alter table DBLegislator_groupResultsMap 
+        add constraint FK_60gos6gbbj9lleb9152p5c07q 
+        foreign key (DBGroup) 
+        references DBGroup;
+    alter table DBLegislator_groupResultsMap 
+        add constraint FK_9vlkjla0bq7iv3j87acqaqxl6 
+        foreign key (DBLegislator) 
+        references DBLegislator;
     create sequence hibernate_sequence;

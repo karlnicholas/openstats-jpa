@@ -71,7 +71,6 @@ public class SchemaTranslator {
 		SchemaTranslator translator = new SchemaTranslator();
 		Class<?>[] entityClasses = {
 				DBAssembly.class, 
-				DBDistricts.class, 
 				DBDistrict.class, 
 				DBLegislator.class, 
 				DBGroupInfo.class,

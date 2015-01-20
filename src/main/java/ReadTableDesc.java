@@ -29,7 +29,6 @@ import openstats.dbmodel.Result;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.model.Assembly;
 import openstats.model.District;
-import openstats.model.Districts;
 import openstats.model.Group;
 import openstats.model.District.CHAMBER;
 import openstats.model.InfoItem;
@@ -279,7 +278,6 @@ public class ReadTableDesc {
 	
 			Group group = new Group(processStat.censusTable.tableId, processStat.censusTable.tableDescr);
 			assembly.setGroup(group);
-			Districts districts = assembly.getDistricts();
 			List<InfoItem> infoItems = new ArrayList<InfoItem>();
 			System.out.println(processStat.censusTable.tableId+":"+processStat.censusTable.tableDescr);
 			System.out.print("RecordNo,");
@@ -288,8 +286,6 @@ public class ReadTableDesc {
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
 			}
 			System.out.println();
-	
-			districts.setInfoItems(infoItems);
 	
 			fileName = "20125" + openState.getState().toLowerCase()+processStat.seqNumber+"000.zip";
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
@@ -310,7 +306,7 @@ public class ReadTableDesc {
 					CHAMBER chamber;
 					if ( currRecordNo.geoid.startsWith("61000")) chamber = CHAMBER.UPPER;
 					else chamber = CHAMBER.LOWER;
-					District district = districts.findDistrict(chamber, districtLabel);
+					District district = assembly.findDistrict(chamber, districtLabel);
 					List<Result> results = new ArrayList<Result>();
 //					System.out.print(""+recordNo+",");
 					for ( int i=0, j=processStat.cellCount; i<j; ++i ) {

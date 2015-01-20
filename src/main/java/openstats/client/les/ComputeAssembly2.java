@@ -61,12 +61,11 @@ public class ComputeAssembly2 {
 //		Group group = 
 		assembly.setGroup(new Group(Labels.LESGROUPNAME, Labels.LESGROUPDESCR));
 		
-		Districts districts = assembly.getDistricts();
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		districts.addInfoItems(infoItems);
+		assembly.addInfoItems(infoItems);
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
@@ -84,7 +83,7 @@ public class ComputeAssembly2 {
 					dNum = String.format("%3s", dNum);
 				}
 			}
-			District district = districts.findDistrict(chamber, dNum);
+			District district = assembly.findDistrict(chamber, dNum);
 			if (district == null ) {
 				logger.warning("District not found:"+":"+legislator.chamber+":"+ legislator.district );
 				continue;
@@ -106,13 +105,13 @@ public class ComputeAssembly2 {
 			district.getLegislators().add(aLeg);
 		}
 		aggregateCounts(assembly);
-		computeLES(districts);
+		computeLES(assembly);
 		System.out.println(openState.getState()+":"+computeSkewness(assembly));
 	}
 	
 	private void aggregateCounts(Assembly assembly) {
 		List<Result> assemblyResults = new ArrayList<Result>();
-		for ( District district: assembly.getDistricts().getDistrictList() ) {
+		for ( District district: assembly.getDistrictList() ) {
 			List<Result> districtResults = new ArrayList<Result>();
 			for ( Legislator legislator: district.getLegislators() ) {
 				int distCounter = 0;
@@ -141,10 +140,9 @@ public class ComputeAssembly2 {
 
 	
 	public BigDecimal computeSkewness(Assembly assembly) {
-		Districts districts = assembly.getDistricts();
-		double[] stats = new double[districts.getDistrictList().size()];
+		double[] stats = new double[assembly.getDistrictList().size()];
 		int idx=0;
-		for ( District district: districts.getDistrictList() ) {
+		for ( District district: assembly.getDistrictList() ) {
 			List<Result> valueList = district.getResults();
 			if ( valueList.size() == 0 ) continue;
 			stats[idx++] = valueList.get(0).value.doubleValue();
@@ -289,7 +287,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		}
 	}
 	
-	public void computeLES(Districts districts) {
+	public void computeLES(Assembly assembly) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
 		
@@ -297,26 +295,26 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
-		districts.addInfoItems(infoItems);
+		assembly.addInfoItems(infoItems);
 	
-		double LESMult = new Double(districts.getDistrictList().size()/4.0);
+		double LESMult = new Double(assembly.getDistrictList().size()/4.0);
 
 		double[][] denomArray = new double[3][4];
 
-		denomArray[0][0] = totalFrom(districts, 0);
+		denomArray[0][0] = totalFrom(assembly, 0);
 		denomArray[0][1] = 0.0;
 		denomArray[0][2] = 0.0;
-		denomArray[0][3] = totalFrom(districts, 1); 
+		denomArray[0][3] = totalFrom(assembly, 1); 
 		
-		denomArray[1][0] = totalFrom(districts, 2);
-		denomArray[1][1] = totalFrom(districts, 3); 
-		denomArray[1][2] = totalFrom(districts, 4); 
-		denomArray[1][3] = totalFrom(districts, 5); 
+		denomArray[1][0] = totalFrom(assembly, 2);
+		denomArray[1][1] = totalFrom(assembly, 3); 
+		denomArray[1][2] = totalFrom(assembly, 4); 
+		denomArray[1][3] = totalFrom(assembly, 5); 
 
-		denomArray[2][0] = totalFrom(districts, 6);
-		denomArray[2][1] = totalFrom(districts, 7); 
-		denomArray[2][2] = totalFrom(districts, 8); 
-		denomArray[2][3] = totalFrom(districts, 9);
+		denomArray[2][0] = totalFrom(assembly, 6);
+		denomArray[2][1] = totalFrom(assembly, 7); 
+		denomArray[2][2] = totalFrom(assembly, 8); 
+		denomArray[2][3] = totalFrom(assembly, 9);
 		
 		// make the array inverse cumulative across rows 
 		for ( int j=0; j < 3; ++j ) {
@@ -352,7 +350,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 		double[][] distArray = new double[3][4];
 
-		for ( District dist: districts.getDistrictList()) {
+		for ( District dist: assembly.getDistrictList()) {
 
 			List<Result> valueList = dist.getResults();
 			if ( valueList.size() != 0 ) {
@@ -415,9 +413,9 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		}
 	}
 	
-	private double totalFrom(Districts districts, int index) {
+	private double totalFrom(Assembly assembly, int index) {
 		double ret = 0.0;
-		for ( District dist: districts.getDistrictList()) {
+		for ( District dist: assembly.getDistrictList()) {
 			List<Result> values = dist.getResults();
 			if ( values.size() != 0 ) {
 				Long iVal = values.get(index).value.longValue();

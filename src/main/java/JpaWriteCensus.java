@@ -64,7 +64,7 @@ public class JpaWriteCensus {
 			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 			censusAssembly.censusAssembly(openState, censusTable, assembly);
 			assemblyFacade.writeAssembly(assembly);
-			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
+			System.out.println(assembly.getState()+":"+assembly.getDistrictList().size());
 		}
 
 		et.commit();

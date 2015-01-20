@@ -50,7 +50,7 @@ public class InitializeDistricts {
 			    HSSFSheet sheet = workbook.getSheetAt(0);
 			     
 				Assembly assembly = new Assembly(openState.getState(), openState.getSession());
-				List<District> districtList = assembly.getDistricts().getDistrictList();
+				List<District> districtList = assembly.getDistrictList();
 	
 	    		//Iterate through each rows from first sheet
 			    Iterator<Row> rowIterator = sheet.iterator();
@@ -88,7 +88,6 @@ public class InitializeDistricts {
 	
 	public void setLegislators(OpenState openState, Assembly assembly) throws Exception { 
 		openState.loadBulkData();
-		Districts districts = assembly.getDistricts();
 
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 
@@ -104,7 +103,7 @@ public class InitializeDistricts {
 					dNum = String.format("%3s", dNum);
 				}
 			}
-			District district = districts.findDistrict(chamber, dNum);
+			District district = assembly.findDistrict(chamber, dNum);
 			if (district == null ) {
 				continue;
 			}

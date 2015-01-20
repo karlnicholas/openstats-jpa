@@ -1,7 +1,11 @@
+
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.xml.bind.JAXBContext;
+
+import org.jboss.resteasy.client.core.marshallers.Marshaller;
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.OpenState;
@@ -20,7 +24,8 @@ public class SerializeAssembly {
 		Assembly assembly = new Assembly();
 		new ComputeAssembly().computeAssemblyLES(testAction, assembly);
 		JAXBContext ctx = JAXBContext.newInstance(Assembly.class);
-		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.XML")));
+		Marshaller marshaller = (Marshaller) ctx.createMarshaller();
+		((javax.xml.bind.Marshaller) marshaller).marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.XML")));
 		System.out.flush();
 		
 	}
