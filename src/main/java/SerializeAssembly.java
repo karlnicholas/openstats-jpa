@@ -3,9 +3,7 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javax.xml.bind.JAXBContext;
-
-import org.jboss.resteasy.client.core.marshallers.Marshaller;
+import javax.xml.bind.*;
 
 import openstats.client.les.ComputeAssembly;
 import openstats.client.openstates.OpenState;
@@ -20,12 +18,12 @@ public class SerializeAssembly {
 	}
 	
 	private void run() throws Exception {
-		OpenState testAction = new OpenStateClasses.AKOpenState();
+		OpenState testAction = new OpenStateClasses.GAOpenState();
 		Assembly assembly = new Assembly();
 		new ComputeAssembly().computeAssemblyLES(testAction, assembly);
 		JAXBContext ctx = JAXBContext.newInstance(Assembly.class);
 		Marshaller marshaller = (Marshaller) ctx.createMarshaller();
-		((javax.xml.bind.Marshaller) marshaller).marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.XML")));
+		((javax.xml.bind.Marshaller) marshaller).marshal(assembly, Files.newOutputStream(Paths.get("c:/users/karl/GA-2013.XML")));
 		System.out.flush();
 		
 	}

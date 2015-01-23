@@ -114,8 +114,8 @@
     );
     create table DBGroupResults_Results (
         DBGroupResults_id int8 not null,
-        error numeric(19, 2),
-        value numeric(19, 2),
+        error varchar(255),
+        value varchar(255),
         Results_ORDER int4 not null,
         primary key (DBGroupResults_id, Results_ORDER)
     );

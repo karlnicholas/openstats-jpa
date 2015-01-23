@@ -76,7 +76,7 @@ public class InitializeDistricts {
 		
 			    }
 			    file.close();
-//			    setLegislators(openState, assembly);
+			    setLegislators(openState, assembly);
 				DBAssemblyHandler.createAssembly(assembly, em);
 			}
 			et.commit();

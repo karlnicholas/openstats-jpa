@@ -145,7 +145,7 @@ public class ComputeAssembly2 {
 		for ( District district: assembly.getDistrictList() ) {
 			List<Result> valueList = district.getResults();
 			if ( valueList.size() == 0 ) continue;
-			stats[idx++] = valueList.get(0).value.doubleValue();
+			stats[idx++] = valueList.get(0).getValue().doubleValue();
 		}
 		Statistics statistics = new Statistics(stats);
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
@@ -355,20 +355,20 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			List<Result> valueList = dist.getResults();
 			if ( valueList.size() != 0 ) {
 
-				distArray[0][0] = valueList.get(0).value.doubleValue();
+				distArray[0][0] = valueList.get(0).getValue().doubleValue();
 				distArray[0][1] = 0.0;
 				distArray[0][2] = 0.0;
-				distArray[0][3] = valueList.get(1).value.doubleValue(); 
+				distArray[0][3] = valueList.get(1).getValue().doubleValue(); 
 				
-				distArray[1][0] = valueList.get(2).value.doubleValue();
-				distArray[1][1] = valueList.get(3).value.doubleValue(); 
-				distArray[1][2] = valueList.get(4).value.doubleValue(); 
-				distArray[1][3] = valueList.get(5).value.doubleValue(); 
+				distArray[1][0] = valueList.get(2).getValue().doubleValue();
+				distArray[1][1] = valueList.get(3).getValue().doubleValue(); 
+				distArray[1][2] = valueList.get(4).getValue().doubleValue(); 
+				distArray[1][3] = valueList.get(5).getValue().doubleValue(); 
 	
-				distArray[2][0] = valueList.get(6).value.doubleValue();
-				distArray[2][1] = valueList.get(7).value.doubleValue(); 
-				distArray[2][2] = valueList.get(8).value.doubleValue(); 
-				distArray[2][3] = valueList.get(9).value.doubleValue();
+				distArray[2][0] = valueList.get(6).getValue().doubleValue();
+				distArray[2][1] = valueList.get(7).getValue().doubleValue(); 
+				distArray[2][2] = valueList.get(8).getValue().doubleValue(); 
+				distArray[2][3] = valueList.get(9).getValue().doubleValue();
 			}
 				
 			// make the array inverse cumulative across rows 
@@ -418,7 +418,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		for ( District dist: assembly.getDistrictList()) {
 			List<Result> values = dist.getResults();
 			if ( values.size() != 0 ) {
-				Long iVal = values.get(index).value.longValue();
+				Long iVal = values.get(index).getValue().longValue();
 				ret = ret + iVal;
 			}
 		}
