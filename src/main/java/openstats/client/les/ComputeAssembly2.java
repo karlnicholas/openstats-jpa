@@ -65,6 +65,8 @@ public class ComputeAssembly2 {
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
+		infoItems.add( new InfoItem(Labels.DISTRICTCOMPUTATIONLABEL, Labels.DISTRICTCOMPUTATIONDESC));
+		infoItems.add( new InfoItem(Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONDESC));
 		assembly.addInfoItems(infoItems);
 		// skipping descriptions for the moment
 		
@@ -104,33 +106,39 @@ public class ComputeAssembly2 {
 			aLeg.addResults(valueList);
 			district.getLegislators().add(aLeg);
 		}
+		//
 		aggregateCounts(assembly);
+		assembly.getResults().add(new Result(new BigDecimal("0.0000"), new BigDecimal("0")));
+		//
 		computeLES(assembly);
+		//
 		System.out.println(openState.getState()+":"+computeSkewness(assembly));
 	}
 	
 	private void aggregateCounts(Assembly assembly) {
 		List<Result> assemblyResults = new ArrayList<Result>();
 		for ( District district: assembly.getDistrictList() ) {
+			
 			List<Result> districtResults = new ArrayList<Result>();
 			for ( Legislator legislator: district.getLegislators() ) {
 				int distCounter = 0;
 				for ( Result result: legislator.getResults() ) {
 					if ( districtResults.size() >= distCounter+1 ) { 
-						districtResults.set(distCounter, result.add(districtResults.get(distCounter)));
+						districtResults.set(distCounter, districtResults.get(distCounter).add(result));
 					} else {
-						districtResults.add(result);
+						districtResults.add(new Result(result));
 					}
 					distCounter++;
 				}
 			}
 			district.addResults(districtResults);
+			
 			int assemblyCounter = 0;
 			for ( Result result: district.getResults() ) {
 				if ( assemblyResults.size() >= assemblyCounter+1 ) { 
-					assemblyResults.set(assemblyCounter, result.add(assemblyResults.get(assemblyCounter)));
+					assemblyResults.set(assemblyCounter, assemblyResults.get(assemblyCounter).add(result));
 				} else {
-					assemblyResults.add(result);
+					assemblyResults.add(new Result(result));
 				}
 				assemblyCounter++;
 			}
@@ -148,11 +156,13 @@ public class ComputeAssembly2 {
 			stats[idx++] = valueList.get(0).getValue().doubleValue();
 		}
 		Statistics statistics = new Statistics(stats);
+/*		
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.ASSEMBLYCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL.get(i), Labels.ASSEMBLYCOMPUTATIONDESC.get(i)) );
 		}
 		assembly.addInfoItems(infoItems);
+*/		
 		List<Result> valueList = new ArrayList<Result>();
 
 		double mean = statistics.getMean();
@@ -290,13 +300,13 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 	public void computeLES(Assembly assembly) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
-		
+/*		
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
 		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABEL.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTCOMPUTATIONLABEL.get(i), Labels.DISTRICTCOMPUTATIONDESC.get(i)) );
 		}
 		assembly.addInfoItems(infoItems);
-	
+*/	
 		double LESMult = new Double(assembly.getDistrictList().size()/4.0);
 
 		double[][] denomArray = new double[3][4];

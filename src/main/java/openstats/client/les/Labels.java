@@ -16,10 +16,10 @@ public class Labels {
 			"Bills Introduced", "Bills to Other Chamber", "Bills Passed", "Bills Chaptered", 
 			"Topical Bills Introduced", "Topical Bills to Other Chamber", "Topical Bills Passed", "Topical Bills Chaptered"
 		}));
-	public static ArrayList<String> DISTRICTCOMPUTATIONLABEL = new ArrayList<String>(Arrays.asList(new String[] {"LES"}));
-	public static ArrayList<String> DISTRICTCOMPUTATIONDESC = new ArrayList<String>(Arrays.asList(new String[] {"Legislator Effectiveness Score"}));
-	public static ArrayList<String> ASSEMBLYCOMPUTATIONLABEL = new ArrayList<String>(Arrays.asList(new String[] {"Skewness"}));
-	public static ArrayList<String> ASSEMBLYCOMPUTATIONDESC = new ArrayList<String>(Arrays.asList(new String[] {"Skewness of distribution of LES scores for all districts"}));
+	public static final String DISTRICTCOMPUTATIONLABEL = "LES";
+	public static final String DISTRICTCOMPUTATIONDESC = "Legislator Effectiveness Score";
+	public static final String ASSEMBLYCOMPUTATIONLABEL = "Skewness";
+	public static final String ASSEMBLYCOMPUTATIONDESC = "Skewness of distribution of LES scores for all districts";
 		
 
 }
