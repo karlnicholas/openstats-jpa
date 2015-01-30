@@ -2,7 +2,7 @@
 
 import javax.persistence.*;
 
-import openstats.client.les.ComputeAssembly;
+import openstats.client.les.ComputeAssembly2;
 import openstats.client.openstates.*;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.facades.AssemblyFacade;
@@ -25,7 +25,7 @@ public class JpaWriteLES {
 	private void run() throws Exception {
 		initJpa();
 		
-		ComputeAssembly computeAssembly = new ComputeAssembly();
+		ComputeAssembly2 computeAssembly = new ComputeAssembly2();
 		AssemblyFacade assemblyFacade = new AssemblyFacade(em);
 		
 		EntityTransaction et = em.getTransaction();

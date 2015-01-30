@@ -24,7 +24,7 @@ public class SerializeLESAssemblies {
 		ObjectMapper mapper = new ObjectMapper();
 
 		for( OpenState openState: OpenStateClasses.getOpenStates() ) {
-//			OpenState openState = new OpenStateClasses.GAOpenState();
+//			OpenState openState = new OpenStateClasses.CAOpenState();
 			Assembly templateAssembly = restClient.getTemplateAssembly(openState.getState(), openState.getSession());
 			Assembly assembly = new Assembly(templateAssembly);
 			computeAssembly.computeAssemblyLES(openState, assembly);

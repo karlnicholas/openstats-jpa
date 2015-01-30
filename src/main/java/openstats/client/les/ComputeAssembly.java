@@ -14,6 +14,28 @@ import openstats.model.District.CHAMBER;
 
 public class ComputeAssembly {
 
+	public class AuthorStats {
+
+		public AuthorStats() {
+			billData = new long[3][];
+			for ( int i=0; i<3; ++i ) {
+				billData[i] = new long[4];
+				for ( int j=0;j<4;++j) {
+					billData[i][j] = 0;
+				}
+			}
+		}
+		
+		public long billData[][];
+		public int cmember = 0;
+		public int cvchair = 0;
+		public int cchair = 0;
+		public int leader = 0;
+		public int officeScore = -1;
+		public double les = 0.0;
+	}
+
+
 	class BillAction implements Comparable<BillAction> {
 		public org.openstates.data.Bill.Action action; 
 		public BillAction(org.openstates.data.Bill.Action action) {

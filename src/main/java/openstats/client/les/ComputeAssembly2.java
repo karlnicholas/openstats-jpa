@@ -1,6 +1,5 @@
 package openstats.client.les;
 
-import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Logger;
@@ -15,6 +14,20 @@ import openstats.model.District.CHAMBER;
 
 public class ComputeAssembly2 {
 	private static final Logger logger = Logger.getLogger(ComputeAssembly2.class.getName());
+	
+	class AuthorStats {
+		public AuthorStats() {
+			billData = new long[2][];
+			for ( int i=0; i<2; ++i ) {
+				billData[i] = new long[4];
+				for ( int j=0;j<4;++j) {
+					billData[i][j] = 0;
+				}
+			}
+		}
+		public long billData[][];
+		public double les = 0.0;
+	}
 
 	class BillAction implements Comparable<BillAction> {
 		public org.openstates.data.Bill.Action action; 
@@ -33,8 +46,6 @@ public class ComputeAssembly2 {
 	public void computeAssemblyLES(OpenState openState, Assembly assembly) throws Exception { 
 		openState.loadBulkData();
 		TreeMap<org.openstates.data.Legislator, AuthorStats> legislatorStats = readLegislators();
-		buildcurrentTopics(openState);
-		determineOfficeScores(legislatorStats);
 		ArrayList<org.openstates.data.Bill.Sponsor> sponsors = new ArrayList<org.openstates.data.Bill.Sponsor>();
 //		int determineCount = 0;
 		Collection<org.openstates.data.Bill> bills = org.openstates.model.Bills.values();
@@ -71,6 +82,7 @@ public class ComputeAssembly2 {
 		// skipping descriptions for the moment
 		
 		for ( org.openstates.data.Legislator legislator: legislatorStats.keySet() ) {
+			
 			AuthorStats sponsorStats = legislatorStats.get(legislator); 
 			
 			CHAMBER chamber;
@@ -87,8 +99,19 @@ public class ComputeAssembly2 {
 			}
 			District district = assembly.findDistrict(chamber, dNum);
 			if (district == null ) {
-				logger.warning("District not found:"+":"+legislator.chamber+":"+ legislator.district );
+//				logger.warning("District not found:"+":"+legislator.chamber+":"+ legislator.district );
 				continue;
+			}
+			
+			Legislator aLeg = district.findLegislator(legislator.full_name);
+			if ( aLeg == null ) {
+//				logger.warning("Legislator not found:"+legislator.full_name);
+			}
+			if (district.getLegislators().size() == 0 ) {
+//				logger.warning("No Legislators for district:"+chamber+":"+dNum);
+				continue;
+			} else {
+				aLeg = district.getLegislators().get(0);
 			}
 			
 			List<Result> valueList = new ArrayList<Result>();
@@ -98,13 +121,7 @@ public class ComputeAssembly2 {
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][1]), BigDecimal.valueOf(0)));
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][2]), BigDecimal.valueOf(0)));
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][3]), BigDecimal.valueOf(0)));
-			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][0]), BigDecimal.valueOf(0)));
-			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][1]), BigDecimal.valueOf(0)));
-			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][2]), BigDecimal.valueOf(0)));
-			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[2][3]), BigDecimal.valueOf(0)));
-			Legislator aLeg = new Legislator(legislator.full_name, legislator.party, legislator.roles.get(0).term); 
-			aLeg.addResults(valueList);
-			district.getLegislators().add(aLeg);
+			aLeg.setResults(valueList);
 		}
 		//
 		aggregateCounts(assembly);
@@ -112,7 +129,8 @@ public class ComputeAssembly2 {
 		//
 		computeLES(assembly);
 		//
-		System.out.println(openState.getState()+":"+computeSkewness(assembly));
+		computeSkewness(assembly);
+//		System.out.println(openState.getState()+":"+computeSkewness(assembly));
 	}
 	
 	private void aggregateCounts(Assembly assembly) {
@@ -235,68 +253,6 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		return legislators;
 	}
 	
-	/**
-	 * 
-	 * Legislative Influence: Toward Theory Development through Causal Analysis
-	 * Author(s): Katherine Meyer
-	 * Source: Legislative Studies Quarterly, Vol. 5, No. 4 (Nov., 1980), pp. 563-585
-	 * Published
-	 * 
-	 * It assigned the following valueList to positions: Party Leader
-	 * or Whip = 5; Committee Chair and Vice Chair simultaneously on different
-	 * committees = 4; Committee Chair only = 3; two or more Committee Vice
-	 * Chairs = 2; Committee Vice Chair only = 1; and Member only = 0.
-	 * 
-	 * Added -1 if no office held
-	 * 
-	 */
-	private void determineOfficeScores(
-		TreeMap<org.openstates.data.Legislator, AuthorStats> authorSuccess
-	) {
-		for ( org.openstates.data.Committee committee: org.openstates.model.Committees.values() ) {
-			for ( org.openstates.data.Committee.Member member: committee.members ) {
-				org.openstates.data.Legislator legislator = null;
-				if ( member.leg_id != null ) legislator = org.openstates.model.Legislators.get(member.leg_id);
-				if ( legislator != null ) {
-					AuthorStats successStat = authorSuccess.get(legislator);
-					String role = member.role.toLowerCase();
-					if ( role.contains("member")) {
-						successStat.cmember++;
-					}
-					else if ( role.contains("vice")) {
-						successStat.cvchair++;
-					}
-					else if ( role.contains("chair") ) {
-						successStat.cchair++;
-//					} else { 
-						// assume it's a leadership position?
-//						System.out.println("Leader Role???:" + legislator + ":" + role);
-//						successStat.leader++;
-					}
-				}
-			}
-		}
-		// check 
-		for (org.openstates.data.Legislator legislator: authorSuccess.keySet() ) {
-			AuthorStats successStat = authorSuccess.get(legislator); 
-			if ( successStat.cmember > 0 ) successStat.officeScore = 0;
-			if ( successStat.cvchair == 1 ) successStat.officeScore = 1;
-			if ( successStat.cvchair > 1 ) successStat.officeScore = 2;
-			if ( successStat.cchair == 1 ) successStat.officeScore = 3;
-			if ( successStat.cchair > 0 && successStat.cvchair > 0 ) successStat.officeScore = 4;
-			if ( successStat.leader > 0 ) successStat.officeScore = 5;
-/*
-			for ( Legislator.Role role: legislator.roles ) {
-				String type = role.type.toLowerCase();
-				if ( !(type.contains("member") || type.contains("vice chair") || type.contains("chair")) ) {
-					System.out.println("Presumed leadership?:" + role);
-					successStat.officeScore = 5;
-				}
-			}
-*/			
-		}
-	}
-	
 	public void computeLES(Assembly assembly) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
@@ -309,7 +265,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 */	
 		double LESMult = new Double(assembly.getDistrictList().size()/4.0);
 
-		double[][] denomArray = new double[3][4];
+		double[][] denomArray = new double[2][4];
 
 		denomArray[0][0] = totalFrom(assembly, 0);
 		denomArray[0][1] = 0.0;
@@ -320,14 +276,9 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		denomArray[1][1] = totalFrom(assembly, 3); 
 		denomArray[1][2] = totalFrom(assembly, 4); 
 		denomArray[1][3] = totalFrom(assembly, 5); 
-
-		denomArray[2][0] = totalFrom(assembly, 6);
-		denomArray[2][1] = totalFrom(assembly, 7); 
-		denomArray[2][2] = totalFrom(assembly, 8); 
-		denomArray[2][3] = totalFrom(assembly, 9);
 		
 		// make the array inverse cumulative across rows 
-		for ( int j=0; j < 3; ++j ) {
+		for ( int j=0; j < 2; ++j ) {
 			for ( int i=0; i < 4; ++i ) {
 				double sum = 0.0;
 				for ( int i2=i; i2 < 4; ++i2 ) {
@@ -338,27 +289,22 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		}
 
 		double billsMult = 5.0;
-		double topicMult = 10.0;
 		
 		
 		double[] denom = new double[4];
 		denom[0] = denomArray[0][0]
-				+ (billsMult * denomArray[1][0])  
-				+ (topicMult * denomArray[2][0]); 
+				+ (billsMult * denomArray[1][0]);  
 
 		denom[1] = denomArray[0][1]
-				+ (billsMult * denomArray[1][1])  
-				+ (topicMult * denomArray[2][1]); 
+				+ (billsMult * denomArray[1][1]);  
 
 		denom[2] = denomArray[0][2]
-				+ (billsMult * denomArray[1][2])  
-				+ (topicMult * denomArray[2][2]); 
+				+ (billsMult * denomArray[1][2]);  
 	
 		denom[3] = denomArray[0][3]
-				+ (billsMult * denomArray[1][3])  
-				+ (topicMult * denomArray[2][3]); 
+				+ (billsMult * denomArray[1][3]);  
 
-		double[][] distArray = new double[3][4];
+		double[][] distArray = new double[2][4];
 
 		for ( District dist: assembly.getDistrictList()) {
 
@@ -375,14 +321,12 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 				distArray[1][2] = valueList.get(4).getValue().doubleValue(); 
 				distArray[1][3] = valueList.get(5).getValue().doubleValue(); 
 	
-				distArray[2][0] = valueList.get(6).getValue().doubleValue();
-				distArray[2][1] = valueList.get(7).getValue().doubleValue(); 
-				distArray[2][2] = valueList.get(8).getValue().doubleValue(); 
-				distArray[2][3] = valueList.get(9).getValue().doubleValue();
+			} else {
+				continue;
 			}
 				
 			// make the array inverse cumulative across rows 
-			for ( int j=0; j < 3; ++j ) {
+			for ( int j=0; j < 2; ++j ) {
 				for ( int i=0; i < 4; ++i ) {
 					double sum = 0.0;
 					for ( int i2=i; i2 < 4; ++i2 ) {
@@ -394,20 +338,16 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 	
 			double[] num = new double[4];
 			num[0] = distArray[0][0]
-					+ (billsMult * distArray[1][0])  
-					+ (topicMult * distArray[2][0]); 
+					+ (billsMult * distArray[1][0]);
 
 			num[1] = distArray[0][1]
-					+ (billsMult * distArray[1][1])  
-					+ (topicMult * distArray[2][1]); 
+					+ (billsMult * distArray[1][1]);  
 
 			num[2] = distArray[0][2]
-					+ (billsMult * distArray[1][2])  
-					+ (topicMult * distArray[2][2]); 
+					+ (billsMult * distArray[1][2]);  
 
 			num[3] = distArray[0][3]
-					+ (billsMult * distArray[1][3])  
-					+ (topicMult * distArray[2][3]); 
+					+ (billsMult * distArray[1][3]);  
 
 			double partIntroduced = num[0] / denom[0];			
 			double partOtherChamber = num[1] / denom[1];
@@ -419,6 +359,8 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			if ( !Double.isNaN(LES) ) {
 				comps.add(new Result(new BigDecimal(String.format("%.5f", LES)), new BigDecimal(0.0)) );
 				dist.addResults(comps);
+				dist.getLegislators().get(0).addResults(comps);
+//				System.out.println(dist.getChamber()+":"+dist.getDistrict()+":"+String.format("%.5f", LES));
 			}
 		}
 	}
@@ -433,19 +375,6 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			}
 		}
 		return ret;
-	}
-
-	private void buildcurrentTopics(OpenState openState) throws Exception {
-		currentTopics = new TreeSet<String>(); 
-		InputStream is = ComputeAssembly2.class.getResourceAsStream("/topics/" + openState.getState() + "TopicBills2013.txt");
-		InputStreamReader isr = new InputStreamReader(is, "ASCII");
-		BufferedReader br = new BufferedReader(isr);
-		String line;
-		while ( (line = br.readLine()) != null ) {
-			currentTopics.add(line);
-		}
-		is.close();
-//		System.out.println(currentTopics);
 	}
 
 }

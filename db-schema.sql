@@ -131,7 +131,6 @@
         name varchar(255),
         party varchar(255),
         startDate date,
-        term varchar(255),
         primary key (id)
     );
     create table DBLegislator_groupResultsMap (

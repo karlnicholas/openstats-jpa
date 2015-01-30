@@ -15,7 +15,7 @@ public class RestCreateAssembly {
 	}
 	
 	public void run() throws Exception {
-		ComputeAssembly computeAssembly = new ComputeAssembly(); 
+		ComputeAssembly2 computeAssembly = new ComputeAssembly2(); 
 		
 		Client client = ClientBuilder.newClient();
 

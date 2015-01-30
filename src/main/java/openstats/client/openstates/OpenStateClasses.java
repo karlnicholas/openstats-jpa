@@ -74,13 +74,12 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-11-01-mi-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-mi-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("HB") || bill.bill_id.startsWith("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 					return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -127,7 +126,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("HB") || bill.bill_id.startsWith("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -145,7 +143,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-mt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-mt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -175,7 +173,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("HB") || bill.bill_id.startsWith("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -194,7 +191,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-in-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-in-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -225,7 +222,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("H ") || bill.bill_id.startsWith("S ")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -238,7 +234,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-id-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-id-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -268,7 +264,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("HB") || bill.bill_id.startsWith("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -286,7 +281,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-ct-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ct-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -317,7 +312,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("AB") || bill.bill_id.startsWith("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -335,7 +329,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-wi-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-wi-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -365,7 +359,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.startsWith("H ") || bill.bill_id.startsWith("S ")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -384,7 +377,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-vt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-vt-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -414,7 +407,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -432,7 +424,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-ut-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ut-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -462,7 +454,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -480,7 +471,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-sd-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-sd-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -510,7 +501,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -529,7 +519,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-or-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-or-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -559,7 +549,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -578,7 +567,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-oh-json.zip", "129", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-oh-json.zip", "129", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -608,7 +597,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SF")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -625,7 +613,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-wy-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-wy-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -655,7 +643,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("H ") || bill.bill_id.contains("S ")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -672,7 +659,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-sc-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-sc-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -703,7 +690,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -720,7 +706,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ri-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ri-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -750,7 +736,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("AB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -769,7 +754,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-nv-json.zip", "77", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nv-json.zip", "77", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -799,7 +784,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -817,7 +801,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-nm-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nm-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -847,7 +831,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -864,7 +847,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-nh-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nh-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -894,7 +877,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("LB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -910,7 +892,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ne-json.zip", "102", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ne-json.zip", "102", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -940,7 +922,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -958,7 +939,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-nd-json.zip", "62", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nd-json.zip", "62", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -988,7 +969,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SP") || bill.bill_id.contains("HP") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1007,7 +987,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-me-json.zip", "125", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-me-json.zip", "125", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1037,7 +1017,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1050,7 +1029,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ks-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ks-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1080,7 +1059,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1098,7 +1076,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-il-json.zip", "97", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-il-json.zip", "97", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1128,7 +1106,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SF") || bill.bill_id.contains("HF") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1141,7 +1118,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ia-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ia-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1171,7 +1148,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("S ") || bill.bill_id.contains("H ") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1190,7 +1166,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-fl-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-fl-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1220,7 +1196,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1240,7 +1215,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-de-json.zip", "146", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-de-json.zip", "146", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1270,7 +1245,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1289,7 +1263,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-co-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-co-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1319,7 +1293,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1338,7 +1311,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-al-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-al-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1368,7 +1341,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1386,7 +1358,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ak-json.zip", "27", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ak-json.zip", "27", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1416,7 +1388,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("HB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1435,7 +1406,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-01-ky-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ky-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override
@@ -1455,7 +1426,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1481,7 +1451,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ga-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ga-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
 
 		@Override
@@ -1499,7 +1469,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1525,7 +1494,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ar-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ar-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1541,7 +1510,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1566,7 +1534,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-ok-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ok-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );			
 		}
 		@Override
 		public String getCensusCode() {
@@ -1586,13 +1554,11 @@ public class OpenStateClasses {
 					!tlc.startsWith("resolve " ) 
 					&& !tlc.startsWith("resolutions ") 
 			) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
 /*			
 			if ( bill.bill_id.contains("H ") || bill.bill_id.contains("S ") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1617,7 +1583,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-ma-json.zip", "187th", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ma-json.zip", "187th", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1633,7 +1599,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1658,7 +1623,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-nc-json.zip", "2013", TimeZone.getTimeZone("GMT-07:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nc-json.zip", "2013", TimeZone.getTimeZone("GMT-07:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1674,7 +1639,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1700,7 +1664,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-az-json.zip", "51st-1st", TimeZone.getTimeZone("GMT-07:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-az-json.zip", "51st-1st", TimeZone.getTimeZone("GMT-07:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1716,7 +1680,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HF") || bill.bill_id.contains("SF") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1735,7 +1698,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-11-01-mn-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-mn-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1751,7 +1714,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1778,7 +1740,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-hi-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-hi-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1794,7 +1756,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB") ) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1822,7 +1783,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-la-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-la-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1838,7 +1799,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1863,7 +1823,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-tn-json.zip", "108", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-tn-json.zip", "108", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1880,7 +1840,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1906,7 +1865,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-va-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-va-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1922,7 +1881,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("A ") || bill.bill_id.contains("S ")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1946,7 +1904,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-11-01-nj-json.zip", "215", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-nj-json.zip", "215", TimeZone.getTimeZone("GMT-05:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -1968,7 +1926,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -1990,7 +1947,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-pa-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-pa-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 
 		@Override
@@ -2014,7 +1971,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2037,7 +1993,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-md-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-md-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 
 		@Override
@@ -2061,7 +2017,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2083,7 +2038,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ms-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ms-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 
 		@Override
@@ -2106,7 +2061,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2126,7 +2080,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-09-mo-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-mo-json.zip", "2013", TimeZone.getTimeZone("GMT-06:00") );
 		}
 		@Override
 		public String getCensusCode() {
@@ -2147,7 +2101,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("HB") || bill.bill_id.contains("SB")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2169,7 +2122,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-tx-json.zip", "83", TimeZone.getTimeZone("GMT-06:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-tx-json.zip", "83", TimeZone.getTimeZone("GMT-06:00") );
 		}
 
 		@Override
@@ -2193,7 +2146,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("A ") || bill.bill_id.contains("S ")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2215,7 +2167,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-08-ny-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
+			new LoadBulkData().loadCurrentTerm( "2014-12-02-ny-json.zip", "2013", TimeZone.getTimeZone("GMT-05:00") );
 		}
 
 		@Override
@@ -2244,7 +2196,6 @@ public class OpenStateClasses {
 		@Override
 		public BILLTYPE getBillType(Bill bill, TreeSet<String> currentTopics) {
 			if ( bill.bill_id.contains("SB") || bill.bill_id.contains("AB") || bill.bill_id.contains("SBX1") || bill.bill_id.contains("ABX1")) {
-				if ( currentTopics.contains(bill.bill_id)) return BILLTYPE.TOPICALBILL;
 				return BILLTYPE.BILL;
 			}
 			return BILLTYPE.RESOLUTION;
@@ -2265,7 +2216,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadCurrentTerm( "2013-10-07-ca-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadCurrentTerm( "2014-12-01-ca-json.zip", "2013", TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override

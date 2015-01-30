@@ -90,7 +90,6 @@ public class InitializeDistricts {
 		openState.loadBulkData();
 
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
-
 			CHAMBER chamber;
 			if ( legislator.chamber.equals("upper") ) chamber = CHAMBER.UPPER;
 			else if ( legislator.chamber.equals("lower") ) chamber = CHAMBER.LOWER;
@@ -110,7 +109,6 @@ public class InitializeDistricts {
 			Legislator aLegislator = new Legislator();
 			aLegislator.setName(legislator.full_name);
 			aLegislator.setParty(legislator.party);
-			aLegislator.setTerm(legislator.roles.get(0).term);
 			district.getLegislators().add(aLegislator);
 		}
 	}	
