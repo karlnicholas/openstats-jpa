@@ -2,7 +2,6 @@ package openstats.client.les;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.logging.Logger;
 
 import openstats.client.openstates.*;
 import openstats.client.openstates.OpenState.BILLACTION;
@@ -13,7 +12,7 @@ import openstats.model.*;
 import openstats.model.District.CHAMBER;
 
 public class ComputeAssembly2 {
-	private static final Logger logger = Logger.getLogger(ComputeAssembly2.class.getName());
+//	private static final Logger logger = Logger.getLogger(ComputeAssembly2.class.getName());
 	
 	class AuthorStats {
 		public AuthorStats() {
@@ -76,7 +75,9 @@ public class ComputeAssembly2 {
 		for ( int i=0, ie=Labels.DISTRICTSAGGREGATELABELS.size(); i<ie; ++i ) {
 			infoItems.add( new InfoItem( Labels.DISTRICTSAGGREGATELABELS.get(i), Labels.DISTRICTSAGGREGATEDESC.get(i)) );
 		}
-		infoItems.add( new InfoItem(Labels.DISTRICTCOMPUTATIONLABEL, Labels.DISTRICTCOMPUTATIONDESC));
+		for ( int i=0, ie=Labels.DISTRICTCOMPUTATIONLABELS.size(); i<ie; ++i ) {
+			infoItems.add( new InfoItem(Labels.DISTRICTCOMPUTATIONLABELS.get(i), Labels.DISTRICTCOMPUTATIONDESCS.get(i)));
+		}
 		infoItems.add( new InfoItem(Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONDESC));
 		assembly.addInfoItems(infoItems);
 		// skipping descriptions for the moment
@@ -119,15 +120,15 @@ public class ComputeAssembly2 {
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[0][3]), BigDecimal.valueOf(0)));
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][0]), BigDecimal.valueOf(0)));
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][1]), BigDecimal.valueOf(0)));
-			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][2]), BigDecimal.valueOf(0)));
 			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][3]), BigDecimal.valueOf(0)));
+			valueList.add(new Result(BigDecimal.valueOf(sponsorStats.billData[1][2]), BigDecimal.valueOf(0)));
 			aLeg.setResults(valueList);
 		}
 		//
 		aggregateCounts(assembly);
 		assembly.getResults().add(new Result(new BigDecimal("0.0000"), new BigDecimal("0")));
 		//
-		computeLES(assembly);
+		computeScores(assembly);
 		//
 		computeSkewness(assembly);
 //		System.out.println(openState.getState()+":"+computeSkewness(assembly));
@@ -161,7 +162,37 @@ public class ComputeAssembly2 {
 				assemblyCounter++;
 			}
 		}
-		assembly.addResults(assemblyResults);
+		if ( assemblyResults.size() == 6 ) {
+			assembly.addResults(assemblyResults);
+			double divisor = assemblyResults.get(2).getValue().doubleValue();
+			divisor += assemblyResults.get(3).getValue().doubleValue();
+			divisor += assemblyResults.get(4).getValue().doubleValue();
+			divisor += assemblyResults.get(5).getValue().doubleValue();
+			
+			double hitcount = (assemblyResults.get(5).getValue().doubleValue() + assemblyResults.get(4).getValue().doubleValue()) / divisor; 
+			if ( !(Double.isNaN(hitcount) || Double.isInfinite(hitcount)) ) {
+				Result result = new Result(new BigDecimal(String.format("%.5f", hitcount)), new BigDecimal(0.0));
+				assembly.addResult(result);
+			}
+			double score = assemblyResults.get(2).getValue().doubleValue();
+			score += (assemblyResults.get(3).getValue().doubleValue() * 5.0); 
+			score += ((assemblyResults.get(4).getValue().doubleValue()
+					+ assemblyResults.get(5).getValue().doubleValue()) * 10.0); 
+			if ( !Double.isNaN(score) ) {
+				Result result = new Result(new BigDecimal(String.format("%.5f", score)), new BigDecimal(0.0));
+				assembly.addResult(result);
+			}
+		} else {
+			Result result = new Result(new BigDecimal(0.0), new BigDecimal(0.0));
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+			assembly.addResult(result);
+		}
 	}
 
 	
@@ -181,8 +212,6 @@ public class ComputeAssembly2 {
 		}
 		assembly.addInfoItems(infoItems);
 */		
-		List<Result> valueList = new ArrayList<Result>();
-
 		double mean = statistics.getMean();
 		double variance = statistics.getVariance();
 		
@@ -197,8 +226,8 @@ public class ComputeAssembly2 {
 //		double skewness = (3.0*(statistics.getMean() - statistics.getMedian()))/statistics.getStdDev();
 		if ( Double.isNaN(skewness)) return new BigDecimal(-1);
 		BigDecimal bdSkewness = new BigDecimal(String.format("%.5f", skewness));
-		valueList.add(new Result(bdSkewness, new BigDecimal(0.0))); 
-		assembly.addResults(valueList);
+		assembly.addResult(new Result(bdSkewness, new BigDecimal(0.0)));
+
 		return bdSkewness;
 	}
 
@@ -253,7 +282,7 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 		return legislators;
 	}
 	
-	public void computeLES(Assembly assembly) {
+	public void computeScores(Assembly assembly) {
 				
 //		ArrayList<Long> lidsAll = makeRList();
 /*		
@@ -306,11 +335,52 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 
 		double[][] distArray = new double[2][4];
 
+		// Lets to Hit Rate from Mathews?
 		for ( District dist: assembly.getDistrictList()) {
 
 			List<Result> valueList = dist.getResults();
 			if ( valueList.size() != 0 ) {
 
+				double divisor = valueList.get(2).getValue().doubleValue();
+				divisor += valueList.get(3).getValue().doubleValue();
+				divisor += valueList.get(4).getValue().doubleValue();
+				divisor += valueList.get(5).getValue().doubleValue();
+				
+				double hitcount = (valueList.get(5).getValue().doubleValue() + valueList.get(4).getValue().doubleValue()) / divisor; 
+				if ( !(Double.isNaN(hitcount) || Double.isInfinite(hitcount)) ) {
+					Result result = new Result(new BigDecimal(String.format("%.5f", hitcount)), new BigDecimal(0.0));
+					dist.addResult(result);
+					dist.getLegislators().get(0).addResult(result);
+				}
+			} else {
+				continue;
+			}
+		}
+		// let's do Legislator Score from Ellickson
+		for ( District dist: assembly.getDistrictList()) {
+
+			List<Result> valueList = dist.getResults();
+			if ( valueList.size() != 0 ) {
+
+				double score = valueList.get(2).getValue().doubleValue();
+				score += (valueList.get(3).getValue().doubleValue() * 5.0); 
+				score += ((valueList.get(4).getValue().doubleValue()
+						+ valueList.get(5).getValue().doubleValue()) * 10.0); 
+				if ( !Double.isNaN(score) ) {
+					Result result = new Result(new BigDecimal(String.format("%.5f", score)), new BigDecimal(0.0));
+					dist.addResult(result);
+					dist.getLegislators().get(0).addResult(result);
+				}
+			} else {
+				continue;
+			}
+		}
+
+		// Do legislative effectiveness scores from Volden & Wiseman.
+		for ( District dist: assembly.getDistrictList()) {
+
+			List<Result> valueList = dist.getResults();
+			if ( valueList.size() != 0 ) {
 				distArray[0][0] = valueList.get(0).getValue().doubleValue();
 				distArray[0][1] = 0.0;
 				distArray[0][2] = 0.0;
@@ -355,13 +425,13 @@ if ( bill.chamber.toLowerCase().equals("upper") && billType == BILLTYPE.RESOLUTI
 			double partChaptered = num[3] / denom[3]; 
 
 			double LES = (partIntroduced + partOtherChamber + partPassed + partChaptered) * LESMult;
-			List<Result> comps = new ArrayList<Result>();
 			if ( !Double.isNaN(LES) ) {
-				comps.add(new Result(new BigDecimal(String.format("%.5f", LES)), new BigDecimal(0.0)) );
-				dist.addResults(comps);
-				dist.getLegislators().get(0).addResults(comps);
+				Result result = new Result(new BigDecimal(String.format("%.5f", LES)), new BigDecimal(0.0));
+				dist.addResult(result);
+				dist.getLegislators().get(0).addResult(result);
 //				System.out.println(dist.getChamber()+":"+dist.getDistrict()+":"+String.format("%.5f", LES));
 			}
+			
 		}
 	}
 	
