@@ -10,20 +10,13 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
 import openstats.model.Assembly;
+import openstats.rest.TestString;
 
 public class RESTClient {
 	
-	private Client client;
-			
-	public RESTClient() {
-		client = ClientBuilder.newClient();
-	}
-	
-	public void close() {
-		client.close();
-	}
 
 	public Assembly getTemplateAssembly(String state, String session) {
+		Client client = ClientBuilder.newClient();
 		WebTarget myResource = client.target("http://localhost:8080/openstats/rest")
 			.path("/template/{state}/{session}")
 			.resolveTemplate("state", state)
@@ -33,22 +26,24 @@ public class RESTClient {
 			return builder.get(Assembly.class);
 		} catch ( BadRequestException e ) {
 			throw new RuntimeException(builder.head().getHeaderString("error"), e);
+		} finally {
+			client.close();
 		}
 	}
 	
 	public void updateAssembly(Assembly assembly) {
+		Client client = ClientBuilder.newClient();
 		WebTarget myResource = client.target("http://localhost:8080/openstats/rest");
 		Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
-		Response response=null;
 		try {
-			response = builder.put(Entity.json(assembly));
+			Response response = builder.put(Entity.json(assembly));
 			if ( response.getStatus() != Status.OK.getStatusCode() ) {
 				throw new RuntimeException(response.getHeaderString("error"));
 			}
 		} catch ( BadRequestException e ) {
 			throw new RuntimeException(e);
 		} finally {
-			if ( response != null ) response.close();
+			client.close();
 		}
 
 	}

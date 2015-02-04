@@ -31,8 +31,8 @@ public class SerializeLESAssemblies {
 			restClient.updateAssembly(assembly);
 			Path path = Paths.get("c:/users/karl/workspace/openstats-jpa/results/"+openState.getState()+"-"+openState.getSession()+" Results.json");
 			
-			mapper.writeValue(path.toFile(), assembly);
-//			mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), assembly);
+//			mapper.writeValue(path.toFile(), assembly);
+			mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), assembly);
 		}
 	}
 }

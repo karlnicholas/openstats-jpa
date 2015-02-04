@@ -107,8 +107,6 @@ public class ProcessCensusData {
 
 			processCensusTable(openState, processStatList);
 		}
-
-		restClient.close();
 		
 //		ObjectMapper mapper = new ObjectMapper();
 //		mapper.writerWithDefaultPrettyPrinter().writeValue(Files.newBufferedWriter(Paths.get("c:/users/karl/workspace/openstats-jpa/assemblies.json"), Charset.forName("utf-8")), assemblies);
