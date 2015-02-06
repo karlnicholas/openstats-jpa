@@ -10,7 +10,6 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
 import openstats.model.Assembly;
-import openstats.rest.TestString;
 
 public class RESTClient {
 	
