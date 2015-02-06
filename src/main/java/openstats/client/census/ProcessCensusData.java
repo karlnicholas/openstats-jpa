@@ -64,7 +64,6 @@ public class ProcessCensusData {
 		public String toString() {
 			return "("+censusTable.tableId+":"+seqNumber+":"+cellStartPos+":"+cellCount+")";
 		}
-		
 	}
 	
 	private class CensusRecordNo implements Comparable<CensusRecordNo>{
@@ -79,7 +78,6 @@ public class ProcessCensusData {
 		public int compareTo(CensusRecordNo o) {			
 			return recordNo-o.recordNo;
 		}
-		
 	}
 	
 	public void run() throws Exception {
@@ -104,7 +102,6 @@ public class ProcessCensusData {
 //			System.out.println("State:"+openState.getState()+":"+processStatList);
 //			assemblyFacade.writeAssembly(assembly);
 //			System.out.println(assembly.getState()+":"+assembly.getDistricts().getDistrictList().size());
-
 			processCensusTable(openState, processStatList);
 		}
 		
@@ -310,7 +307,7 @@ public class ProcessCensusData {
 						String value = split[processStat.cellStartPos+i-1];
 //							System.out.print(value +",");
 						currRecordNo.values.add(new String(value));
-						results.add(new Result(new BigDecimal(value), new BigDecimal(0)) );
+						results.add(new Result(new BigDecimal(value), BigDecimal.ZERO) );
 					}
 					district.addResults(results);
 //						System.out.println();
