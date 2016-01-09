@@ -29,8 +29,8 @@ import openstats.dbmodel.Result;
 import openstats.dbmodel.DBAssemblyHandler;
 import openstats.model.Assembly;
 import openstats.model.District;
-import openstats.model.Group;
 import openstats.model.District.CHAMBER;
+import openstats.model.Group;
 import openstats.model.InfoItem;
 
 import org.apache.commons.csv.CSVFormat;
