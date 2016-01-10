@@ -35,13 +35,13 @@ public class InitializeDistricts {
 	}
 	
 	private void run() throws Exception {
-//		initJpa();
+		initJpa();
 		try {
-//			EntityTransaction et = em.getTransaction();
-//			et.begin();
+			EntityTransaction et = em.getTransaction();
+			et.begin();
 			
 //			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-				OpenState openState = new OpenStateClasses.CAOpenState();
+				OpenState openState = new OpenStateClasses.GAOpenState();
 				
 				FileInputStream file = new FileInputStream(new File("c:/users/karl/censusdata/"+openState.getState().toLowerCase()+".xls"));
 		        		     
@@ -78,53 +78,19 @@ public class InitializeDistricts {
 		
 			    }
 			    file.close();
-			    setLegislators(openState, assembly);
-//				DBAssemblyHandler.createAssembly(assembly, em);
+//			    setLegislators(openState, assembly);
+				DBAssemblyHandler.createAssembly(assembly, em);
 //			}
-//			et.commit();
+			et.commit();
 		} finally {
-//			emf.close();
+			emf.close();
 		}
 		     
 	}
 	
 	public void setLegislators(OpenState openState, Assembly assembly) throws Exception { 
 		openState.loadBulkData();
-		
-		Map<String, org.openstates.data.Legislator> mapLegs = new TreeMap<String, org.openstates.data.Legislator>();
-		
-		String session = openState.getSession();
-		System.out.println("Session = " + session);
-		// assume current or less term
-		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 
-			String district = null;
-			String chamber = null;
-			for ( Role role: legislator.roles) {
-				if ( role.term != null && role.district != null && role.chamber != null) {
-					String key = role.term +'\t'+role.district+'\t'+role.chamber+'\t'+legislator.leg_id;
-					if ( mapLegs.get(key) != null ) System.out.println("Dup1:"+key+":"+legislator.full_name+":"+mapLegs.get(key).full_name);
-					mapLegs.put(key, legislator);
-				}
-			}
-			if ( legislator.old_roles != null ) {
-				for ( String roleKey: legislator.old_roles.keySet() ) {
-					for ( Role role: legislator.old_roles.get(roleKey)) {
-						if ( role.term != null && role.district != null && role.chamber != null) {
-							String key = role.term +'\t'+role.district+'\t'+role.chamber+'\t'+legislator.leg_id;
-							if ( mapLegs.get(key) != null ) System.out.println("Dup2:"+key+":"+legislator.full_name+":"+mapLegs.get(key).full_name);
-							else mapLegs.put(key, legislator);
-						}
-					}
-				}
-			}
-		}
-		for ( String key: mapLegs.keySet() ) {
-			org.openstates.data.Legislator legislator = mapLegs.get(key);
-			System.out.println(key+'\t'+legislator.full_name);
-		}
-
-		/*		
 		for ( org.openstates.data.Legislator legislator: org.openstates.model.Legislators.values()) {
 			CHAMBER chamber;
 			if ( legislator.chamber.equals("upper") ) chamber = CHAMBER.UPPER;
@@ -147,6 +113,6 @@ public class InitializeDistricts {
 			aLegislator.setParty(legislator.party);
 			district.getLegislators().add(aLegislator);
 		}
-*/		
+
 	}	
 }

@@ -1447,7 +1447,7 @@ public class OpenStateClasses {
 		}
 		@Override
 		public String getSession() {
-			return "2011";
+			return "2013";
 		}
 		@Override
 		public void loadBulkData() throws Exception {
@@ -2216,7 +2216,7 @@ public class OpenStateClasses {
 
 		@Override
 		public void loadBulkData() throws Exception {
-			new LoadBulkData().loadTerm( "2014-12-01-ca-json.zip", getSession(), TimeZone.getTimeZone("GMT-08:00") );			
+			new LoadBulkData().loadTerm( "2013-10-07-ca-json.zip", getSession(), TimeZone.getTimeZone("GMT-08:00") );			
 		}
 
 		@Override

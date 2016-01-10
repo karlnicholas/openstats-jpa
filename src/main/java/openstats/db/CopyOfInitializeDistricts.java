@@ -41,7 +41,7 @@ public class CopyOfInitializeDistricts {
 //			et.begin();
 			
 //			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-				OpenState openState = new OpenStateClasses.GAOpenState();
+				OpenState openState = new OpenStateClasses.CAOpenState();
 				
 				FileInputStream file = new FileInputStream(new File("c:/users/karl/censusdata/"+openState.getState().toLowerCase()+".xls"));
 		        		     
@@ -93,8 +93,8 @@ public class CopyOfInitializeDistricts {
 					}
 				}
 
-//				Assembly assembly = new Assembly(openState.getState(), openState.getSession());
-//				assembly.setDistrictList(districtList);
+				Assembly assembly = new Assembly(openState.getState(), openState.getSession());
+				assembly.setDistrictList(districtList);
 //				List<District> districtList = assembly.getDistrictList();
 
 //				DBAssemblyHandler.createAssembly(assembly, em);
