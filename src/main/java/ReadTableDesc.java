@@ -125,7 +125,7 @@ public class ReadTableDesc {
 	}
 	
 	private List<ProcessStat> createProcessStatList() throws IOException {
-		CSVParser parser = CSVParser.parse(new File("/home/knicholas/Downloads/Sequence_Number_and_Table_Number_Lookup.txt"), Charset.forName("UTF-8"), CSVFormat.DEFAULT);
+		CSVParser parser = CSVParser.parse(new File("c:/users/karl/censusdata/Sequence_Number_and_Table_Number_Lookup.txt"), Charset.forName("UTF-8"), CSVFormat.DEFAULT);
 		CSVRecord priorRecord = null;
 		int cellCount = 0;
 		ProcessStat processStat = null;
@@ -180,7 +180,7 @@ public class ReadTableDesc {
 			tables.put(processStat.censusTable.tableId, processStat);
 		}
 		
-        FileInputStream fin = new FileInputStream("/home/knicholas/Downloads/ACS2012_5-Year_TableShells.xls");
+        FileInputStream fin = new FileInputStream("c:/users/karl/censusdata/ACS2012_5-Year_TableShells.xls");
         // create a new org.apache.poi.poifs.filesystem.Filesystem
         POIFSFileSystem poifs = new POIFSFileSystem(fin);
         HSSFWorkbook workbook = new HSSFWorkbook(poifs);
@@ -241,7 +241,7 @@ public class ReadTableDesc {
 	private List<Assembly> processCensusTable(OpenState openState, List<ProcessStat> processStatList) throws Exception {
 //		CensusAssembly censusAssembly = new CensusAssembly();
 		List<Assembly> assemblies = new ArrayList<Assembly>();
-		String cacheDir = "/home/knicholas/censusdata/";
+		String cacheDir = "c:/users/karl/censusdata/";
 		String fileName = "g20125" + openState.getState().toLowerCase()+".txt";
 //			if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
 //				cacheFile(openState, cacheDir, fileName);

@@ -60,12 +60,13 @@ public class JpaWriteCensus {
 		EntityTransaction et = em.getTransaction();
 		et.begin();
 
-		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+//		for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+			OpenState openState = new OpenStateClasses.CAOpenState();	
 			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 			censusAssembly.censusAssembly(openState, censusTable, assembly);
 			assemblyFacade.writeAssembly(assembly);
 			System.out.println(assembly.getState()+":"+assembly.getDistrictList().size());
-		}
+//		}
 
 		et.commit();
 

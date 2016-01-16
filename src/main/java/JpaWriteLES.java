@@ -33,6 +33,7 @@ public class JpaWriteLES {
 		
 		for( OpenState openState: OpenStateClasses.getOpenStates()) {
 //		OpenState openState = new OpenStateClasses.MIOpenState();
+			System.out.println("State: " + openState.getState());
 			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 			computeAssembly.computeAssemblyLES(openState, assembly);
 			assemblyFacade.writeAssembly(assembly);

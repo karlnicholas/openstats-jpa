@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import openstats.client.les.Labels;
 import openstats.data.AssemblyRepository;
 import openstats.dbmodel.*;
 import openstats.model.Assembly;
@@ -31,20 +32,23 @@ public class JpaReadAssembly {
 	
 	private void run() throws Exception {
 		initJpa();
-		
-		List<DBGroup> dbGroups = new ArrayList<DBGroup>();
-		dbGroups.add( DBGroupHandler.getDBGroup("B19301", em));
-		dbGroups.add( DBGroupHandler.getDBGroup("BILLPROGRESS", em));
-//		DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
-		Assembly Assembly = assemblyRepo.buildAssemblyFromGroups(dbGroups, "GA", "2013");
-		Writer writer = new OutputStreamWriter(System.out);
-		
-		AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
-		csvHandler.writeCsv(writer, Assembly);
-		
-		writer.flush();
-		
-		emf.close();
+
+		try {
+			List<DBGroup> dbGroups = new ArrayList<DBGroup>();
+			dbGroups.add( DBGroupHandler.getDBGroup("B19301", em));
+			dbGroups.add( DBGroupHandler.getDBGroup("BILLPROGRESS", em));
+//			DBGroup dbGroup = DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em);
+//			dbGroups.add( DBGroupHandler.getDBGroup(Labels.LESGROUPNAME, em) );
+			Assembly assembly = assemblyRepo.buildAssemblyFromGroups(dbGroups, "CA", "2013");
+			Writer writer = new OutputStreamWriter(System.out);
+			
+			AssemblyCsvHandler csvHandler = new AssemblyCsvHandler();
+			csvHandler.writeCsv(assembly, writer);
+			
+			writer.flush();
+		} finally {
+			emf.close();
+		}
 
 	}
 

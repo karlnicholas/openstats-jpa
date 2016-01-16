@@ -12,7 +12,6 @@ import javax.persistence.Persistence;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
-import org.openstates.data.Legislator.Role;
 
 import openstats.client.openstates.OpenState;
 import openstats.client.openstates.OpenStateClasses;
@@ -40,8 +39,8 @@ public class InitializeDistricts {
 			EntityTransaction et = em.getTransaction();
 			et.begin();
 			
-//			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
-				OpenState openState = new OpenStateClasses.GAOpenState();
+			for ( OpenState openState: OpenStateClasses.getOpenStates() ) {
+//				OpenState openState = new OpenStateClasses.CAOpenState();
 				
 				FileInputStream file = new FileInputStream(new File("c:/users/karl/censusdata/"+openState.getState().toLowerCase()+".xls"));
 		        		     
@@ -78,9 +77,9 @@ public class InitializeDistricts {
 		
 			    }
 			    file.close();
-//			    setLegislators(openState, assembly);
+			    setLegislators(openState, assembly);
 				DBAssemblyHandler.createAssembly(assembly, em);
-//			}
+			}
 			et.commit();
 		} finally {
 			emf.close();

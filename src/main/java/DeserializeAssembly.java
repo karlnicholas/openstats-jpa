@@ -16,11 +16,11 @@ public class DeserializeAssembly {
 	}
 	
 	private void run() throws Exception {
-		OpenState testAction = new OpenStateClasses.AKOpenState();
+		OpenState testAction = new OpenStateClasses.CAOpenState();
 		Assembly assembly = new Assembly();  
 		new ComputeAssembly2().computeAssemblyLES(testAction, assembly);
 		JAXBContext ctx = JAXBContext.newInstance(Assembly.class);
-		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("/home/knicholas/AK-27.xml")));
+		ctx.createMarshaller().marshal(assembly, Files.newOutputStream(Paths.get("c:/users/karl/CA-2013.xml")));
 		
 	}
 

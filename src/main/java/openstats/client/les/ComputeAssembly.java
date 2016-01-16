@@ -152,7 +152,7 @@ public class ComputeAssembly {
 		}
 		Statistics statistics = new Statistics(stats);
 		List<InfoItem> infoItems = new ArrayList<InfoItem>();
-		infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONDESC) );
+//		infoItems.add( new InfoItem( Labels.ASSEMBLYCOMPUTATIONLABEL, Labels.ASSEMBLYCOMPUTATIONDESC) );
 		assembly.addInfoItems(infoItems);
 		List<Result> valueList = new ArrayList<Result>();
 
@@ -171,7 +171,7 @@ public class ComputeAssembly {
 		if ( Double.isNaN(skewness)) return new BigDecimal(-1);
 		BigDecimal bdSkewness = new BigDecimal(String.format("%.5f", skewness));
 		valueList.add(new Result(bdSkewness, new BigDecimal(0.0))); 
-		assembly.addResults(valueList);
+//		assembly.addResults(valueList);
 		return bdSkewness;
 	}
 

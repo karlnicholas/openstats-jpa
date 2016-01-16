@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -212,7 +213,8 @@ public class ProcessCensusData {
         }
 
         // once all the events are processed close our file input stream
-        fin.close();
+//        fin.close();
+        workbook.close();
 //        System.out.println("done.");
 		
 		
@@ -269,6 +271,7 @@ public class ProcessCensusData {
 //			assemblies.add(assembly);
 	
 			Group group = new Group(processStat.censusTable.tableId, processStat.censusTable.tableDescr);
+//			System.out.println(processStat.censusTable.tableId+" : "+processStat.censusTable.tableDescr);
 			assembly.setGroup(group);
 			List<InfoItem> infoItems = new ArrayList<InfoItem>();
 //			System.out.println(processStat.censusTable.tableId+":"+processStat.censusTable.tableDescr);
@@ -276,6 +279,7 @@ public class ProcessCensusData {
 			for ( int i=0, j=processStat.cellCount; i<j; ++i ) {
 //				System.out.print(processStat.censusTable.cells.get(i).label+",");
 				infoItems.add(new InfoItem(processStat.censusTable.cells.get(i).label, processStat.censusTable.cells.get(i).descr));
+//				System.out.println(","+processStat.censusTable.cells.get(i).label+'('+processStat.censusTable.cells.get(i).descr+')');
 			}
 //			System.out.println();
 			assembly.addInfoItems(infoItems);
@@ -285,6 +289,9 @@ public class ProcessCensusData {
 //				if ( !Files.exists(Paths.get(cacheDir+fileName)) ) {
 //					cacheFile(openState, cacheDir, fileName);
 //				}
+			
+			// compute assembly totals.
+			List<Result> assemblyTotals = new ArrayList<Result>();
 			
 			ZipInputStream zipStream = new ZipInputStream(new FileInputStream(cacheDir+fileName));
 			zipStream.getNextEntry();
@@ -308,11 +315,33 @@ public class ProcessCensusData {
 //							System.out.print(value +",");
 						currRecordNo.values.add(new String(value));
 						results.add(new Result(new BigDecimal(value), BigDecimal.ZERO) );
+						if ( chamber == CHAMBER.LOWER ) {
+							if ( assemblyTotals.size() < results.size()) {
+								assemblyTotals.add(new Result(new BigDecimal(value), BigDecimal.ZERO));
+							} else {
+								Result tResult = assemblyTotals.get(i);
+								tResult.setValue(tResult.getValue().add(new BigDecimal(value)));
+								tResult.setError(tResult.getError().add(BigDecimal.ZERO));
+								assemblyTotals.set(i, tResult);
+							}
+						}
 					}
 					district.addResults(results);
 //						System.out.println();
 				}
 			}
+			if (processStat.censusTable.tableId.equals("B19301") ) {
+				int div = 0;
+				for ( District d: assembly.getDistrictList() ) {
+					if ( d.getChamber() == CHAMBER.LOWER ) div++;
+				}
+				if ( div == 0 ) div = assembly.getDistrictList().size();
+				BigDecimal divisor = new BigDecimal(div);				
+				for(Result result: assemblyTotals ) {
+					result.setValue(result.getValue().divide(divisor, RoundingMode.HALF_UP));
+				}
+			}
+			assembly.addResults(assemblyTotals);
 //			reader.
 	
 /*			
