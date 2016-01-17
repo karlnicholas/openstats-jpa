@@ -1,57 +1,57 @@
 
     alter table DBGroupResults_Results 
-        drop constraint FK_aevegygxfhmq39x0f9rey4ldj;
+        drop constraint if exists FK_aevegygxfhmq39x0f9rey4ldj;
     alter table lag.public.DBAssembly_districtList 
-        drop constraint FK_m7jb784s4jjmisy9qss3omgmv;
+        drop constraint if exists FK_m7jb784s4jjmisy9qss3omgmv;
     alter table lag.public.DBAssembly_districtList 
-        drop constraint FK_i4ndorr543f640f2r5m6vwxn3;
+        drop constraint if exists FK_i4ndorr543f640f2r5m6vwxn3;
     alter table lag.public.DBAssembly_groupInfoMap 
-        drop constraint FK_aga9de8numrkiljshgnixjvqx;
+        drop constraint if exists FK_aga9de8numrkiljshgnixjvqx;
     alter table lag.public.DBAssembly_groupInfoMap 
-        drop constraint FK_m14kccfdk6ekucm591i0kmgj3;
+        drop constraint if exists FK_m14kccfdk6ekucm591i0kmgj3;
     alter table lag.public.DBAssembly_groupInfoMap 
-        drop constraint FK_e3x7ct2iyegt9w08j0vq8mlte;
+        drop constraint if exists FK_e3x7ct2iyegt9w08j0vq8mlte;
     alter table lag.public.DBAssembly_groupResultsMap 
-        drop constraint FK_mu3dc10vl8i6g62eokcmufkds;
+        drop constraint if exists FK_mu3dc10vl8i6g62eokcmufkds;
     alter table lag.public.DBAssembly_groupResultsMap 
-        drop constraint FK_cm2r0250hys0nelwneck4d4fx;
+        drop constraint if exists FK_cm2r0250hys0nelwneck4d4fx;
     alter table lag.public.DBAssembly_groupResultsMap 
-        drop constraint FK_q03btcrppy8am0oh1thm5tq71;
+        drop constraint if exists FK_q03btcrppy8am0oh1thm5tq71;
     alter table lag.public.DBDistrict_groupResultsMap 
-        drop constraint FK_7yjdg1ekllqcem1msm68wygam;
+        drop constraint if exists FK_7yjdg1ekllqcem1msm68wygam;
     alter table lag.public.DBDistrict_groupResultsMap 
-        drop constraint FK_qpk1m5o4rqjeevamrfhmw3vtr;
+        drop constraint if exists FK_qpk1m5o4rqjeevamrfhmw3vtr;
     alter table lag.public.DBDistrict_groupResultsMap 
-        drop constraint FK_2sow4ye0m6t3llx3h1fh1pu5l;
+        drop constraint if exists FK_2sow4ye0m6t3llx3h1fh1pu5l;
     alter table lag.public.DBDistrict_legislators 
-        drop constraint FK_gcglx7bc2bha3driqmy4f33g6;
+        drop constraint if exists FK_gcglx7bc2bha3driqmy4f33g6;
     alter table lag.public.DBDistrict_legislators 
-        drop constraint FK_a4omrinmxoff1tvh1fp5mxx8d;
+        drop constraint if exists FK_a4omrinmxoff1tvh1fp5mxx8d;
     alter table lag.public.DBGroupInfo_GroupItems 
-        drop constraint FK_gf185iy4kvsjano69glgvg4ee;
+        drop constraint if exists FK_gf185iy4kvsjano69glgvg4ee;
     alter table lag.public.DBGroupInfo_GroupItems 
-        drop constraint FK_jgiah9g0gv9y6qqinax45samy;
+        drop constraint if exists FK_jgiah9g0gv9y6qqinax45samy;
     alter table lag.public.DBLegislator_groupResultsMap 
-        drop constraint FK_7nk0q9fot3ahn8g2hnny6gmvm;
+        drop constraint if exists FK_7nk0q9fot3ahn8g2hnny6gmvm;
     alter table lag.public.DBLegislator_groupResultsMap 
-        drop constraint FK_60gos6gbbj9lleb9152p5c07q;
+        drop constraint if exists FK_60gos6gbbj9lleb9152p5c07q;
     alter table lag.public.DBLegislator_groupResultsMap 
-        drop constraint FK_9vlkjla0bq7iv3j87acqaqxl6;
-    drop table if exists DBGroupResults_Results cascade;
-    drop table if exists lag.public.DBAssembly cascade;
-    drop table if exists lag.public.DBAssembly_districtList cascade;
-    drop table if exists lag.public.DBAssembly_groupInfoMap cascade;
-    drop table if exists lag.public.DBAssembly_groupResultsMap cascade;
-    drop table if exists lag.public.DBDistrict cascade;
-    drop table if exists lag.public.DBDistrict_groupResultsMap cascade;
-    drop table if exists lag.public.DBDistrict_legislators cascade;
-    drop table if exists lag.public.DBGroup cascade;
-    drop table if exists lag.public.DBGroupInfo cascade;
-    drop table if exists lag.public.DBGroupInfo_GroupItems cascade;
-    drop table if exists lag.public.DBGroupResults cascade;
-    drop table if exists lag.public.DBInfoItem cascade;
-    drop table if exists lag.public.DBLegislator cascade;
-    drop table if exists lag.public.DBLegislator_groupResultsMap cascade;
+        drop constraint if exists FK_9vlkjla0bq7iv3j87acqaqxl6;
+    drop table DBGroupResults_Results cascade;
+    drop table lag.public.DBAssembly cascade;
+    drop table lag.public.DBAssembly_districtList cascade;
+    drop table lag.public.DBAssembly_groupInfoMap cascade;
+    drop table lag.public.DBAssembly_groupResultsMap cascade;
+    drop table lag.public.DBDistrict cascade;
+    drop table lag.public.DBDistrict_groupResultsMap cascade;
+    drop table lag.public.DBDistrict_legislators cascade;
+    drop table lag.public.DBGroup cascade;
+    drop table lag.public.DBGroupInfo cascade;
+    drop table lag.public.DBGroupInfo_GroupItems cascade;
+    drop table lag.public.DBGroupResults cascade;
+    drop table lag.public.DBInfoItem cascade;
+    drop table lag.public.DBLegislator cascade;
+    drop table lag.public.DBLegislator_groupResultsMap cascade;
     drop sequence hibernate_sequence;
     create table DBGroupResults_Results (
         DBGroupResults_id int8 not null,

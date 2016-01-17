@@ -130,8 +130,8 @@ public class ComputeAssembly2 {
 		//
 		computeScores(assembly);
 		//
-		computeSkewness(assembly);
-//		System.out.println(openState.getState()+":"+computeSkewness(assembly));
+//		computeSkewness(assembly);
+		System.out.println(openState.getState()+":"+computeSkewness(assembly));
 	}
 	
 	private void aggregateCounts(Assembly assembly) {
@@ -201,8 +201,8 @@ public class ComputeAssembly2 {
 		int idx=0;
 		for ( District district: assembly.getDistrictList() ) {
 			List<Result> valueList = district.getResults();
-			if ( valueList.size() == 0 ) continue;
-			stats[idx++] = valueList.get(0).getValue().doubleValue();
+			if ( valueList.size() < 9 ) continue;
+			stats[idx++] = valueList.get(8).getValue().doubleValue();
 		}
 		Statistics statistics = new Statistics(stats);
 /*		

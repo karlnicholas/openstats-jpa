@@ -18,8 +18,8 @@
 			<property name="hibernate.hbm2ddl.auto" value="validate" />
 			<property name="hibernate.show_sql" value="false" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/lag" />
-			<property name="javax.persistence.jdbc.user" value="admini6psbbe" />
-			<property name="javax.persistence.jdbc.password" value="TbflYlR2Pya5" />
+			<property name="javax.persistence.jdbc.user" value="adminmynw8jv" />
+			<property name="javax.persistence.jdbc.password" value="7JXjvhQQVQ2z" />
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 		</properties>
 	</persistence-unit>

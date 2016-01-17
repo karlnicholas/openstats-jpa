@@ -28,18 +28,18 @@ public class JpaWriteLES {
 		ComputeAssembly2 computeAssembly = new ComputeAssembly2();
 		AssemblyFacade assemblyFacade = new AssemblyFacade(em);
 		
-		EntityTransaction et = em.getTransaction();
-		et.begin();
+//		EntityTransaction et = em.getTransaction();
+//		et.begin();
 		
 		for( OpenState openState: OpenStateClasses.getOpenStates()) {
-//		OpenState openState = new OpenStateClasses.MIOpenState();
-			System.out.println("State: " + openState.getState());
+//			OpenState openState = new OpenStateClasses.CAOpenState();
+//			System.out.println("State: " + openState.getState());
 			Assembly assembly = DBAssemblyHandler.getAssembly(openState.getState(), openState.getSession(), em);
 			computeAssembly.computeAssemblyLES(openState, assembly);
-			assemblyFacade.writeAssembly(assembly);
+//			assemblyFacade.writeAssembly(assembly);
 		}
 
-		et.commit();
+//		et.commit();
 
 /*
  		OpenState testAction = new GAOpenState();

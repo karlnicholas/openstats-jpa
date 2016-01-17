@@ -82,7 +82,7 @@ public class SchemaTranslator {
 
 //		translator.setDialect("org.hibernate.dialect.HSQLDialect")
 		
-		translator.setDialect("org.hibernate.dialect.PostgreSQL82Dialect")
+		translator.setDialect("org.hibernate.dialect.PostgreSQL9Dialect")
 			.addAnnotatedClasses(entityClasses)
 			.translate(new FileOutputStream(new File("db-schema.sql")));
 
