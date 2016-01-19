@@ -21,7 +21,7 @@
 
     <groupId>openstats-jpa</groupId>
     <artifactId>openstats-jpa</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>war</packaging>
     <name>OpenStats-Jpa</name>
     <description>Console Utils for OpenStats</description>
